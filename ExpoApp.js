@@ -1505,7 +1505,7 @@ body {
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-weight-minus">-</button>
-                        <input type="number" class="stepper-input" id="input-weight" value="" step="2.5" inputmode="decimal">
+                        <input type="number" class="stepper-input" id="input-weight" value="0" step="2.5" inputmode="decimal">
                         <button class="btn-stepper" id="btn-weight-plus">+</button>
                     </div>
                 </div>
@@ -1518,7 +1518,7 @@ body {
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-reps-minus">-</button>
-                        <input type="number" class="stepper-input" id="input-reps" value="" step="1" inputmode="numeric">
+                        <input type="number" class="stepper-input" id="input-reps" value="0" step="1" inputmode="numeric">
                         <button class="btn-stepper" id="btn-reps-plus">+</button>
                     </div>
                 </div>
@@ -1531,7 +1531,7 @@ body {
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-rir-minus">-</button>
-                        <input type="number" class="stepper-input" id="input-rir" value="" min="0" max="5" step="1" inputmode="numeric">
+                        <input type="text" class="stepper-input" id="input-rir" value="0" step="1" inputmode="numeric">
                         <button class="btn-stepper" id="btn-rir-plus">+</button>
                     </div>
                 </div>
@@ -2301,18 +2301,18 @@ function openExerciseFoco(index) {
             // Cargar datos de la nueva serie
             const exerciseData = state.focoData[focoKey];
             const currentSetData = exerciseData.sets[i];
-            dom.inputs.weight.value = currentSetData.weight === 0 ? "" : currentSetData.weight;
-            dom.inputs.reps.value = currentSetData.reps === 0 ? "" : currentSetData.reps;
-            dom.inputs.rir.value = currentSetData.rir === 0 ? "" : currentSetData.rir;
+            dom.inputs.weight.value = currentSetData.weight;
+            dom.inputs.reps.value = currentSetData.reps;
+            dom.inputs.rir.value = currentSetData.rir;
         });
         container.appendChild(btn);
     }
     
     // Asignar inputs desde la serie 1
     const currentSetData = state.focoData[focoKey].sets[1];
-    dom.inputs.weight.value = currentSetData.weight === 0 ? "" : currentSetData.weight;
-    dom.inputs.reps.value = currentSetData.reps === 0 ? "" : currentSetData.reps;
-    dom.inputs.rir.value = currentSetData.rir === 0 ? "" : currentSetData.rir;
+    dom.inputs.weight.value = currentSetData.weight;
+    dom.inputs.reps.value = currentSetData.reps;
+    dom.inputs.rir.value = currentSetData.rir;
     
     // Resetear/detener cronómetro si cambia el ejercicio
     resetTimer();
@@ -2373,13 +2373,13 @@ function setupSteppers() {
     dom.buttons.weightMinus.addEventListener('click', () => {
         let val = parseFloat(dom.inputs.weight.value) || 0;
         val = Math.max(0, val - 2.5);
-        dom.inputs.weight.value = val === 0 ? "" : (val % 1 === 0 ? val.toFixed(0) : val.toFixed(1));
+        dom.inputs.weight.value = val % 1 === 0 ? val.toFixed(0) : val.toFixed(1);
         updateStateData();
     });
     dom.buttons.weightPlus.addEventListener('click', () => {
         let val = parseFloat(dom.inputs.weight.value) || 0;
         val += 2.5;
-        dom.inputs.weight.value = val === 0 ? "" : (val % 1 === 0 ? val.toFixed(0) : val.toFixed(1));
+        dom.inputs.weight.value = val % 1 === 0 ? val.toFixed(0) : val.toFixed(1);
         updateStateData();
     });
     
@@ -2387,44 +2387,60 @@ function setupSteppers() {
     dom.buttons.repsMinus.addEventListener('click', () => {
         let val = parseInt(dom.inputs.reps.value) || 0;
         val = Math.max(0, val - 1);
-        dom.inputs.reps.value = val === 0 ? "" : val;
+        dom.inputs.reps.value = val;
         updateStateData();
     });
     dom.buttons.repsPlus.addEventListener('click', () => {
         let val = parseInt(dom.inputs.reps.value) || 0;
         val += 1;
-        dom.inputs.reps.value = val === 0 ? "" : val;
+        dom.inputs.reps.value = val;
         updateStateData();
     });
     
     // RIR (Reps in Reserva, Límite mínimo: 0)
     dom.buttons.rirMinus.addEventListener('click', () => {
-        let val = parseInt(dom.inputs.rir.value) || 0;
-        val = Math.max(0, val - 1);
-        dom.inputs.rir.value = val === 0 ? "" : val;
+        let val = dom.inputs.rir.value.trim().toUpperCase();
+        if (val === 'F') {
+            // Ya está en Fallo
+        } else if (val === '0' || val === '' || parseInt(val) === 0) {
+            dom.inputs.rir.value = 'F';
+        } else {
+            let num = parseInt(val) || 0;
+            dom.inputs.rir.value = Math.max(0, num - 1);
+        }
         updateStateData();
     });
     dom.buttons.rirPlus.addEventListener('click', () => {
-        let val = parseInt(dom.inputs.rir.value) || 0;
-        val += 1;
-        dom.inputs.rir.value = val === 0 ? "" : val;
+        let val = dom.inputs.rir.value.trim().toUpperCase();
+        if (val === 'F') {
+            dom.inputs.rir.value = '0';
+        } else {
+            let num = parseInt(val) || 0;
+            dom.inputs.rir.value = num + 1;
+        }
         updateStateData();
     });
     
     // Escuchar cambios directos en los inputs
     Object.values(dom.inputs).forEach(input => {
         input.addEventListener('change', () => {
-            // Clampear RIR en manual
             if (input.id === 'input-rir') {
-                let val = parseInt(input.value) || 0;
-                const clamped = Math.max(0, Math.min(5, val));
-                input.value = clamped === 0 ? "" : clamped;
+                let val = input.value.trim().toUpperCase();
+                if (val === 'F') {
+                    input.value = 'F';
+                } else {
+                    let num = parseInt(val) || 0;
+                    input.value = Math.max(0, Math.min(5, num));
+                }
+            } else {
+                let val = parseFloat(input.value) || 0;
+                if (val < 0) input.value = 0;
             }
             updateStateData();
         });
         
         input.addEventListener('focus', () => {
-            if (parseFloat(input.value) === 0 || input.value === "0" || input.value === "") {
+            if (input.value === "0" || parseFloat(input.value) === 0) {
                 input.value = '';
             } else {
                 input.select();
@@ -2433,8 +2449,9 @@ function setupSteppers() {
         
         input.addEventListener('blur', () => {
             if (input.value.trim() === '') {
-                updateStateData();
+                input.value = "0";
             }
+            updateStateData();
         });
     });
 }
@@ -2448,7 +2465,13 @@ function updateStateData() {
     const set = state.currentSet;
     exerciseData.sets[set].weight = parseFloat(dom.inputs.weight.value) || 0;
     exerciseData.sets[set].reps = parseInt(dom.inputs.reps.value) || 0;
-    exerciseData.sets[set].rir = parseInt(dom.inputs.rir.value) || 0;
+    
+    const rirVal = dom.inputs.rir.value.trim().toUpperCase();
+    if (rirVal === 'F') {
+        exerciseData.sets[set].rir = 'F';
+    } else {
+        exerciseData.sets[set].rir = parseInt(rirVal) || 0;
+    }
 }
 
 // 10. LÓGICA DEL CRONÓMETRO

@@ -1145,8 +1145,8 @@ function bindEvents() {
         }
     });
 
-    // Botón Sincronizar Google Sheets
-    const btnSyncSheets = document.getElementById('btn-sync-sheets');
+    // Botón Sincronizar Google Sheets Manual Premium
+    const btnSyncSheets = document.getElementById('btn-sync-sheets-manual');
     if (btnSyncSheets) {
         btnSyncSheets.addEventListener('click', () => {
             syncToGoogleSheets();
@@ -1210,9 +1210,12 @@ function saveWorkout() {
     const todayStr = new Date().toISOString().split('T')[0];
     const sessionID = "DIA_" + todayStr.replace(/-/g, '_') + "/" + state.currentRoutineKey.toUpperCase().replace(/-/g, '_');
     
+    // Marcar que esta sesión tiene cambios pendientes de sincronizar
+    state.focoData.syncPending = true;
+    
     const dataStr = JSON.stringify(state.focoData);
     localStorage.setItem(sessionID, dataStr);
-    console.log("WARZONE: Guardada persistencia en DB_WORKOUTS:", sessionID);
+    console.log("WARZONE: Guardada persistencia en DB_WORKOUTS con syncPending:true:", sessionID);
     
     // Si corre en React Native WebView, notificar al contenedor nativo para guardado atómico AsyncStorage
     if (window.ReactNativeWebView) {
@@ -1224,19 +1227,26 @@ function saveWorkout() {
     }
 }
 
-function exportToSheetsFormat(workoutData) {
-    const todayStr = new Date().toISOString().split('T')[0];
-    const routine = ROUTINE_DATA[state.currentRoutineKey];
-    if (!routine) return [];
+function getAllSessionKeys() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("DIA_")) {
+            keys.push(key);
+        }
+    }
+    return keys;
+}
+
+function getHorizontalRowForSession(dateStr, routineKey, workoutData) {
+    const routine = ROUTINE_DATA[routineKey];
+    if (!routine) return [dateStr, routineKey];
     
-    // Una sola fila horizontal: [Fecha, NombreRutina, Ej1_Set1_W, Ej1_Set1_R, Ej1_Set1_RIR, ..., EjN_SetM_RIR, NotasGenerales]
-    const row = [todayStr, routine.title];
-    
+    const row = [dateStr, routine.title];
     routine.exercises.forEach((exercise, idx) => {
-        const focoKey = `${state.currentRoutineKey}-${idx}`;
+        const focoKey = `${routineKey}-${idx}`;
         const exerciseData = workoutData[focoKey];
         
-        // Agregar las series ordenadas del ejercicio actual
         for (let s = 1; s <= exercise.totalSets; s++) {
             if (exerciseData && exerciseData.sets[s]) {
                 const setData = exerciseData.sets[s];
@@ -1244,35 +1254,93 @@ function exportToSheetsFormat(workoutData) {
                 row.push(setData.reps !== undefined ? setData.reps : "");
                 row.push(setData.rir !== undefined ? setData.rir : "");
             } else {
-                row.push("", "", ""); // Vacío si no se ha registrado o no existe
+                row.push("", "", "");
             }
         }
-        
-        // Notas de este ejercicio
         row.push(exerciseData ? (exerciseData.notes || "") : "");
     });
-    
     return row;
 }
 
-function syncToGoogleSheets() {
-    const payload = exportToSheetsFormat(state.focoData);
-    console.log("WARZONE GOOGLE SHEETS HORIZONTAL ROW:", payload);
+async function syncToGoogleSheets() {
+    const btnSync = document.getElementById('btn-sync-sheets-manual');
+    if (btnSync) {
+        btnSync.classList.add('loading');
+        btnSync.innerHTML = '<div class="spinner"></div><span>Sincronizando...</span>';
+    }
     
-    if (payload.length <= 2) { // Solo contiene hoy y nombre de rutina
-        alert("No hay entrenamientos registrados hoy para sincronizar.");
+    const sessionKeys = getAllSessionKeys();
+    const dataToSync = [];
+    const keysToUpdate = [];
+    
+    sessionKeys.forEach(key => {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+            try {
+                const sessionData = JSON.parse(saved);
+                if (sessionData.syncPending) {
+                    const parts = key.split('/');
+                    const dateStr = parts[0].replace("DIA_", "").replace(/_/g, "-");
+                    const routineKey = parts[1].toLowerCase().replace(/_/g, "-");
+                    
+                    const row = getHorizontalRowForSession(dateStr, routineKey, sessionData);
+                    dataToSync.push(row);
+                    keysToUpdate.push({ key, data: sessionData });
+                }
+            } catch (e) {
+                console.error("Error parsing key during sync:", key, e);
+            }
+        }
+    });
+    
+    if (dataToSync.length === 0) {
+        alert("Todo está al día.");
+        restoreSyncButton();
         return;
     }
     
-    // Alerta de estado listo
-    alert(`Listo para sincronizar fila horizontal con Google Sheets: [${payload.join(', ')}]. Datos en consola.`);
+    console.log("WARZONE: Sincronizando entrenamientos con Google Sheets:", dataToSync);
     
-    // Si corre en React Native WebView, notificar al contenedor nativo
-    if (window.ReactNativeWebView) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-            action: 'syncGoogleSheets',
-            payload: payload
-        }));
+    try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxoKN58eAj0bFaBJ_jZaqsjFdH5GZbR5aMNf4r8mAghHiwWvSlFl097MCGbVJVrwydp/exec', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToSync)
+        });
+        
+        // Google Apps Script a veces devuelve CORS redirects, pero con no-cors o si se completa,
+        // cambiamos el estado de syncPending. Asumimos éxito si la petición POST finaliza.
+        keysToUpdate.forEach(item => {
+            item.data.syncPending = false;
+            const updatedStr = JSON.stringify(item.data);
+            localStorage.setItem(item.key, updatedStr);
+            if (window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                    action: 'save',
+                    key: item.key,
+                    value: updatedStr
+                }));
+            }
+        });
+        
+        alert("Entrenamientos sincronizados correctamente.");
+    } catch (e) {
+        console.error("Sync fetch error:", e);
+        alert("Error al sincronizar con Google Sheets. Verifica tu conexión.");
+    } finally {
+        restoreSyncButton();
+    }
+}
+
+function restoreSyncButton() {
+    const btnSync = document.getElementById('btn-sync-sheets-manual');
+    if (btnSync) {
+        btnSync.classList.remove('loading');
+        btnSync.innerHTML = '<i data-lucide="cloud-lightning"></i><span>Sincronizar Datos</span>';
+        initIcons();
     }
 }
 

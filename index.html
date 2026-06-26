@@ -19,14 +19,9 @@
                     <h1>Entreno</h1>
                     <div class="subtitle">Selecciona una rutina para hoy</div>
                 </div>
-                <div style="display: flex; gap: 8px;">
-                    <button class="btn-icon" id="btn-sync-sheets" title="Sincronizar Google Sheets">
-                        <i data-lucide="refresh-cw"></i>
-                    </button>
-                    <button class="btn-icon" id="btn-theme-info">
-                        <i data-lucide="zap"></i>
-                    </button>
-                </div>
+                <button class="btn-icon" id="btn-theme-info">
+                    <i data-lucide="zap"></i>
+                </button>
             </header>
 
             <div class="routine-list">
@@ -66,6 +61,14 @@
                         <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 8 ejercicios</span>
                     </div>
                     <i data-lucide="chevron-right" class="chevron"></i>
+                </button>
+            </div>
+
+            <!-- Botón de Sincronización Manual Premium -->
+            <div class="sync-container-home">
+                <button class="btn-sync-premium" id="btn-sync-sheets-manual">
+                    <i data-lucide="cloud-lightning"></i>
+                    <span>Sincronizar Datos</span>
                 </button>
             </div>
         </section>

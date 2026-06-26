@@ -1312,3 +1312,57 @@ body {
 .history-note-expanded.show {
     display: block;
 }
+
+/* Botón Sincronizar Google Sheets Premium */
+.sync-container-home {
+    margin: 25px 20px 20px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-sync-premium {
+    width: 100%;
+    background: linear-gradient(135deg, #8A2BE2, #4B0082);
+    border: 1px solid rgba(138, 43, 226, 0.4);
+    border-radius: 14px;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);
+    transition: all var(--transition-smooth);
+}
+
+.btn-sync-premium:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+.btn-sync-premium.loading {
+    background: #161618 !important;
+    border-color: #242429 !important;
+    color: #a3a3a3 !important;
+    pointer-events: none !important;
+    box-shadow: none !important;
+}
+
+/* Spinner CSS */
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid #a3a3a3;
+    border-top: 2.5px solid #8A2BE2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

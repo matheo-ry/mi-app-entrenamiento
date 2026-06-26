@@ -10,7 +10,8 @@ const payload = JSON.stringify({
     sdkVersion: "51.0.0"
   },
   dependencies: {
-    "react-native-webview": { version: "*" }
+    "react-native-webview": { version: "*" },
+    "@react-native-async-storage/async-storage": { version: "*" }
   },
   code: {
     "App.js": {

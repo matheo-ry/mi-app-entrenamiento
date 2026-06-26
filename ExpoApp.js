@@ -1,7 +1,8 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
 import { WebView } from 'react-native-webview';
 import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const htmlContent = `<!DOCTYPE html>
 <html lang="es">
@@ -2124,6 +2125,24 @@ function openRoutineGeneral(routineKey) {
     state.currentRoutineKey = routineKey;
     dom.routineGeneralTitle.textContent = routine.title;
     
+    // Determinar ID de sesión en formato DIA_X/RUTINA
+    const todayStr = new Date().toISOString().split('T')[0];
+    const sessionID = "DIA_" + todayStr.replace(/-/g, '_') + "/" + routineKey.toUpperCase().replace(/-/g, '_');
+    
+    const saved = localStorage.getItem(sessionID);
+    if (saved) {
+        try {
+            state.focoData = JSON.parse(saved);
+            console.log("Cargada persistencia atómica para:", sessionID, state.focoData);
+        } catch (e) {
+            console.error("Error al cargar persistencia:", e);
+            state.focoData = {};
+        }
+    } else {
+        state.focoData = {};
+        console.log("No hay sesión activa para hoy en DB_WORKOUTS. Inicializado limpio.");
+    }
+    
     // Poblar la lista de ejercicios dinámicamente
     dom.exerciseListContainer.innerHTML = '';
     
@@ -2193,7 +2212,7 @@ function openExerciseFoco(index) {
         }
         state.focoData[focoKey] = {
             notes: '',
-            setupTechnical: exercise.setupTechnical || exercise.notes || "",
+            setupTechnical: dbSetups[exercise.name] || exercise.setupTechnical || exercise.notes || "",
             sets: sets
         };
     }
@@ -2724,11 +2743,22 @@ function bindEvents() {
         const exerciseData = state.focoData[focoKey];
         if (exerciseData) {
             exerciseData.setupTechnical = e.target.value;
-            // Guardar también en el objeto de ejercicio en ROUTINE_DATA
+            
+            // Guardar en DB_SETUPS diccionario global
             const routine = ROUTINE_DATA[state.currentRoutineKey];
             if (routine && routine.exercises[state.currentExerciseIndex]) {
-                routine.exercises[state.currentExerciseIndex].setupTechnical = e.target.value;
-                routine.exercises[state.currentExerciseIndex].notes = e.target.value;
+                const exName = routine.exercises[state.currentExerciseIndex].name;
+                dbSetups[exName] = e.target.value;
+                localStorage.setItem('DB_SETUPS', JSON.stringify(dbSetups));
+                
+                // Notificar al puente AsyncStorage nativo
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(JSON.stringify({
+                        action: 'save',
+                        key: 'DB_SETUPS',
+                        value: JSON.stringify(dbSetups)
+                    }));
+                }
             }
             saveWorkout();
         }
@@ -2773,97 +2803,90 @@ function init() {
     setupTimer();
     setupGestures();
     setupKeyboardShortcuts();
-    loadTodayWorkout();
+    loadSetups();
     initIcons();
     console.log("WARZONE STRENGTH LOG - Frontend cargado con éxito.");
 }
 
 // 14. SISTEMA DE PERSISTENCIA LOCAL Y SINCRONIZACIÓN DE GOOGLE SHEETS
-function saveWorkout() {
-    const todayStr = new Date().toISOString().split('T')[0];
-    localStorage.setItem(\`workout-\${todayStr}\`, JSON.stringify(state.focoData));
-    console.log("WARZONE: Guardada persistencia para hoy:", todayStr);
-    
-    // Si corre en React Native WebView, notificar al contenedor nativo
-    if (window.ReactNativeWebView) {
-        window.ReactNativeWebView.postMessage(JSON.stringify({
-            action: 'saveWorkout',
-            date: todayStr,
-            data: state.focoData
-        }));
-    }
-}
+let dbSetups = {};
 
-function loadTodayWorkout() {
-    const todayStr = new Date().toISOString().split('T')[0];
-    const saved = localStorage.getItem(\`workout-\${todayStr}\`);
+function loadSetups() {
+    const saved = localStorage.getItem('DB_SETUPS');
     if (saved) {
         try {
-            state.focoData = JSON.parse(saved);
-            console.log("WARZONE: Sincronizada persistencia local de hoy:", state.focoData);
+            dbSetups = JSON.parse(saved);
+            console.log("WARZONE: Cargados setups técnicos:", dbSetups);
         } catch (e) {
-            console.error("WARZONE: Error al parsear persistencia:", e);
+            console.error("WARZONE: Error al cargar setups:", e);
+            dbSetups = {};
         }
     }
 }
 
-function exportToGoogleSheetsFormat() {
+function saveWorkout() {
+    if (!state.currentRoutineKey) return;
     const todayStr = new Date().toISOString().split('T')[0];
-    const timestamp = new Date().toLocaleString();
-    const rows = [];
-
-    // Recorrer todas las rutinas y ejercicios definidos
-    for (const routineKey in ROUTINE_DATA) {
-        const routine = ROUTINE_DATA[routineKey];
-        routine.exercises.forEach((exercise, idx) => {
-            const focoKey = \`\${routineKey}-\${idx}\`;
-            const exerciseData = state.focoData[focoKey];
-            
-            // Solo exportar si el usuario ha registrado alguna serie o notas para este ejercicio hoy
-            if (exerciseData) {
-                const row = {
-                    rowId: \`\${todayStr}_\${exercise.name.replace(/\s+/g, '_')}\`,
-                    timestamp: timestamp,
-                    routine: routine.title,
-                    exercise: exercise.name,
-                    notes: exerciseData.notes || "",
-                    setupTechnical: exerciseData.setupTechnical || ""
-                };
-                
-                // Agregar las series dinámicamente
-                for (let s = 1; s <= exercise.totalSets; s++) {
-                    const setData = exerciseData.sets[s];
-                    if (setData) {
-                        row[\`set\${s}_weight\`] = setData.weight !== undefined ? setData.weight : "";
-                        row[\`set\${s}_reps\`] = setData.reps !== undefined ? setData.reps : "";
-                        row[\`set\${s}_rir\`] = setData.rir !== undefined ? setData.rir : "";
-                    } else {
-                        row[\`set\${s}_weight\`] = "";
-                        row[\`set\${s}_reps\`] = "";
-                        row[\`set\${s}_rir\`] = "";
-                    }
-                }
-                rows.push(row);
-            }
-        });
-    }
+    const sessionID = "DIA_" + todayStr.replace(/-/g, '_') + "/" + state.currentRoutineKey.toUpperCase().replace(/-/g, '_');
     
-    return rows;
+    const dataStr = JSON.stringify(state.focoData);
+    localStorage.setItem(sessionID, dataStr);
+    console.log("WARZONE: Guardada persistencia en DB_WORKOUTS:", sessionID);
+    
+    // Si corre en React Native WebView, notificar al contenedor nativo para guardado atómico AsyncStorage
+    if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+            action: 'save',
+            key: sessionID,
+            value: dataStr
+        }));
+    }
+}
+
+function exportToSheetsFormat(workoutData) {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const routine = ROUTINE_DATA[state.currentRoutineKey];
+    if (!routine) return [];
+    
+    // Una sola fila horizontal: [Fecha, NombreRutina, Ej1_Set1_W, Ej1_Set1_R, Ej1_Set1_RIR, ..., EjN_SetM_RIR, NotasGenerales]
+    const row = [todayStr, routine.title];
+    
+    routine.exercises.forEach((exercise, idx) => {
+        const focoKey = \`\${state.currentRoutineKey}-\${idx}\`;
+        const exerciseData = workoutData[focoKey];
+        
+        // Agregar las series ordenadas del ejercicio actual
+        for (let s = 1; s <= exercise.totalSets; s++) {
+            if (exerciseData && exerciseData.sets[s]) {
+                const setData = exerciseData.sets[s];
+                row.push(setData.weight !== undefined ? setData.weight : "");
+                row.push(setData.reps !== undefined ? setData.reps : "");
+                row.push(setData.rir !== undefined ? setData.rir : "");
+            } else {
+                row.push("", "", ""); // Vacío si no se ha registrado o no existe
+            }
+        }
+        
+        // Notas de este ejercicio
+        row.push(exerciseData ? (exerciseData.notes || "") : "");
+    });
+    
+    return row;
 }
 
 function syncToGoogleSheets() {
-    const payload = exportToGoogleSheetsFormat();
-    console.log("WARZONE GOOGLE SHEETS PAYLOAD:", JSON.stringify(payload, null, 2));
+    const payload = exportToSheetsFormat(state.focoData);
+    console.log("WARZONE GOOGLE SHEETS HORIZONTAL ROW:", payload);
     
-    if (payload.length === 0) {
+    if (payload.length <= 2) { // Solo contiene hoy y nombre de rutina
         alert("No hay entrenamientos registrados hoy para sincronizar.");
         return;
     }
     
     // Alerta de estado listo
-    alert(\`Listo para sincronizar \${payload.length} ejercicios con Google Sheets. Los datos se han impreso en la consola.\`);
+    alert(\`Listo para sincronizar fila horizontal con Google Sheets: [\${payload.join(', ')}]. Datos en consola.\`);
     
-    // Si corre en React Native WebView, notificar al contenedor nativo para sincronizar por red
+    // Si corre en React Native WebView, notificar al contenedor nativo
     if (window.ReactNativeWebView) {
         window.ReactNativeWebView.postMessage(JSON.stringify({
             action: 'syncGoogleSheets',
@@ -2880,16 +2903,32 @@ document.addEventListener('DOMContentLoaded', init);
 `;
 
 export default function App() {
+  const webViewRef = useRef(null);
+
+  const onMessage = async (event) => {
+    try {
+      const msg = JSON.parse(event.nativeEvent.data);
+      if (msg.action === 'save') {
+        await AsyncStorage.setItem(msg.key, msg.value);
+        console.log('AsyncStorage Bridge saved:', msg.key);
+      }
+    } catch (e) {
+      console.error('AsyncStorage Bridge Error:', e);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
       <WebView 
+        ref={webViewRef}
         source={{ html: htmlContent }} 
         style={{ flex: 1, backgroundColor: '#000000' }} 
         originWhitelist={['*']}
         javaScriptEnabled={true}
         domStorageEnabled={true}
         bounces={false}
+        onMessage={onMessage}
       />
     </SafeAreaView>
   );

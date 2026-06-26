@@ -9,23 +9,40 @@ const bundledHtml = html
   .replace('<script src="app.js"></script>', `<script>${js}</script>`);
 
 const appJs = `
-import React from 'react';
+import React, { useRef } from 'react';
 import { WebView } from 'react-native-webview';
 import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const htmlContent = \`${bundledHtml.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`;
 
 export default function App() {
+  const webViewRef = useRef(null);
+
+  const onMessage = async (event) => {
+    try {
+      const msg = JSON.parse(event.nativeEvent.data);
+      if (msg.action === 'save') {
+        await AsyncStorage.setItem(msg.key, msg.value);
+        console.log('AsyncStorage Bridge saved:', msg.key);
+      }
+    } catch (e) {
+      console.error('AsyncStorage Bridge Error:', e);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000000" />
       <WebView 
+        ref={webViewRef}
         source={{ html: htmlContent }} 
         style={{ flex: 1, backgroundColor: '#000000' }} 
         originWhitelist={['*']}
         javaScriptEnabled={true}
         domStorageEnabled={true}
         bounces={false}
+        onMessage={onMessage}
       />
     </SafeAreaView>
   );

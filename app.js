@@ -352,7 +352,10 @@ function openRoutineGeneral(routineKey) {
                 <i data-lucide="chevron-right" class="arrow-right-icon"></i>
             </div>
             <div class="history-block">
-                ${ex.history.map(row => `<div class="history-row">${row}</div>`).join('')}
+                ${ex.history.map(row => {
+                    const sets = row.trim().split(/\s+/).map(set => `<span class="history-set">${set}</span>`).join('');
+                    return `<div class="history-row">${sets}</div>`;
+                }).join('')}
             </div>
         `;
         

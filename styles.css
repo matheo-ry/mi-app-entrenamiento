@@ -446,10 +446,11 @@ body {
 }
 
 .card-exercise {
-    background-color: var(--bg-card);
+    background-color: #161618;
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 18px;
+    border-left: 4px solid #8A2BE2;
+    border-radius: 12px;
+    padding: 16px;
     cursor: pointer;
     transition: var(--transition-bounce);
     display: flex;
@@ -485,12 +486,14 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #333333;
 }
 
 .exercise-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text-primary);
+    font-size: 17px;
+    font-weight: 600;
+    color: #FFFFFF;
 }
 
 .card-exercise i.arrow-right-icon {
@@ -507,21 +510,26 @@ body {
 
 /* Bloque compacto del historial de las últimas 3 sesiones */
 .history-block {
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 1px dashed rgba(138, 43, 226, 0.2);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
+    background-color: #0C0C0C;
+    border-radius: 8px;
+    padding: 8px 12px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
 .history-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
     font-family: monospace;
     font-size: 11px;
-    color: var(--text-secondary);
-    white-space: pre-wrap;
+    color: #A0A0A0;
     line-height: 1.3;
+}
+
+.history-set {
+    text-align: left;
 }
 
 /* ==========================================

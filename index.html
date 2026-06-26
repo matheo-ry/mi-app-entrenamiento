@@ -147,9 +147,6 @@
 
         <!-- VISTA FOCO (PANTALLA COMPLETA - LA ZONA DE GUERRA) -->
         <section id="screen-foco" class="screen">
-            <!-- Indicador superior de Gesto (Swipe) -->
-            <div class="swipe-indicator top"></div>
-
             <div class="foco-header">
                 <button class="btn-icon" id="btn-back-to-general">
                     <i data-lucide="arrow-left"></i>
@@ -162,6 +159,14 @@
                 <button class="btn-icon" id="btn-info-modal" title="Setup Técnico">
                     <i data-lucide="info"></i>
                 </button>
+            </div>
+
+            <!-- Historial de Rendimiento (Acceso Instantáneo) -->
+            <div class="history-panel-foco">
+                <div class="history-panel-title">Historial Reciente</div>
+                <div id="foco-history-list" class="history-list-foco">
+                    <!-- Se poblará dinámicamente -->
+                </div>
             </div>
 
             <!-- Selector de Series (Sets Tracker) -->
@@ -253,9 +258,7 @@
                 <textarea class="persistent-notes-input" id="input-daily-notes" placeholder="Ej: Subir peso la próxima vez, molestias en hombro..."></textarea>
             </div>
 
-            <!-- Indicador inferior de Gesto (Swipe) -->
-            <div class="swipe-indicator bottom"></div>
-        </section>
+            </section>
 
         <!-- Barra de Navegación Inferior Minimalista -->
         <nav class="bottom-nav" id="main-nav">

@@ -1220,6 +1220,110 @@ body {
     border-color: #8A2BE2;
     box-shadow: 0 0 10px rgba(138, 43, 226, 0.15);
 }
+
+/* Historial Reciente en Vista Foco */
+.history-panel-foco {
+    background: rgba(22, 22, 24, 0.6);
+    border: 1px solid #242429;
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin: 0px 20px 15px 20px;
+    backdrop-filter: blur(10px);
+}
+
+.history-panel-title {
+    color: #a3a3a3;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+.history-list-foco {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-item-foco {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(36, 36, 41, 0.5);
+    padding-bottom: 6px;
+}
+
+.history-item-foco:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.history-row-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.history-date-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.history-date {
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.history-bell-btn {
+    background: none;
+    border: none;
+    color: #8A2BE2;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.history-bell-btn i {
+    width: 14px;
+    height: 14px;
+}
+
+.history-sets-summary {
+    display: flex;
+    gap: 8px;
+    color: #E0E0E0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.history-set-pill {
+    background-color: #101012;
+    border: 1px solid #242429;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.history-note-expanded {
+    display: none;
+    background: #101012;
+    border: 1px solid #8A2BE2;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-top: 6px;
+    color: #a3a3a3;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.history-note-expanded.show {
+    display: block;
+}
 </style>
 </head>
 <body>
@@ -1362,9 +1466,6 @@ body {
 
         <!-- VISTA FOCO (PANTALLA COMPLETA - LA ZONA DE GUERRA) -->
         <section id="screen-foco" class="screen">
-            <!-- Indicador superior de Gesto (Swipe) -->
-            <div class="swipe-indicator top"></div>
-
             <div class="foco-header">
                 <button class="btn-icon" id="btn-back-to-general">
                     <i data-lucide="arrow-left"></i>
@@ -1377,6 +1478,14 @@ body {
                 <button class="btn-icon" id="btn-info-modal" title="Setup Técnico">
                     <i data-lucide="info"></i>
                 </button>
+            </div>
+
+            <!-- Historial de Rendimiento (Acceso Instantáneo) -->
+            <div class="history-panel-foco">
+                <div class="history-panel-title">Historial Reciente</div>
+                <div id="foco-history-list" class="history-list-foco">
+                    <!-- Se poblará dinámicamente -->
+                </div>
             </div>
 
             <!-- Selector de Series (Sets Tracker) -->
@@ -1468,9 +1577,7 @@ body {
                 <textarea class="persistent-notes-input" id="input-daily-notes" placeholder="Ej: Subir peso la próxima vez, molestias en hombro..."></textarea>
             </div>
 
-            <!-- Indicador inferior de Gesto (Swipe) -->
-            <div class="swipe-indicator bottom"></div>
-        </section>
+            </section>
 
         <!-- Barra de Navegación Inferior Minimalista -->
         <nav class="bottom-nav" id="main-nav">
@@ -1518,8 +1625,8 @@ const ROUTINE_DATA = {
                 name: "Press Horizontal en máquina",
                 history: [
                     "90x10(1) 90x10(1) 90x9(0)",
-                    "95x9(1) 95x8(1) 95x8(0)",
-                    "95x10(1) 95x9(1) 95x8(0)"
+                    "95x9(1) 95x8(1) 95x8(0) | Muy cansado de hombro posterior",
+                    "95x10(1) 95x9(1) 95x8(0) | Asiento en altura 4, empuje explosivo y retracción escapular"
                 ],
                 notes: "3 series.",
                 totalSets: 3,
@@ -1530,7 +1637,7 @@ const ROUTINE_DATA = {
                 history: [
                     "70x10(1) 70x9(0)",
                     "75x8(1) 75x8(0)",
-                    "75x9(1) 75x8(0)"
+                    "75x9(1) 75x8(0) | Buen ángulo de banco, sin dolor"
                 ],
                 notes: "2 series.",
                 totalSets: 2,
@@ -1634,7 +1741,7 @@ const ROUTINE_DATA = {
                 history: [
                     "15x12(1) 15x11(1) 15x10(0)",
                     "17.5x10(1) 17.5x9(1) 17.5x9(0)",
-                    "17.5x11(1) 17.5x10(1) 17.5x9(0)"
+                    "17.5x11(1) 17.5x10(1) 17.5x9(0) | Foco en estiramiento total"
                 ],
                 notes: "3 series.",
                 totalSets: 3,
@@ -2025,7 +2132,8 @@ function openRoutineGeneral(routineKey) {
             </div>
             <div class="history-block">
                 \${ex.history.map(row => {
-                    const setsArr = row.trim().split(/\s+/);
+                    const setsStr = row.split('|')[0].trim();
+                    const setsArr = setsStr.split(/\s+/);
                     const setsCount = setsArr.length;
                     const sets = setsArr.map(set => \`<span class="history-set">\${set}</span>\`).join('');
                     return \`<div class="history-row" style="grid-template-columns: repeat(\${setsCount}, 1fr);">\${sets}</div>\`;
@@ -2095,6 +2203,81 @@ function openExerciseFoco(index) {
     // Cargar Notas Generales y Setup Técnico (Editable Textarea)
     dom.infoModalText.value = state.focoData[focoKey].setupTechnical;
     dom.inputDailyNotes.value = state.focoData[focoKey].notes;
+    
+    // Cargar Historial Reciente (los últimos 3 entrenamientos)
+    const historyList = document.getElementById('foco-history-list');
+    if (historyList) {
+        historyList.innerHTML = '';
+        const rawHistory = exercise.history || [];
+        const last3 = rawHistory.slice(-3).reverse();
+        
+        // Generar etiquetas de fecha de forma representativa (Hoy/Previo, Hace 7 días, Hace 14 días...)
+        const relativeDates = ["Hoy (Previo)", "Hace 7 días", "Hace 14 días"];
+        
+        if (last3.length === 0) {
+            historyList.innerHTML = \`<div style="color: #666; font-size: 13px; font-style: italic; padding: 4px 0;">No hay historial registrado.</div>\`;
+        } else {
+            last3.forEach((sessionStr, idx) => {
+                const parts = sessionStr.split('|');
+                const setsStr = parts[0].trim();
+                const noteText = parts[1] ? parts[1].trim() : '';
+                
+                const setsArr = setsStr.split(/\s+/);
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'history-item-foco';
+                
+                // Fila principal
+                const mainRow = document.createElement('div');
+                mainRow.className = 'history-row-main';
+                
+                // Fecha y campanita
+                const dateWrapper = document.createElement('div');
+                dateWrapper.className = 'history-date-wrapper';
+                
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'history-date';
+                dateSpan.textContent = relativeDates[idx] || "Sesión Pasada";
+                dateWrapper.appendChild(dateSpan);
+                
+                if (noteText) {
+                    const bellBtn = document.createElement('button');
+                    bellBtn.className = 'history-bell-btn';
+                    bellBtn.innerHTML = \`<i data-lucide="bell"></i>\`;
+                    bellBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const noteDiv = itemDiv.querySelector('.history-note-expanded');
+                        noteDiv.classList.toggle('show');
+                    });
+                    dateWrapper.appendChild(bellBtn);
+                }
+                mainRow.appendChild(dateWrapper);
+                
+                // Resumen de series
+                const setsSummary = document.createElement('div');
+                setsSummary.className = 'history-sets-summary';
+                
+                setsArr.forEach(setVal => {
+                    const pill = document.createElement('span');
+                    pill.className = 'history-set-pill';
+                    pill.textContent = setVal;
+                    setsSummary.appendChild(pill);
+                });
+                mainRow.appendChild(setsSummary);
+                itemDiv.appendChild(mainRow);
+                
+                // Nota desplegable
+                if (noteText) {
+                    const noteDiv = document.createElement('div');
+                    noteDiv.className = 'history-note-expanded';
+                    noteDiv.textContent = noteText;
+                    itemDiv.appendChild(noteDiv);
+                }
+                
+                historyList.appendChild(itemDiv);
+            });
+        }
+    }
     
     // Renderizado dinámico de selector de series (Set 1, Set 2...)
     const container = document.querySelector('.set-selector-container');
@@ -2431,15 +2614,6 @@ function handleSwipeGesture() {
             // Swipe Derecha (deslizar de izquierda a derecha -> Volver)
             closeExerciseFoco();
         }
-    } else {
-        // Deslizamiento Vertical
-        if (diffY > threshold) {
-            // Swipe Abajo (deslizar de arriba a abajo -> Ejercicio Anterior)
-            navigateExercise(-1);
-        } else if (diffY < -threshold) {
-            // Swipe Arriba (deslizar de abajo a arriba -> Siguiente Ejercicio)
-            navigateExercise(1);
-        }
     }
 }
 
@@ -2448,13 +2622,7 @@ function setupKeyboardShortcuts() {
     window.addEventListener('keydown', (e) => {
         // Solo actuar si la pantalla Foco está visible
         if (dom.screens.foco.classList.contains('active')) {
-            if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                navigateExercise(-1); // Ejercicio anterior
-            } else if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                navigateExercise(1); // Siguiente ejercicio
-            } else if (e.key === 'Escape' || e.key === 'ArrowRight') {
+            if (e.key === 'Escape' || e.key === 'ArrowRight') {
                 e.preventDefault();
                 closeExerciseFoco(); // Volver
             }

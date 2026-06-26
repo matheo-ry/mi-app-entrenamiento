@@ -16,3 +16,15 @@
 {"_e":"devserver:start","_t":1782470217078,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
 {"_e":"metro:config","_t":1782470217461,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
 {"_e":"metro:instantiate","_t":1782470221600,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"root:init","_t":1782481424637,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782481424639,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782481424642,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1782481425135,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782481425976,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:instantiate","_t":1782481440959,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"root:init","_t":1782481457003,"format":"v0-jsonl","version":"56.1.16"}
+{"_e":"env:mode","_t":1782481457006,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1782481457009,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1782481457225,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1782481457595,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"metro:instantiate","_t":1782481461953,"atlas":false,"workers":12,"host":"::","port":8081}

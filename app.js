@@ -564,34 +564,63 @@ function openExerciseFoco(index) {
     
     state.currentExerciseIndex = index;
     const exercise = routine.exercises[index];
+    const focoKey = `${state.currentRoutineKey}-${index}`;
     
-    // Inicializar focoData para este ejercicio si no existe
-    if (!state.focoData[index]) {
-        state.focoData[index] = {
+    // Inicializar focoData para este ejercicio si no existe con totalSets dinámicos
+    if (!state.focoData[focoKey]) {
+        const sets = {};
+        for (let i = 1; i <= exercise.totalSets; i++) {
+            sets[i] = { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 };
+        }
+        state.focoData[focoKey] = {
             notes: '',
-            sets: {
-                1: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 },
-                2: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 },
-                3: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 }
-            }
+            setupTechnical: exercise.setupTechnical || exercise.notes || "",
+            sets: sets
         };
     }
     
     // Resetear a Serie 1
     state.currentSet = 1;
-    dom.btnSets.forEach(btn => {
-        if (parseInt(btn.dataset.set) === 1) btn.classList.add('active');
-        else btn.classList.remove('active');
-    });
     
     // Cargar datos en pantalla
     dom.focoExerciseName.textContent = exercise.name;
     dom.focoExerciseIndex.textContent = `Ejercicio ${index + 1} de ${routine.exercises.length}`;
-    dom.infoModalText.textContent = exercise.notes || "No hay notas técnicas para este ejercicio.";
-    dom.inputDailyNotes.value = state.focoData[index].notes;
+    
+    // Cargar Notas Generales y Setup Técnico (Editable Textarea)
+    dom.infoModalText.value = state.focoData[focoKey].setupTechnical;
+    dom.inputDailyNotes.value = state.focoData[focoKey].notes;
+    
+    // Renderizado dinámico de selector de series (Set 1, Set 2...)
+    const container = document.querySelector('.set-selector-container');
+    container.innerHTML = '';
+    for (let i = 1; i <= exercise.totalSets; i++) {
+        const btn = document.createElement('button');
+        btn.className = `btn-set ${i === 1 ? 'active' : ''}`;
+        btn.dataset.set = i;
+        btn.textContent = `Set ${i}`;
+        btn.addEventListener('click', () => {
+            // Guardar datos actuales de la serie antes de cambiar
+            updateStateData();
+            
+            // Cambiar serie activa
+            state.currentSet = i;
+            
+            // Actualizar UI de botones
+            container.querySelectorAll('.btn-set').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Cargar datos de la nueva serie
+            const exerciseData = state.focoData[focoKey];
+            const currentSetData = exerciseData.sets[i];
+            dom.inputs.weight.value = currentSetData.weight;
+            dom.inputs.reps.value = currentSetData.reps;
+            dom.inputs.rir.value = currentSetData.rir;
+        });
+        container.appendChild(btn);
+    }
     
     // Asignar inputs desde la serie 1
-    const currentSetData = state.focoData[index].sets[1];
+    const currentSetData = state.focoData[focoKey].sets[1];
     dom.inputs.weight.value = currentSetData.weight;
     dom.inputs.reps.value = currentSetData.reps;
     dom.inputs.rir.value = currentSetData.rir;
@@ -708,7 +737,8 @@ function setupSteppers() {
 
 // Sincronizar inputs manuales con el estado mock
 function updateStateData() {
-    const exerciseData = state.focoData[state.currentExerciseIndex];
+    const focoKey = `${state.currentRoutineKey}-${state.currentExerciseIndex}`;
+    const exerciseData = state.focoData[focoKey];
     if (!exerciseData) return;
     
     const set = state.currentSet;
@@ -957,34 +987,27 @@ function bindEvents() {
         dom.infoModal.classList.remove('show');
     });
     
-    // Nueva UX Vista Foco: Selector de Series
-    dom.btnSets.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Guardar datos actuales de la serie antes de cambiar
-            updateStateData();
-            
-            // Cambiar serie activa
-            const setNum = parseInt(btn.dataset.set);
-            state.currentSet = setNum;
-            
-            // Actualizar UI de botones
-            dom.btnSets.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Cargar datos de la nueva serie
-            const exerciseData = state.focoData[state.currentExerciseIndex];
-            const currentSetData = exerciseData.sets[setNum];
-            dom.inputs.weight.value = currentSetData.weight;
-            dom.inputs.reps.value = currentSetData.reps;
-            dom.inputs.rir.value = currentSetData.rir;
-        });
-    });
-    
-    // Nueva UX Vista Foco: Guardar Notas Diarias
+    // Nueva UX Vista Foco: Guardar Notas Diarias (Notas Generales)
     dom.inputDailyNotes.addEventListener('input', (e) => {
-        const exerciseData = state.focoData[state.currentExerciseIndex];
+        const focoKey = `${state.currentRoutineKey}-${state.currentExerciseIndex}`;
+        const exerciseData = state.focoData[focoKey];
         if (exerciseData) {
             exerciseData.notes = e.target.value;
+        }
+    });
+
+    // Nueva UX Vista Foco: Guardar Setup Técnico Editable
+    dom.infoModalText.addEventListener('input', (e) => {
+        const focoKey = `${state.currentRoutineKey}-${state.currentExerciseIndex}`;
+        const exerciseData = state.focoData[focoKey];
+        if (exerciseData) {
+            exerciseData.setupTechnical = e.target.value;
+            // Guardar también en el objeto de ejercicio en ROUTINE_DATA
+            const routine = ROUTINE_DATA[state.currentRoutineKey];
+            if (routine && routine.exercises[state.currentExerciseIndex]) {
+                routine.exercises[state.currentExerciseIndex].setupTechnical = e.target.value;
+                routine.exercises[state.currentExerciseIndex].notes = e.target.value;
+            }
         }
     });
     

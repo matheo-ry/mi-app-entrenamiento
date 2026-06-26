@@ -1187,3 +1187,24 @@ body {
     font-size: 15px;
     line-height: 1.6;
 }
+
+.modal-textarea {
+    width: 100%;
+    background-color: #101012;
+    border: 1px solid #242429;
+    border-radius: 12px;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 15px;
+    padding: 16px;
+    min-height: 140px;
+    resize: none;
+    outline: none;
+    line-height: 1.6;
+    margin-top: 10px;
+}
+
+.modal-textarea:focus {
+    border-color: #8A2BE2;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.15);
+}

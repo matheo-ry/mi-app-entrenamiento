@@ -1,7 +1,7 @@
 const fs = require('fs');
 const https = require('https');
 
-const appJsContent = fs.readFileSync('App.js', 'utf8');
+const appJsContent = fs.readFileSync('ExpoApp.js', 'utf8');
 
 const payload = JSON.stringify({
   manifest: {

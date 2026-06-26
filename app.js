@@ -12,33 +12,33 @@ const ROUTINE_DATA = {
                 name: "Press Horizontal",
                 history: "Sesión 1: 90kg x 8 | Sesión 2: 90kg x 8 | Sesión 3: 90kg x 7",
                 notes: "Mantener el codo a 45 grados. RPE 9 en la última serie. Incrementar a 92.5kg si se consiguen todas las repeticiones.",
-                weight: 90,
-                reps: 8,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Dominadas Lastradas",
                 history: "Sesión 1: +15kg x 6 | Sesión 2: +15kg x 6 | Sesión 3: +10kg x 8",
                 notes: "Tracción completa hasta el pecho. Controlar la fase excéntrica (bajada lenta y controlada de 3 segundos).",
-                weight: 15,
-                reps: 6,
-                rir: 1
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Press Inclinado c/ Mancuernas",
                 history: "Sesión 1: 36kg x 10 | Sesión 2: 34kg x 10 | Sesión 3: 34kg x 9",
                 notes: "Puntas de las mancuernas ligeramente rotadas hacia adentro. Foco en el estiramiento máximo del pectoral.",
-                weight: 34,
-                reps: 10,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Remo con Barra",
                 history: "Sesión 1: 80kg x 8 | Sesión 2: 80kg x 8 | Sesión 3: 75kg x 10",
                 notes: "Mantener la espalda paralela al suelo. Llevar la barra hacia el ombligo y apretar escápulas.",
-                weight: 80,
-                reps: 8,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             }
         ]
     },
@@ -49,33 +49,33 @@ const ROUTINE_DATA = {
                 name: "Sentadilla Búlgara",
                 history: "Sesión 1: 24kg x 10 | Sesión 2: 24kg x 9 | Sesión 3: 20kg x 12",
                 notes: "Torso ligeramente inclinado al frente para mayor estímulo de glúteos. Mancuernas a los costados.",
-                weight: 24,
-                reps: 10,
-                rir: 1
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Curl de Bíceps Inclinado",
                 history: "Sesión 1: 16kg x 10 | Sesión 2: 16kg x 8 | Sesión 3: 14kg x 10",
                 notes: "Codos fijos detrás de la línea del cuerpo. Movimiento estricto, evitar el balanceo de hombros.",
-                weight: 16,
-                reps: 10,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Extensión Tríceps en Polea",
                 history: "Sesión 1: 30kg x 12 | Sesión 2: 30kg x 11 | Sesión 3: 25kg x 15",
                 notes: "Hombros fijos abajo. Extensión completa de codos. Enfocar en apretar el tríceps al final.",
-                weight: 30,
-                reps: 12,
-                rir: 1
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Peso Muerto Rumano",
                 history: "Sesión 1: 100kg x 8 | Sesión 2: 95kg x 8 | Sesión 3: 90kg x 10",
                 notes: "Empujar la cadera hacia atrás. Barra rozando las piernas. Sentir tensión pura en isquiotibiales.",
-                weight: 95,
-                reps: 8,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             }
         ]
     },
@@ -86,33 +86,33 @@ const ROUTINE_DATA = {
                 name: "Jalón al Pecho",
                 history: "Sesión 1: 75kg x 10 | Sesión 2: 70kg x 11 | Sesión 3: 70kg x 10",
                 notes: "Pensar en llevar los codos hacia las caderas. No tirarse hacia atrás en exceso.",
-                weight: 70,
-                reps: 10,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Fondos en Paralelas",
                 history: "Sesión 1: BW+20kg x 8 | Sesión 2: BW+20kg x 7 | Sesión 3: BW x 12",
                 notes: "Inclinarse ligeramente adelante. Rango de movimiento profundo con control del hombro.",
-                weight: 20,
-                reps: 8,
-                rir: 1
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Remo Unilateral c/ Mancuerna",
                 history: "Sesión 1: 40kg x 10 | Sesión 2: 40kg x 9 | Sesión 3: 38kg x 10",
                 notes: "Apoyo en banco. Llevar la mancuerna en diagonal hacia la cadera.",
-                weight: 40,
-                reps: 10,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Cruces en Polea Alta",
                 history: "Sesión 1: 15kg x 15 | Sesión 2: 15kg x 14 | Sesión 3: 12kg x 15",
                 notes: "Contracción máxima en el centro cruzando las manos ligeramente. Fase negativa controlada.",
-                weight: 15,
-                reps: 15,
-                rir: 1
+                weight: 0,
+                reps: 0,
+                rir: 0
             }
         ]
     },
@@ -123,33 +123,33 @@ const ROUTINE_DATA = {
                 name: "Prensa de Piernas",
                 history: "Sesión 1: 200kg x 10 | Sesión 2: 200kg x 9 | Sesión 3: 180kg x 12",
                 notes: "Bajar controlado hasta donde la pelvis no se retrovierta (buttwink). Empuje sólido.",
-                weight: 200,
-                reps: 10,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Curl Scott c/ Barra Z",
                 history: "Sesión 1: 35kg x 8 | Sesión 2: 30kg x 10 | Sesión 3: 30kg x 9",
                 notes: "Apoyo completo de axilas en el banco. No extender los codos hiperlaxamente abajo.",
-                weight: 30,
-                reps: 10,
-                rir: 2
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Press Francés",
                 history: "Sesión 1: 30kg x 10 | Sesión 2: 30kg x 9 | Sesión 3: 25kg x 12",
                 notes: "Llevar la barra hacia la coronilla, no hacia la frente, para mantener tensión en tríceps.",
-                weight: 30,
-                reps: 10,
-                rir: 1
+                weight: 0,
+                reps: 0,
+                rir: 0
             },
             {
                 name: "Elevación de Talones de Pie",
                 history: "Sesión 1: 60kg x 15 | Sesión 2: 60kg x 15 | Sesión 3: 50kg x 18",
                 notes: "Pausa de 2 segundos en el estiramiento máximo (abajo) y 1 segundo arriba.",
-                weight: 60,
-                reps: 15,
-                rir: 1
+                weight: 0,
+                reps: 0,
+                rir: 0
             }
         ]
     }
@@ -160,7 +160,8 @@ const state = {
     currentTab: 'screen-entreno',
     currentRoutineKey: null,
     currentExerciseIndex: 0,
-    isFirstTimeFoco: true
+    isFirstTimeFoco: true,
+    isWorkoutActive: false
 };
 
 // 3. REFERENCIAS DEL DOM
@@ -300,6 +301,15 @@ function openRoutineGeneral(routineKey) {
         dom.exerciseListContainer.appendChild(card);
     });
     
+    // Sincronizar estado visual del botón Iniciar/Terminar Entreno
+    if (state.isWorkoutActive) {
+        dom.btnStartWorkout.classList.add('active-workout');
+        dom.btnStartWorkout.innerHTML = '<i data-lucide="square"></i><span>Terminar Entreno</span>';
+    } else {
+        dom.btnStartWorkout.classList.remove('active-workout');
+        dom.btnStartWorkout.innerHTML = '<i data-lucide="play"></i><span>Iniciar Entreno</span>';
+    }
+
     // Mostrar pantalla general
     dom.screens.general.classList.add('active');
     // Ocultar barra inferior para dar foco
@@ -425,7 +435,7 @@ function setupSteppers() {
         updateStateData();
     });
     
-    // RIR (Reps in Reserva, Clamp: 0 a 5)
+    // RIR (Reps in Reserva, Límite mínimo: 0)
     dom.buttons.rirMinus.addEventListener('click', () => {
         let val = parseInt(dom.inputs.rir.value) || 0;
         val = Math.max(0, val - 1);
@@ -434,7 +444,7 @@ function setupSteppers() {
     });
     dom.buttons.rirPlus.addEventListener('click', () => {
         let val = parseInt(dom.inputs.rir.value) || 0;
-        val = Math.min(5, val + 1);
+        val += 1;
         dom.inputs.rir.value = val;
         updateStateData();
     });
@@ -499,6 +509,11 @@ function startTimer(seconds) {
             dom.timerStatus.style.color = "var(--accent-red)";
             dom.btnTimerPlay.innerHTML = '<i data-lucide="play"></i>';
             initIcons();
+            
+            // Haptic feedback (Vibración fuerte en dispositivo)
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200, 100, 300]);
+            }
             
             // Animación de flash rojo
             dom.timerDisplay.style.color = "var(--accent-red)";
@@ -713,9 +728,20 @@ function bindEvents() {
         alert("WARZONE LOG: Estricto Dark Mode activo. Acentos en Morado Eléctrico.");
     });
     
-    // Botón mock "Iniciar Entreno" en Vista General
+    // Botón Iniciar/Terminar Entreno en Vista General
     dom.btnStartWorkout.addEventListener('click', () => {
-        alert("¡Entrenamiento iniciado! Toca cualquier ejercicio para ingresar a la Zona de Guerra.");
+        if (!state.isWorkoutActive) {
+            state.isWorkoutActive = true;
+            dom.btnStartWorkout.classList.add('active-workout');
+            dom.btnStartWorkout.innerHTML = '<i data-lucide="square"></i><span>Terminar Entreno</span>';
+            alert("¡Entrenamiento iniciado! Toca cualquier ejercicio para ingresar a la Zona de Guerra.");
+        } else {
+            state.isWorkoutActive = false;
+            dom.btnStartWorkout.classList.remove('active-workout');
+            dom.btnStartWorkout.innerHTML = '<i data-lucide="play"></i><span>Iniciar Entreno</span>';
+            alert("¡Entrenamiento terminado y guardado en la memoria!");
+        }
+        initIcons();
     });
 }
 

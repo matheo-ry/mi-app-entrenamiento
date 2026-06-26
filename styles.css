@@ -1037,3 +1037,11 @@ body {
     text-transform: uppercase;
     font-weight: 700;
 }
+
+/* Estado de Entrenamiento Activo (Dimmed) */
+.btn-start-workout.active-workout {
+    background: #1e1e24 !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    box-shadow: none !important;
+}

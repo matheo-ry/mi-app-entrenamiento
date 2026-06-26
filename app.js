@@ -352,7 +352,10 @@ const state = {
     currentTab: 'screen-entreno',
     currentRoutineKey: null,
     currentExerciseIndex: 0,
-    isWorkoutActive: false
+    isWorkoutActive: false,
+    currentSet: 1,
+    // Estructura: focoData[exerciseIndex] = { notes: '', sets: { 1: {weight, reps, rir}, 2: {}, 3: {} } }
+    focoData: {}
 };
 
 // 3. REFERENCIAS DEL DOM
@@ -378,9 +381,14 @@ const dom = {
     btnBackToGeneral: document.getElementById('btn-back-to-general'),
     focoExerciseName: document.getElementById('foco-exercise-name'),
     focoExerciseIndex: document.getElementById('foco-exercise-index'),
-    btnToggleNotes: document.getElementById('btn-toggle-notes'),
-    notesPanel: document.getElementById('notes-panel'),
-    notesText: document.getElementById('notes-text'),
+    
+    // Nueva UX Vista Foco
+    btnInfoModal: document.getElementById('btn-info-modal'),
+    infoModal: document.getElementById('info-modal'),
+    btnCloseInfoModal: document.getElementById('btn-close-info-modal'),
+    infoModalText: document.getElementById('info-modal-text'),
+    btnSets: document.querySelectorAll('.btn-set'),
+    inputDailyNotes: document.getElementById('input-daily-notes'),
     
     // Steppers de Vista Foco
     inputs: {
@@ -525,22 +533,39 @@ function openExerciseFoco(index) {
     state.currentExerciseIndex = index;
     const exercise = routine.exercises[index];
     
+    // Inicializar focoData para este ejercicio si no existe
+    if (!state.focoData[index]) {
+        state.focoData[index] = {
+            notes: '',
+            sets: {
+                1: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 },
+                2: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 },
+                3: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 }
+            }
+        };
+    }
+    
+    // Resetear a Serie 1
+    state.currentSet = 1;
+    dom.btnSets.forEach(btn => {
+        if (parseInt(btn.dataset.set) === 1) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    
     // Cargar datos en pantalla
     dom.focoExerciseName.textContent = exercise.name;
     dom.focoExerciseIndex.textContent = `Ejercicio ${index + 1} de ${routine.exercises.length}`;
-    dom.notesText.textContent = exercise.notes;
+    dom.infoModalText.textContent = exercise.notes || "No hay notas técnicas para este ejercicio.";
+    dom.inputDailyNotes.value = state.focoData[index].notes;
     
-    // Asignar inputs desde el modelo o mantener
-    dom.inputs.weight.value = exercise.weight;
-    dom.inputs.reps.value = exercise.reps;
-    dom.inputs.rir.value = exercise.rir;
+    // Asignar inputs desde la serie 1
+    const currentSetData = state.focoData[index].sets[1];
+    dom.inputs.weight.value = currentSetData.weight;
+    dom.inputs.reps.value = currentSetData.reps;
+    dom.inputs.rir.value = currentSetData.rir;
     
     // Resetear/detener cronómetro si cambia el ejercicio
     resetTimer();
-    
-    // Ocultar panel de notas al entrar
-    dom.notesPanel.style.display = 'none';
-    dom.btnToggleNotes.classList.remove('active');
     
     // Mostrar pantalla foco
     dom.screens.foco.className = 'screen active screen-foco'; // Limpiar clases de animación previas
@@ -651,14 +676,13 @@ function setupSteppers() {
 
 // Sincronizar inputs manuales con el estado mock
 function updateStateData() {
-    const routine = ROUTINE_DATA[state.currentRoutineKey];
-    if (!routine) return;
-    const exercise = routine.exercises[state.currentExerciseIndex];
-    if (!exercise) return;
+    const exerciseData = state.focoData[state.currentExerciseIndex];
+    if (!exerciseData) return;
     
-    exercise.weight = parseFloat(dom.inputs.weight.value) || 0;
-    exercise.reps = parseInt(dom.inputs.reps.value) || 0;
-    exercise.rir = parseInt(dom.inputs.rir.value) || 0;
+    const set = state.currentSet;
+    exerciseData.sets[set].weight = parseFloat(dom.inputs.weight.value) || 0;
+    exerciseData.sets[set].reps = parseInt(dom.inputs.reps.value) || 0;
+    exerciseData.sets[set].rir = parseInt(dom.inputs.rir.value) || 0;
 }
 
 // 10. LÓGICA DEL CRONÓMETRO
@@ -892,15 +916,43 @@ function bindEvents() {
     dom.btnBackToHome.addEventListener('click', closeRoutineGeneral);
     dom.btnBackToGeneral.addEventListener('click', closeExerciseFoco);
     
-    // Mostrar/Ocultar notas de ejercicio
-    dom.btnToggleNotes.addEventListener('click', () => {
-        const isVisible = dom.notesPanel.style.display === 'block';
-        if (isVisible) {
-            dom.notesPanel.style.display = 'none';
-            dom.btnToggleNotes.classList.remove('active');
-        } else {
-            dom.notesPanel.style.display = 'block';
-            dom.btnToggleNotes.classList.add('active');
+    // Nueva UX Vista Foco: Abrir/Cerrar Modal de Info
+    dom.btnInfoModal.addEventListener('click', () => {
+        dom.infoModal.classList.add('show');
+    });
+    
+    dom.btnCloseInfoModal.addEventListener('click', () => {
+        dom.infoModal.classList.remove('show');
+    });
+    
+    // Nueva UX Vista Foco: Selector de Series
+    dom.btnSets.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Guardar datos actuales de la serie antes de cambiar
+            updateStateData();
+            
+            // Cambiar serie activa
+            const setNum = parseInt(btn.dataset.set);
+            state.currentSet = setNum;
+            
+            // Actualizar UI de botones
+            dom.btnSets.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Cargar datos de la nueva serie
+            const exerciseData = state.focoData[state.currentExerciseIndex];
+            const currentSetData = exerciseData.sets[setNum];
+            dom.inputs.weight.value = currentSetData.weight;
+            dom.inputs.reps.value = currentSetData.reps;
+            dom.inputs.rir.value = currentSetData.rir;
+        });
+    });
+    
+    // Nueva UX Vista Foco: Guardar Notas Diarias
+    dom.inputDailyNotes.addEventListener('input', (e) => {
+        const exerciseData = state.focoData[state.currentExerciseIndex];
+        if (exerciseData) {
+            exerciseData.notes = e.target.value;
         }
     });
     

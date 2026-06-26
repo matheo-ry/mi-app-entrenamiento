@@ -158,22 +158,20 @@
                     <div class="foco-exercise-name" id="foco-exercise-name">Press Horizontal</div>
                     <div class="foco-subtitle" id="foco-exercise-index">Ejercicio 1 de 4</div>
                 </div>
-                <!-- Icono de Campana / Notas del día anterior -->
-                <button class="btn-icon" id="btn-toggle-notes" title="Notas del día anterior">
-                    <i data-lucide="bell"></i>
+                <!-- Icono de Setup Técnico (Info) -->
+                <button class="btn-icon" id="btn-info-modal" title="Setup Técnico">
+                    <i data-lucide="info"></i>
                 </button>
             </div>
 
-            <!-- Panel de Notas Desplegable -->
-            <div class="notes-panel" id="notes-panel">
-                <div class="notes-header">
-                    <span>Notas de la sesión anterior</span>
-                    <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
-                </div>
-                <div class="notes-text" id="notes-text">
-                    Mantener el codo a 45 grados. RPE 9 en la última serie. Incrementar a 92.5kg si se consiguen todas las repeticiones.
-                </div>
+            <!-- Selector de Series (Sets Tracker) -->
+            <div class="set-selector-container">
+                <button class="btn-set active" data-set="1">Serie 1</button>
+                <button class="btn-set" data-set="2">Serie 2</button>
+                <button class="btn-set" data-set="3">Serie 3</button>
             </div>
+
+
 
             <!-- Grid de Inputs Híbridos (Steppers) -->
             <div class="data-inputs-container">
@@ -251,6 +249,12 @@
                 </div>
             </div>
 
+            <!-- Notas del Día Persistentes -->
+            <div class="persistent-notes-container">
+                <div class="persistent-notes-label">Notas del Ejercicio (Día Actual)</div>
+                <textarea class="persistent-notes-input" id="input-daily-notes" placeholder="Ej: Subir peso la próxima vez, molestias en hombro..."></textarea>
+            </div>
+
             <!-- Indicador inferior de Gesto (Swipe) -->
             <div class="swipe-indicator bottom"></div>
         </section>
@@ -269,6 +273,19 @@
 
 
 
+    </div>
+
+    <!-- Modal de Setup Técnico (Info) -->
+    <div class="modal-overlay" id="info-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Setup Técnico</span>
+                <button class="btn-close-modal" id="btn-close-info-modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-text" id="info-modal-text"></div>
+        </div>
     </div>
 
     <!-- Cargar Iconos de Lucide -->

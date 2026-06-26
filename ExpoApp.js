@@ -1056,6 +1056,149 @@ body {
     border: 1px solid var(--border-subtle) !important;
     box-shadow: none !important;
 }
+
+/* ==========================================
+   NUEVA UX VISTA FOCO (Selector de Series, Notas, Info Modal)
+   ========================================== */
+
+/* Selector de Series */
+.set-selector-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: #101012;
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 30px;
+    border: 1px solid #242429;
+}
+
+.btn-set {
+    flex: 1;
+    padding: 12px 0;
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: #a3a3a3;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-set.active {
+    background-color: #8A2BE2;
+    color: #FFFFFF;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+}
+
+/* Notas del Día Persistentes */
+.persistent-notes-container {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.persistent-notes-label {
+    color: #a3a3a3;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.persistent-notes-input {
+    width: 100%;
+    background-color: #101012;
+    border: 1px solid #242429;
+    border-radius: 12px;
+    color: #FFFFFF;
+    font-family: var(--font-body);
+    font-size: 15px;
+    padding: 16px;
+    min-height: 100px;
+    resize: none;
+    outline: none;
+}
+
+.persistent-notes-input:focus {
+    border-color: #8A2BE2;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.15);
+}
+
+/* Modal Info (Setup Técnico) */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition-smooth);
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    width: 100%;
+    background-color: #161618;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid #8A2BE2;
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+    transform: scale(0.95);
+    transition: var(--transition-bounce);
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #242429;
+    padding-bottom: 15px;
+}
+
+.modal-title {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.btn-close-modal {
+    background: transparent;
+    border: none;
+    color: #a3a3a3;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.btn-close-modal i {
+    width: 24px;
+    height: 24px;
+}
+
+.modal-text {
+    color: #E0E0E0;
+    font-size: 15px;
+    line-height: 1.6;
+}
 </style>
 </head>
 <body>
@@ -1209,22 +1352,20 @@ body {
                     <div class="foco-exercise-name" id="foco-exercise-name">Press Horizontal</div>
                     <div class="foco-subtitle" id="foco-exercise-index">Ejercicio 1 de 4</div>
                 </div>
-                <!-- Icono de Campana / Notas del día anterior -->
-                <button class="btn-icon" id="btn-toggle-notes" title="Notas del día anterior">
-                    <i data-lucide="bell"></i>
+                <!-- Icono de Setup Técnico (Info) -->
+                <button class="btn-icon" id="btn-info-modal" title="Setup Técnico">
+                    <i data-lucide="info"></i>
                 </button>
             </div>
 
-            <!-- Panel de Notas Desplegable -->
-            <div class="notes-panel" id="notes-panel">
-                <div class="notes-header">
-                    <span>Notas de la sesión anterior</span>
-                    <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
-                </div>
-                <div class="notes-text" id="notes-text">
-                    Mantener el codo a 45 grados. RPE 9 en la última serie. Incrementar a 92.5kg si se consiguen todas las repeticiones.
-                </div>
+            <!-- Selector de Series (Sets Tracker) -->
+            <div class="set-selector-container">
+                <button class="btn-set active" data-set="1">Serie 1</button>
+                <button class="btn-set" data-set="2">Serie 2</button>
+                <button class="btn-set" data-set="3">Serie 3</button>
             </div>
+
+
 
             <!-- Grid de Inputs Híbridos (Steppers) -->
             <div class="data-inputs-container">
@@ -1302,6 +1443,12 @@ body {
                 </div>
             </div>
 
+            <!-- Notas del Día Persistentes -->
+            <div class="persistent-notes-container">
+                <div class="persistent-notes-label">Notas del Ejercicio (Día Actual)</div>
+                <textarea class="persistent-notes-input" id="input-daily-notes" placeholder="Ej: Subir peso la próxima vez, molestias en hombro..."></textarea>
+            </div>
+
             <!-- Indicador inferior de Gesto (Swipe) -->
             <div class="swipe-indicator bottom"></div>
         </section>
@@ -1320,6 +1467,19 @@ body {
 
 
 
+    </div>
+
+    <!-- Modal de Setup Técnico (Info) -->
+    <div class="modal-overlay" id="info-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Setup Técnico</span>
+                <button class="btn-close-modal" id="btn-close-info-modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-text" id="info-modal-text"></div>
+        </div>
     </div>
 
     <!-- Cargar Iconos de Lucide -->
@@ -1679,7 +1839,10 @@ const state = {
     currentTab: 'screen-entreno',
     currentRoutineKey: null,
     currentExerciseIndex: 0,
-    isWorkoutActive: false
+    isWorkoutActive: false,
+    currentSet: 1,
+    // Estructura: focoData[exerciseIndex] = { notes: '', sets: { 1: {weight, reps, rir}, 2: {}, 3: {} } }
+    focoData: {}
 };
 
 // 3. REFERENCIAS DEL DOM
@@ -1705,9 +1868,14 @@ const dom = {
     btnBackToGeneral: document.getElementById('btn-back-to-general'),
     focoExerciseName: document.getElementById('foco-exercise-name'),
     focoExerciseIndex: document.getElementById('foco-exercise-index'),
-    btnToggleNotes: document.getElementById('btn-toggle-notes'),
-    notesPanel: document.getElementById('notes-panel'),
-    notesText: document.getElementById('notes-text'),
+    
+    // Nueva UX Vista Foco
+    btnInfoModal: document.getElementById('btn-info-modal'),
+    infoModal: document.getElementById('info-modal'),
+    btnCloseInfoModal: document.getElementById('btn-close-info-modal'),
+    infoModalText: document.getElementById('info-modal-text'),
+    btnSets: document.querySelectorAll('.btn-set'),
+    inputDailyNotes: document.getElementById('input-daily-notes'),
     
     // Steppers de Vista Foco
     inputs: {
@@ -1852,22 +2020,39 @@ function openExerciseFoco(index) {
     state.currentExerciseIndex = index;
     const exercise = routine.exercises[index];
     
+    // Inicializar focoData para este ejercicio si no existe
+    if (!state.focoData[index]) {
+        state.focoData[index] = {
+            notes: '',
+            sets: {
+                1: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 },
+                2: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 },
+                3: { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 }
+            }
+        };
+    }
+    
+    // Resetear a Serie 1
+    state.currentSet = 1;
+    dom.btnSets.forEach(btn => {
+        if (parseInt(btn.dataset.set) === 1) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    
     // Cargar datos en pantalla
     dom.focoExerciseName.textContent = exercise.name;
     dom.focoExerciseIndex.textContent = \`Ejercicio \${index + 1} de \${routine.exercises.length}\`;
-    dom.notesText.textContent = exercise.notes;
+    dom.infoModalText.textContent = exercise.notes || "No hay notas técnicas para este ejercicio.";
+    dom.inputDailyNotes.value = state.focoData[index].notes;
     
-    // Asignar inputs desde el modelo o mantener
-    dom.inputs.weight.value = exercise.weight;
-    dom.inputs.reps.value = exercise.reps;
-    dom.inputs.rir.value = exercise.rir;
+    // Asignar inputs desde la serie 1
+    const currentSetData = state.focoData[index].sets[1];
+    dom.inputs.weight.value = currentSetData.weight;
+    dom.inputs.reps.value = currentSetData.reps;
+    dom.inputs.rir.value = currentSetData.rir;
     
     // Resetear/detener cronómetro si cambia el ejercicio
     resetTimer();
-    
-    // Ocultar panel de notas al entrar
-    dom.notesPanel.style.display = 'none';
-    dom.btnToggleNotes.classList.remove('active');
     
     // Mostrar pantalla foco
     dom.screens.foco.className = 'screen active screen-foco'; // Limpiar clases de animación previas
@@ -1978,14 +2163,13 @@ function setupSteppers() {
 
 // Sincronizar inputs manuales con el estado mock
 function updateStateData() {
-    const routine = ROUTINE_DATA[state.currentRoutineKey];
-    if (!routine) return;
-    const exercise = routine.exercises[state.currentExerciseIndex];
-    if (!exercise) return;
+    const exerciseData = state.focoData[state.currentExerciseIndex];
+    if (!exerciseData) return;
     
-    exercise.weight = parseFloat(dom.inputs.weight.value) || 0;
-    exercise.reps = parseInt(dom.inputs.reps.value) || 0;
-    exercise.rir = parseInt(dom.inputs.rir.value) || 0;
+    const set = state.currentSet;
+    exerciseData.sets[set].weight = parseFloat(dom.inputs.weight.value) || 0;
+    exerciseData.sets[set].reps = parseInt(dom.inputs.reps.value) || 0;
+    exerciseData.sets[set].rir = parseInt(dom.inputs.rir.value) || 0;
 }
 
 // 10. LÓGICA DEL CRONÓMETRO
@@ -2219,15 +2403,43 @@ function bindEvents() {
     dom.btnBackToHome.addEventListener('click', closeRoutineGeneral);
     dom.btnBackToGeneral.addEventListener('click', closeExerciseFoco);
     
-    // Mostrar/Ocultar notas de ejercicio
-    dom.btnToggleNotes.addEventListener('click', () => {
-        const isVisible = dom.notesPanel.style.display === 'block';
-        if (isVisible) {
-            dom.notesPanel.style.display = 'none';
-            dom.btnToggleNotes.classList.remove('active');
-        } else {
-            dom.notesPanel.style.display = 'block';
-            dom.btnToggleNotes.classList.add('active');
+    // Nueva UX Vista Foco: Abrir/Cerrar Modal de Info
+    dom.btnInfoModal.addEventListener('click', () => {
+        dom.infoModal.classList.add('show');
+    });
+    
+    dom.btnCloseInfoModal.addEventListener('click', () => {
+        dom.infoModal.classList.remove('show');
+    });
+    
+    // Nueva UX Vista Foco: Selector de Series
+    dom.btnSets.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Guardar datos actuales de la serie antes de cambiar
+            updateStateData();
+            
+            // Cambiar serie activa
+            const setNum = parseInt(btn.dataset.set);
+            state.currentSet = setNum;
+            
+            // Actualizar UI de botones
+            dom.btnSets.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Cargar datos de la nueva serie
+            const exerciseData = state.focoData[state.currentExerciseIndex];
+            const currentSetData = exerciseData.sets[setNum];
+            dom.inputs.weight.value = currentSetData.weight;
+            dom.inputs.reps.value = currentSetData.reps;
+            dom.inputs.rir.value = currentSetData.rir;
+        });
+    });
+    
+    // Nueva UX Vista Foco: Guardar Notas Diarias
+    dom.inputDailyNotes.addEventListener('input', (e) => {
+        const exerciseData = state.focoData[state.currentExerciseIndex];
+        if (exerciseData) {
+            exerciseData.notes = e.target.value;
         }
     });
     

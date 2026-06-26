@@ -567,11 +567,11 @@ function openExerciseFoco(index) {
     const exercise = routine.exercises[index];
     const focoKey = `${state.currentRoutineKey}-${index}`;
     
-    // Inicializar focoData para este ejercicio si no existe con totalSets dinámicos
+    // Inicializar focoData para este ejercicio si no existe con totalSets dinámicos (iniciar vacíos)
     if (!state.focoData[focoKey]) {
         const sets = {};
         for (let i = 1; i <= exercise.totalSets; i++) {
-            sets[i] = { weight: exercise.weight || 0, reps: exercise.reps || 0, rir: exercise.rir || 0 };
+            sets[i] = { weight: "", reps: "", rir: "" };
         }
         state.focoData[focoKey] = {
             notes: '',
@@ -843,22 +843,26 @@ function setupSteppers() {
     });
 }
 
-// Sincronizar inputs manuales con el estado mock
+// Sincronizar inputs manuales con el estado mock y persistir localmente
 function updateStateData() {
     const focoKey = `${state.currentRoutineKey}-${state.currentExerciseIndex}`;
     const exerciseData = state.focoData[focoKey];
     if (!exerciseData) return;
     
     const set = state.currentSet;
-    exerciseData.sets[set].weight = parseFloat(dom.inputs.weight.value) || 0;
-    exerciseData.sets[set].reps = parseInt(dom.inputs.reps.value) || 0;
-    
+    const wVal = dom.inputs.weight.value.trim();
+    const rVal = dom.inputs.reps.value.trim();
     const rirVal = dom.inputs.rir.value.trim().toUpperCase();
+    
+    exerciseData.sets[set].weight = wVal === "" ? "" : (parseFloat(wVal) || 0);
+    exerciseData.sets[set].reps = rVal === "" ? "" : (parseInt(rVal) || 0);
+    
     if (rirVal === 'F') {
         exerciseData.sets[set].rir = 'F';
     } else {
-        exerciseData.sets[set].rir = parseInt(rirVal) || 0;
+        exerciseData.sets[set].rir = rirVal === "" ? "" : (parseInt(rirVal) || 0);
     }
+    saveWorkout();
 }
 
 // 10. LÓGICA DEL CRONÓMETRO
@@ -1092,6 +1096,7 @@ function bindEvents() {
         const exerciseData = state.focoData[focoKey];
         if (exerciseData) {
             exerciseData.notes = e.target.value;
+            saveWorkout();
         }
     });
 
@@ -1107,8 +1112,17 @@ function bindEvents() {
                 routine.exercises[state.currentExerciseIndex].setupTechnical = e.target.value;
                 routine.exercises[state.currentExerciseIndex].notes = e.target.value;
             }
+            saveWorkout();
         }
     });
+
+    // Botón Sincronizar Google Sheets
+    const btnSyncSheets = document.getElementById('btn-sync-sheets');
+    if (btnSyncSheets) {
+        btnSyncSheets.addEventListener('click', () => {
+            syncToGoogleSheets();
+        });
+    }
     
 
 
@@ -1141,8 +1155,103 @@ function init() {
     setupTimer();
     setupGestures();
     setupKeyboardShortcuts();
+    loadTodayWorkout();
     initIcons();
     console.log("WARZONE STRENGTH LOG - Frontend cargado con éxito.");
+}
+
+// 14. SISTEMA DE PERSISTENCIA LOCAL Y SINCRONIZACIÓN DE GOOGLE SHEETS
+function saveWorkout() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    localStorage.setItem(`workout-${todayStr}`, JSON.stringify(state.focoData));
+    console.log("WARZONE: Guardada persistencia para hoy:", todayStr);
+    
+    // Si corre en React Native WebView, notificar al contenedor nativo
+    if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+            action: 'saveWorkout',
+            date: todayStr,
+            data: state.focoData
+        }));
+    }
+}
+
+function loadTodayWorkout() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const saved = localStorage.getItem(`workout-${todayStr}`);
+    if (saved) {
+        try {
+            state.focoData = JSON.parse(saved);
+            console.log("WARZONE: Sincronizada persistencia local de hoy:", state.focoData);
+        } catch (e) {
+            console.error("WARZONE: Error al parsear persistencia:", e);
+        }
+    }
+}
+
+function exportToGoogleSheetsFormat() {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const timestamp = new Date().toLocaleString();
+    const rows = [];
+
+    // Recorrer todas las rutinas y ejercicios definidos
+    for (const routineKey in ROUTINE_DATA) {
+        const routine = ROUTINE_DATA[routineKey];
+        routine.exercises.forEach((exercise, idx) => {
+            const focoKey = `${routineKey}-${idx}`;
+            const exerciseData = state.focoData[focoKey];
+            
+            // Solo exportar si el usuario ha registrado alguna serie o notas para este ejercicio hoy
+            if (exerciseData) {
+                const row = {
+                    rowId: `${todayStr}_${exercise.name.replace(/\s+/g, '_')}`,
+                    timestamp: timestamp,
+                    routine: routine.title,
+                    exercise: exercise.name,
+                    notes: exerciseData.notes || "",
+                    setupTechnical: exerciseData.setupTechnical || ""
+                };
+                
+                // Agregar las series dinámicamente
+                for (let s = 1; s <= exercise.totalSets; s++) {
+                    const setData = exerciseData.sets[s];
+                    if (setData) {
+                        row[`set${s}_weight`] = setData.weight !== undefined ? setData.weight : "";
+                        row[`set${s}_reps`] = setData.reps !== undefined ? setData.reps : "";
+                        row[`set${s}_rir`] = setData.rir !== undefined ? setData.rir : "";
+                    } else {
+                        row[`set${s}_weight`] = "";
+                        row[`set${s}_reps`] = "";
+                        row[`set${s}_rir`] = "";
+                    }
+                }
+                rows.push(row);
+            }
+        });
+    }
+    
+    return rows;
+}
+
+function syncToGoogleSheets() {
+    const payload = exportToGoogleSheetsFormat();
+    console.log("WARZONE GOOGLE SHEETS PAYLOAD:", JSON.stringify(payload, null, 2));
+    
+    if (payload.length === 0) {
+        alert("No hay entrenamientos registrados hoy para sincronizar.");
+        return;
+    }
+    
+    // Alerta de estado listo
+    alert(`Listo para sincronizar ${payload.length} ejercicios con Google Sheets. Los datos se han impreso en la consola.`);
+    
+    // Si corre en React Native WebView, notificar al contenedor nativo para sincronizar por red
+    if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+            action: 'syncGoogleSheets',
+            payload: payload
+        }));
+    }
 }
 
 // Arrancar cuando el DOM esté listo

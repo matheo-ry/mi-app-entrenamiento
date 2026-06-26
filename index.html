@@ -19,9 +19,14 @@
                     <h1>Entreno</h1>
                     <div class="subtitle">Selecciona una rutina para hoy</div>
                 </div>
-                <button class="btn-icon" id="btn-theme-info">
-                    <i data-lucide="zap"></i>
-                </button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-icon" id="btn-sync-sheets" title="Sincronizar Google Sheets">
+                        <i data-lucide="refresh-cw"></i>
+                    </button>
+                    <button class="btn-icon" id="btn-theme-info">
+                        <i data-lucide="zap"></i>
+                    </button>
+                </div>
             </header>
 
             <div class="routine-list">
@@ -186,7 +191,7 @@
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-weight-minus">-</button>
-                        <input type="number" class="stepper-input" id="input-weight" value="0" step="2.5" inputmode="decimal">
+                        <input type="number" class="stepper-input" id="input-weight" placeholder="0" value="" step="2.5" inputmode="decimal">
                         <button class="btn-stepper" id="btn-weight-plus">+</button>
                     </div>
                 </div>
@@ -199,7 +204,7 @@
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-reps-minus">-</button>
-                        <input type="number" class="stepper-input" id="input-reps" value="0" step="1" inputmode="numeric">
+                        <input type="number" class="stepper-input" id="input-reps" placeholder="0" value="" step="1" inputmode="numeric">
                         <button class="btn-stepper" id="btn-reps-plus">+</button>
                     </div>
                 </div>
@@ -212,7 +217,7 @@
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-rir-minus">-</button>
-                        <input type="text" class="stepper-input" id="input-rir" value="0" step="1" inputmode="numeric">
+                        <input type="text" class="stepper-input" id="input-rir" placeholder="0" value="" step="1" inputmode="numeric">
                         <button class="btn-stepper" id="btn-rir-plus">+</button>
                     </div>
                 </div>

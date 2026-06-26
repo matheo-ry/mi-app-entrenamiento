@@ -1505,7 +1505,7 @@ body {
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-weight-minus">-</button>
-                        <input type="number" class="stepper-input" id="input-weight" value="0" step="2.5">
+                        <input type="number" class="stepper-input" id="input-weight" value="" step="2.5" inputmode="decimal">
                         <button class="btn-stepper" id="btn-weight-plus">+</button>
                     </div>
                 </div>
@@ -1518,7 +1518,7 @@ body {
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-reps-minus">-</button>
-                        <input type="number" class="stepper-input" id="input-reps" value="0" step="1">
+                        <input type="number" class="stepper-input" id="input-reps" value="" step="1" inputmode="numeric">
                         <button class="btn-stepper" id="btn-reps-plus">+</button>
                     </div>
                 </div>
@@ -1531,7 +1531,7 @@ body {
                     </div>
                     <div class="stepper-controls">
                         <button class="btn-stepper" id="btn-rir-minus">-</button>
-                        <input type="number" class="stepper-input" id="input-rir" value="0" min="0" max="5" step="1">
+                        <input type="number" class="stepper-input" id="input-rir" value="" min="0" max="5" step="1" inputmode="numeric">
                         <button class="btn-stepper" id="btn-rir-plus">+</button>
                     </div>
                 </div>
@@ -2301,18 +2301,18 @@ function openExerciseFoco(index) {
             // Cargar datos de la nueva serie
             const exerciseData = state.focoData[focoKey];
             const currentSetData = exerciseData.sets[i];
-            dom.inputs.weight.value = currentSetData.weight;
-            dom.inputs.reps.value = currentSetData.reps;
-            dom.inputs.rir.value = currentSetData.rir;
+            dom.inputs.weight.value = currentSetData.weight === 0 ? "" : currentSetData.weight;
+            dom.inputs.reps.value = currentSetData.reps === 0 ? "" : currentSetData.reps;
+            dom.inputs.rir.value = currentSetData.rir === 0 ? "" : currentSetData.rir;
         });
         container.appendChild(btn);
     }
     
     // Asignar inputs desde la serie 1
     const currentSetData = state.focoData[focoKey].sets[1];
-    dom.inputs.weight.value = currentSetData.weight;
-    dom.inputs.reps.value = currentSetData.reps;
-    dom.inputs.rir.value = currentSetData.rir;
+    dom.inputs.weight.value = currentSetData.weight === 0 ? "" : currentSetData.weight;
+    dom.inputs.reps.value = currentSetData.reps === 0 ? "" : currentSetData.reps;
+    dom.inputs.rir.value = currentSetData.rir === 0 ? "" : currentSetData.rir;
     
     // Resetear/detener cronómetro si cambia el ejercicio
     resetTimer();
@@ -2373,13 +2373,13 @@ function setupSteppers() {
     dom.buttons.weightMinus.addEventListener('click', () => {
         let val = parseFloat(dom.inputs.weight.value) || 0;
         val = Math.max(0, val - 2.5);
-        dom.inputs.weight.value = val % 1 === 0 ? val.toFixed(0) : val.toFixed(1);
+        dom.inputs.weight.value = val === 0 ? "" : (val % 1 === 0 ? val.toFixed(0) : val.toFixed(1));
         updateStateData();
     });
     dom.buttons.weightPlus.addEventListener('click', () => {
         let val = parseFloat(dom.inputs.weight.value) || 0;
         val += 2.5;
-        dom.inputs.weight.value = val % 1 === 0 ? val.toFixed(0) : val.toFixed(1);
+        dom.inputs.weight.value = val === 0 ? "" : (val % 1 === 0 ? val.toFixed(0) : val.toFixed(1));
         updateStateData();
     });
     
@@ -2387,13 +2387,13 @@ function setupSteppers() {
     dom.buttons.repsMinus.addEventListener('click', () => {
         let val = parseInt(dom.inputs.reps.value) || 0;
         val = Math.max(0, val - 1);
-        dom.inputs.reps.value = val;
+        dom.inputs.reps.value = val === 0 ? "" : val;
         updateStateData();
     });
     dom.buttons.repsPlus.addEventListener('click', () => {
         let val = parseInt(dom.inputs.reps.value) || 0;
         val += 1;
-        dom.inputs.reps.value = val;
+        dom.inputs.reps.value = val === 0 ? "" : val;
         updateStateData();
     });
     
@@ -2401,13 +2401,13 @@ function setupSteppers() {
     dom.buttons.rirMinus.addEventListener('click', () => {
         let val = parseInt(dom.inputs.rir.value) || 0;
         val = Math.max(0, val - 1);
-        dom.inputs.rir.value = val;
+        dom.inputs.rir.value = val === 0 ? "" : val;
         updateStateData();
     });
     dom.buttons.rirPlus.addEventListener('click', () => {
         let val = parseInt(dom.inputs.rir.value) || 0;
         val += 1;
-        dom.inputs.rir.value = val;
+        dom.inputs.rir.value = val === 0 ? "" : val;
         updateStateData();
     });
     
@@ -2417,9 +2417,24 @@ function setupSteppers() {
             // Clampear RIR en manual
             if (input.id === 'input-rir') {
                 let val = parseInt(input.value) || 0;
-                input.value = Math.max(0, Math.min(5, val));
+                const clamped = Math.max(0, Math.min(5, val));
+                input.value = clamped === 0 ? "" : clamped;
             }
             updateStateData();
+        });
+        
+        input.addEventListener('focus', () => {
+            if (parseFloat(input.value) === 0 || input.value === "0" || input.value === "") {
+                input.value = '';
+            } else {
+                input.select();
+            }
+        });
+        
+        input.addEventListener('blur', () => {
+            if (input.value.trim() === '') {
+                updateStateData();
+            }
         });
     });
 }

@@ -10,7 +10,11 @@ const ROUTINE_DATA = {
         exercises: [
             {
                 name: "Press Horizontal",
-                history: "Sesión 1: 90kg x 8 | Sesión 2: 90kg x 8 | Sesión 3: 90kg x 7",
+                history: [
+                    "90x8(1)  90x8(1)  90x7(0)",
+                    "90x8(1)  90x8(1)  90x8(0)",
+                    "92.5x8(1) 92.5x7(1) 92.5x6(0)"
+                ],
                 notes: "Mantener el codo a 45 grados. RPE 9 en la última serie. Incrementar a 92.5kg si se consiguen todas las repeticiones.",
                 weight: 0,
                 reps: 0,
@@ -18,7 +22,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Dominadas Lastradas",
-                history: "Sesión 1: +15kg x 6 | Sesión 2: +15kg x 6 | Sesión 3: +10kg x 8",
+                history: [
+                    "+10x8(1) +10x8(1) +10x7(0)",
+                    "+15x6(1) +15x6(0) +10x8(0)",
+                    "+15x6(1) +15x6(1) +10x8(0)"
+                ],
                 notes: "Tracción completa hasta el pecho. Controlar la fase excéntrica (bajada lenta y controlada de 3 segundos).",
                 weight: 0,
                 reps: 0,
@@ -26,7 +34,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Press Inclinado c/ Mancuernas",
-                history: "Sesión 1: 36kg x 10 | Sesión 2: 34kg x 10 | Sesión 3: 34kg x 9",
+                history: [
+                    "34x10(1) 34x9(1) 34x8(0)",
+                    "34x10(1) 34x10(0) 34x9(0)",
+                    "36x10(1) 36x9(1) 36x8(0)"
+                ],
                 notes: "Puntas de las mancuernas ligeramente rotadas hacia adentro. Foco en el estiramiento máximo del pectoral.",
                 weight: 0,
                 reps: 0,
@@ -34,7 +46,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Remo con Barra",
-                history: "Sesión 1: 80kg x 8 | Sesión 2: 80kg x 8 | Sesión 3: 75kg x 10",
+                history: [
+                    "75x10(1) 75x10(1) 75x9(0)",
+                    "80x8(1) 80x8(1) 80x7(0)",
+                    "80x8(1) 80x8(1) 75x10(0)"
+                ],
                 notes: "Mantener la espalda paralela al suelo. Llevar la barra hacia el ombligo y apretar escápulas.",
                 weight: 0,
                 reps: 0,
@@ -47,7 +63,11 @@ const ROUTINE_DATA = {
         exercises: [
             {
                 name: "Sentadilla Búlgara",
-                history: "Sesión 1: 24kg x 10 | Sesión 2: 24kg x 9 | Sesión 3: 20kg x 12",
+                history: [
+                    "20x12(1) 20x12(1) 20x10(0)",
+                    "24x9(1)  24x9(1)  24x8(0)",
+                    "24x10(1) 24x9(1)  20x12(0)"
+                ],
                 notes: "Torso ligeramente inclinado al frente para mayor estímulo de glúteos. Mancuernas a los costados.",
                 weight: 0,
                 reps: 0,
@@ -55,7 +75,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Curl de Bíceps Inclinado",
-                history: "Sesión 1: 16kg x 10 | Sesión 2: 16kg x 8 | Sesión 3: 14kg x 10",
+                history: [
+                    "14x10(1) 14x10(1) 14x9(0)",
+                    "16x8(1)  16x8(1)  16x7(0)",
+                    "16x10(1) 16x8(1)  14x10(0)"
+                ],
                 notes: "Codos fijos detrás de la línea del cuerpo. Movimiento estricto, evitar el balanceo de hombros.",
                 weight: 0,
                 reps: 0,
@@ -63,7 +87,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Extensión Tríceps en Polea",
-                history: "Sesión 1: 30kg x 12 | Sesión 2: 30kg x 11 | Sesión 3: 25kg x 15",
+                history: [
+                    "25x15(1) 25x15(1) 25x14(0)",
+                    "30x11(1) 30x11(1) 30x10(0)",
+                    "30x12(1) 30x11(1) 25x15(0)"
+                ],
                 notes: "Hombros fijos abajo. Extensión completa de codos. Enfocar en apretar el tríceps al final.",
                 weight: 0,
                 reps: 0,
@@ -71,7 +99,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Peso Muerto Rumano",
-                history: "Sesión 1: 100kg x 8 | Sesión 2: 95kg x 8 | Sesión 3: 90kg x 10",
+                history: [
+                    "90x10(1) 90x10(1) 90x9(0)",
+                    "95x8(1)  95x8(1)  95x8(0)",
+                    "100x8(1) 95x8(1)  90x10(0)"
+                ],
                 notes: "Empujar la cadera hacia atrás. Barra rozando las piernas. Sentir tensión pura en isquiotibiales.",
                 weight: 0,
                 reps: 0,
@@ -84,7 +116,11 @@ const ROUTINE_DATA = {
         exercises: [
             {
                 name: "Jalón al Pecho",
-                history: "Sesión 1: 75kg x 10 | Sesión 2: 70kg x 11 | Sesión 3: 70kg x 10",
+                history: [
+                    "70x10(1) 70x10(1) 70x9(0)",
+                    "70x11(1) 70x10(1) 70x10(0)",
+                    "75x10(1) 70x11(1) 70x10(0)"
+                ],
                 notes: "Pensar en llevar los codos hacia las caderas. No tirarse hacia atrás en exceso.",
                 weight: 0,
                 reps: 0,
@@ -92,7 +128,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Fondos en Paralelas",
-                history: "Sesión 1: BW+20kg x 8 | Sesión 2: BW+20kg x 7 | Sesión 3: BW x 12",
+                history: [
+                    "BWx12(1)   BWx12(1)   BWx10(0)",
+                    "BW+20x7(1) BW+20x6(1) BW+20x6(0)",
+                    "BW+20x8(1) BW+20x7(1) BWx12(0)"
+                ],
                 notes: "Inclinarse ligeramente adelante. Rango de movimiento profundo con control del hombro.",
                 weight: 0,
                 reps: 0,
@@ -100,7 +140,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Remo Unilateral c/ Mancuerna",
-                history: "Sesión 1: 40kg x 10 | Sesión 2: 40kg x 9 | Sesión 3: 38kg x 10",
+                history: [
+                    "38x10(1) 38x10(1) 38x9(0)",
+                    "40x9(1)  40x9(1)  40x8(0)",
+                    "40x10(1) 40x9(1)  38x10(0)"
+                ],
                 notes: "Apoyo en banco. Llevar la mancuerna en diagonal hacia la cadera.",
                 weight: 0,
                 reps: 0,
@@ -108,7 +152,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Cruces en Polea Alta",
-                history: "Sesión 1: 15kg x 15 | Sesión 2: 15kg x 14 | Sesión 3: 12kg x 15",
+                history: [
+                    "12x15(1) 12x15(1) 12x14(0)",
+                    "15x14(1) 15x13(1) 15x12(0)",
+                    "15x15(1) 15x14(1) 12x15(0)"
+                ],
                 notes: "Contracción máxima en el centro cruzando las manos ligeramente. Fase negativa controlada.",
                 weight: 0,
                 reps: 0,
@@ -121,7 +169,11 @@ const ROUTINE_DATA = {
         exercises: [
             {
                 name: "Prensa de Piernas",
-                history: "Sesión 1: 200kg x 10 | Sesión 2: 200kg x 9 | Sesión 3: 180kg x 12",
+                history: [
+                    "180x12(1) 180x12(1) 180x10(0)",
+                    "200x9(1)  200x9(1)  200x8(0)",
+                    "200x10(1) 200x9(1)  180x12(0)"
+                ],
                 notes: "Bajar controlado hasta donde la pelvis no se retrovierta (buttwink). Empuje sólido.",
                 weight: 0,
                 reps: 0,
@@ -129,7 +181,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Curl Scott c/ Barra Z",
-                history: "Sesión 1: 35kg x 8 | Sesión 2: 30kg x 10 | Sesión 3: 30kg x 9",
+                history: [
+                    "30x9(1)  30x9(1)  30x8(0)",
+                    "30x10(1) 30x10(1) 30x9(0)",
+                    "35x8(1)  30x10(1) 30x9(0)"
+                ],
                 notes: "Apoyo completo de axilas en el banco. No extender los codos hiperlaxamente abajo.",
                 weight: 0,
                 reps: 0,
@@ -137,7 +193,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Press Francés",
-                history: "Sesión 1: 30kg x 10 | Sesión 2: 30kg x 9 | Sesión 3: 25kg x 12",
+                history: [
+                    "25x12(1) 25x12(1) 25x10(0)",
+                    "30x9(1)  30x9(1)  30x8(0)",
+                    "30x10(1) 30x9(1)  25x12(0)"
+                ],
                 notes: "Llevar la barra hacia la coronilla, no hacia la frente, para mantener tensión en tríceps.",
                 weight: 0,
                 reps: 0,
@@ -145,7 +205,11 @@ const ROUTINE_DATA = {
             },
             {
                 name: "Elevación de Talones de Pie",
-                history: "Sesión 1: 60kg x 15 | Sesión 2: 60kg x 15 | Sesión 3: 50kg x 18",
+                history: [
+                    "50x18(1) 50x18(1) 50x15(0)",
+                    "60x15(1) 60x15(1) 60x14(0)",
+                    "60x15(1) 60x15(1) 50x18(0)"
+                ],
                 notes: "Pausa de 2 segundos en el estiramiento máximo (abajo) y 1 segundo arriba.",
                 weight: 0,
                 reps: 0,
@@ -288,8 +352,7 @@ function openRoutineGeneral(routineKey) {
                 <i data-lucide="chevron-right" class="arrow-right-icon"></i>
             </div>
             <div class="history-block">
-                <span class="history-title">Últimas 3 sesiones</span>
-                <span class="history-content">${ex.history}</span>
+                ${ex.history.map(row => `<div class="history-row">${row}</div>`).join('')}
             </div>
         `;
         

@@ -1326,43 +1326,41 @@ body {
     display: block;
 }
 
-/* Botón Sincronizar Google Sheets Premium */
-.sync-container-home {
-    margin: 25px 20px 20px 20px;
+/* Botón Sincronizar Google Sheets Minimal Flotante */
+.btn-sync-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
     display: flex;
     justify-content: center;
-}
-
-.btn-sync-premium {
-    width: 100%;
-    background: linear-gradient(135deg, #8A2BE2, #4B0082);
-    border: 1px solid rgba(138, 43, 226, 0.4);
-    border-radius: 14px;
-    color: #FFFFFF;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 16px;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);
-    transition: all var(--transition-smooth);
+    transition: var(--transition-smooth);
+    z-index: 100;
 }
 
-.btn-sync-premium:active {
-    transform: scale(0.98);
-    opacity: 0.9;
+.btn-sync-icon:active {
+    transform: scale(0.92);
+    border-color: var(--accent-purple);
+    background: var(--accent-purple-dim);
 }
 
-.btn-sync-premium.loading {
+.btn-sync-icon i {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-sync-icon.loading {
     background: #161618 !important;
     border-color: #242429 !important;
     color: #a3a3a3 !important;
     pointer-events: none !important;
-    box-shadow: none !important;
 }
 
 /* Spinner CSS */
@@ -1388,14 +1386,14 @@ body {
         
         <!-- PANTALLA 1: HOME ("ENTRENO") -->
         <section id="screen-entreno" class="screen active">
+            <button class="btn-sync-icon" id="btn-sync-sheets-manual" title="Sincronizar Datos">
+                <i data-lucide="refresh-cw"></i>
+            </button>
             <header class="header">
                 <div>
                     <h1>Entreno</h1>
                     <div class="subtitle">Selecciona una rutina para hoy</div>
                 </div>
-                <button class="btn-icon" id="btn-theme-info">
-                    <i data-lucide="zap"></i>
-                </button>
             </header>
 
             <div class="routine-list">
@@ -1405,7 +1403,7 @@ body {
                         <span class="routine-title">Pecho / Espalda</span>
                         <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 8 ejercicios</span>
                     </div>
-                    <i data-lucide="chevron-right" class="chevron"></i>
+                    <i data-lucide="zap" class="chevron"></i>
                     <!-- Detalle UI: Punto rojo brillante -->
                     <div class="notification-dot"></div>
                 </button>
@@ -1416,7 +1414,7 @@ body {
                         <span class="routine-title">Brazo / Pierna 1</span>
                         <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 8 ejercicios</span>
                     </div>
-                    <i data-lucide="chevron-right" class="chevron"></i>
+                    <i data-lucide="zap" class="chevron"></i>
                 </button>
 
                 <!-- Botón Rutina 3 -->
@@ -1425,7 +1423,7 @@ body {
                         <span class="routine-title">Espalda / Pecho</span>
                         <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 8 ejercicios</span>
                     </div>
-                    <i data-lucide="chevron-right" class="chevron"></i>
+                    <i data-lucide="zap" class="chevron"></i>
                 </button>
 
                 <!-- Botón Rutina 4 -->
@@ -1434,15 +1432,7 @@ body {
                         <span class="routine-title">Brazo / Pierna 2</span>
                         <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 8 ejercicios</span>
                     </div>
-                    <i data-lucide="chevron-right" class="chevron"></i>
-                </button>
-            </div>
-
-            <!-- Botón de Sincronización Manual Premium -->
-            <div class="sync-container-home">
-                <button class="btn-sync-premium" id="btn-sync-sheets-manual">
-                    <i data-lucide="cloud-lightning"></i>
-                    <span>Sincronizar Datos</span>
+                    <i data-lucide="zap" class="chevron"></i>
                 </button>
             </div>
         </section>
@@ -2832,9 +2822,12 @@ function bindEvents() {
 
 
     // Botón decorativo de tema
-    document.getElementById('btn-theme-info').addEventListener('click', () => {
-        alert("WARZONE LOG: Estricto Dark Mode activo. Acentos en Morado Eléctrico.");
-    });
+    const btnThemeInfo = document.getElementById('btn-theme-info');
+    if (btnThemeInfo) {
+        btnThemeInfo.addEventListener('click', () => {
+            alert("WARZONE LOG: Estricto Dark Mode activo. Acentos en Morado Eléctrico.");
+        });
+    }
     
     // Botón Iniciar/Terminar Entreno en Vista General
     dom.btnStartWorkout.addEventListener('click', () => {
@@ -2942,7 +2935,7 @@ async function syncToGoogleSheets() {
     const btnSync = document.getElementById('btn-sync-sheets-manual');
     if (btnSync) {
         btnSync.classList.add('loading');
-        btnSync.innerHTML = '<div class="spinner"></div><span>Sincronizando...</span>';
+        btnSync.innerHTML = '<div class="spinner"></div>';
     }
     
     const sessionKeys = getAllSessionKeys();
@@ -3015,7 +3008,7 @@ function restoreSyncButton() {
     const btnSync = document.getElementById('btn-sync-sheets-manual');
     if (btnSync) {
         btnSync.classList.remove('loading');
-        btnSync.innerHTML = '<i data-lucide="cloud-lightning"></i><span>Sincronizar Datos</span>';
+        btnSync.innerHTML = '<i data-lucide="refresh-cw"></i>';
         initIcons();
     }
 }

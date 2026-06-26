@@ -1313,43 +1313,41 @@ body {
     display: block;
 }
 
-/* Botón Sincronizar Google Sheets Premium */
-.sync-container-home {
-    margin: 25px 20px 20px 20px;
+/* Botón Sincronizar Google Sheets Minimal Flotante */
+.btn-sync-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
     display: flex;
     justify-content: center;
-}
-
-.btn-sync-premium {
-    width: 100%;
-    background: linear-gradient(135deg, #8A2BE2, #4B0082);
-    border: 1px solid rgba(138, 43, 226, 0.4);
-    border-radius: 14px;
-    color: #FFFFFF;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 700;
-    padding: 16px;
-    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);
-    transition: all var(--transition-smooth);
+    transition: var(--transition-smooth);
+    z-index: 100;
 }
 
-.btn-sync-premium:active {
-    transform: scale(0.98);
-    opacity: 0.9;
+.btn-sync-icon:active {
+    transform: scale(0.92);
+    border-color: var(--accent-purple);
+    background: var(--accent-purple-dim);
 }
 
-.btn-sync-premium.loading {
+.btn-sync-icon i {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-sync-icon.loading {
     background: #161618 !important;
     border-color: #242429 !important;
     color: #a3a3a3 !important;
     pointer-events: none !important;
-    box-shadow: none !important;
 }
 
 /* Spinner CSS */

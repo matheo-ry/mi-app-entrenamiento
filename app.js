@@ -1156,9 +1156,12 @@ function bindEvents() {
 
 
     // Botón decorativo de tema
-    document.getElementById('btn-theme-info').addEventListener('click', () => {
-        alert("WARZONE LOG: Estricto Dark Mode activo. Acentos en Morado Eléctrico.");
-    });
+    const btnThemeInfo = document.getElementById('btn-theme-info');
+    if (btnThemeInfo) {
+        btnThemeInfo.addEventListener('click', () => {
+            alert("WARZONE LOG: Estricto Dark Mode activo. Acentos en Morado Eléctrico.");
+        });
+    }
     
     // Botón Iniciar/Terminar Entreno en Vista General
     dom.btnStartWorkout.addEventListener('click', () => {
@@ -1266,7 +1269,7 @@ async function syncToGoogleSheets() {
     const btnSync = document.getElementById('btn-sync-sheets-manual');
     if (btnSync) {
         btnSync.classList.add('loading');
-        btnSync.innerHTML = '<div class="spinner"></div><span>Sincronizando...</span>';
+        btnSync.innerHTML = '<div class="spinner"></div>';
     }
     
     const sessionKeys = getAllSessionKeys();
@@ -1339,7 +1342,7 @@ function restoreSyncButton() {
     const btnSync = document.getElementById('btn-sync-sheets-manual');
     if (btnSync) {
         btnSync.classList.remove('loading');
-        btnSync.innerHTML = '<i data-lucide="cloud-lightning"></i><span>Sincronizar Datos</span>';
+        btnSync.innerHTML = '<i data-lucide="refresh-cw"></i>';
         initIcons();
     }
 }

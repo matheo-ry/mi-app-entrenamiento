@@ -9,52 +9,84 @@ const ROUTINE_DATA = {
         title: "Pecho / Espalda",
         exercises: [
             {
-                name: "Press Horizontal",
+                name: "Press Horizontal en máquina",
                 history: [
-                    "90x8(1)  90x8(1)  90x7(0)",
-                    "90x8(1)  90x8(1)  90x8(0)",
-                    "92.5x8(1) 92.5x7(1) 92.5x6(0)"
+                    "90x10(1) 90x10(1) 90x9(0)",
+                    "95x9(1) 95x8(1) 95x8(0)",
+                    "95x10(1) 95x9(1) 95x8(0)"
                 ],
-                notes: "Mantener el codo a 45 grados. RPE 9 en la última serie. Incrementar a 92.5kg si se consiguen todas las repeticiones.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Dominadas Lastradas",
+                name: "Press Inclinado",
                 history: [
-                    "+10x8(1) +10x8(1) +10x7(0)",
-                    "+15x6(1) +15x6(0) +10x8(0)",
-                    "+15x6(1) +15x6(1) +10x8(0)"
+                    "70x10(1) 70x9(0)",
+                    "75x8(1) 75x8(0)",
+                    "75x9(1) 75x8(0)"
                 ],
-                notes: "Tracción completa hasta el pecho. Controlar la fase excéntrica (bajada lenta y controlada de 3 segundos).",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Press Inclinado c/ Mancuernas",
+                name: "Aperturas en polea sentado",
                 history: [
-                    "34x10(1) 34x9(1) 34x8(0)",
-                    "34x10(1) 34x10(0) 34x9(0)",
-                    "36x10(1) 36x9(1) 36x8(0)"
+                    "15x15(1) 15x14(0)",
+                    "17.5x12(1) 17.5x12(0)",
+                    "17.5x13(1) 17.5x12(0)"
                 ],
-                notes: "Puntas de las mancuernas ligeramente rotadas hacia adentro. Foco en el estiramiento máximo del pectoral.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Remo con Barra",
+                name: "Remo en T",
                 history: [
-                    "75x10(1) 75x10(1) 75x9(0)",
-                    "80x8(1) 80x8(1) 80x7(0)",
-                    "80x8(1) 80x8(1) 75x10(0)"
+                    "60x10(1) 60x10(1) 60x9(0)",
+                    "65x8(1) 65x8(1) 65x7(0)",
+                    "65x9(1) 65x8(1) 65x8(0)"
                 ],
-                notes: "Mantener la espalda paralela al suelo. Llevar la barra hacia el ombligo y apretar escápulas.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Jalón Dorsal Plano Frontal",
+                history: [
+                    "50x12(1) 50x11(0)",
+                    "55x10(1) 55x9(0)",
+                    "55x11(1) 55x10(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Jalón Dorsal Plano Sagital",
+                history: [
+                    "45x12(1) 45x11(0)",
+                    "50x10(1) 50x9(0)",
+                    "50x10(1) 50x10(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Laterales en polea (Hombro)",
+                history: [
+                    "10x15(1) 10x15(0)",
+                    "12.5x12(1) 12.5x12(0)",
+                    "12.5x13(1) 12.5x12(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Hombro Posterior",
+                history: [
+                    "10x15(0)",
+                    "12.5x12(0)",
+                    "12.5x13(0)"
+                ],
+                notes: "1 serie.",
+                weight: 0, reps: 0, rir: 0
             }
         ]
     },
@@ -62,52 +94,84 @@ const ROUTINE_DATA = {
         title: "Brazo / Pierna 1",
         exercises: [
             {
-                name: "Sentadilla Búlgara",
+                name: "Press Francés",
                 history: [
-                    "20x12(1) 20x12(1) 20x10(0)",
-                    "24x9(1)  24x9(1)  24x8(0)",
-                    "24x10(1) 24x9(1)  20x12(0)"
+                    "30x12(1) 30x11(0)",
+                    "35x10(1) 35x9(0)",
+                    "35x11(1) 35x10(0)"
                 ],
-                notes: "Torso ligeramente inclinado al frente para mayor estímulo de glúteos. Mancuernas a los costados.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Curl de Bíceps Inclinado",
+                name: "Extensión de tríceps en polea",
                 history: [
-                    "14x10(1) 14x10(1) 14x9(0)",
-                    "16x8(1)  16x8(1)  16x7(0)",
-                    "16x10(1) 16x8(1)  14x10(0)"
+                    "20x15(1) 20x14(1) 20x14(0)",
+                    "25x12(1) 25x12(1) 25x11(0)",
+                    "25x13(1) 25x12(1) 25x12(0)"
                 ],
-                notes: "Codos fijos detrás de la línea del cuerpo. Movimiento estricto, evitar el balanceo de hombros.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Extensión Tríceps en Polea",
+                name: "Curl Banco Scott Unilateral",
                 history: [
-                    "25x15(1) 25x15(1) 25x14(0)",
-                    "30x11(1) 30x11(1) 30x10(0)",
-                    "30x12(1) 30x11(1) 25x15(0)"
+                    "15x12(1) 15x11(1) 15x10(0)",
+                    "17.5x10(1) 17.5x9(1) 17.5x9(0)",
+                    "17.5x11(1) 17.5x10(1) 17.5x9(0)"
                 ],
-                notes: "Hombros fijos abajo. Extensión completa de codos. Enfocar en apretar el tríceps al final.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Peso Muerto Rumano",
+                name: "Martillo en polea",
                 history: [
-                    "90x10(1) 90x10(1) 90x9(0)",
-                    "95x8(1)  95x8(1)  95x8(0)",
-                    "100x8(1) 95x8(1)  90x10(0)"
+                    "25x12(1) 25x11(0)",
+                    "30x10(1) 30x9(0)",
+                    "30x11(1) 30x10(0)"
                 ],
-                notes: "Empujar la cadera hacia atrás. Barra rozando las piernas. Sentir tensión pura en isquiotibiales.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Elevaciones laterales",
+                history: [
+                    "12x15(1) 12x14(0)",
+                    "14x12(1) 14x12(0)",
+                    "14x13(1) 14x12(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Extensión de cuádriceps",
+                history: [
+                    "60x15(1) 60x14(1) 60x14(0)",
+                    "65x12(1) 65x12(1) 65x11(0)",
+                    "65x13(1) 65x12(1) 65x12(0)"
+                ],
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Sentadilla Péndulo",
+                history: [
+                    "100x12(1) 100x11(0)",
+                    "110x10(1) 110x9(0)",
+                    "110x11(1) 110x10(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Curl Femoral Sentado",
+                history: [
+                    "50x12(1) 50x11(0)",
+                    "55x10(1) 55x9(0)",
+                    "55x11(1) 55x10(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
             }
         ]
     },
@@ -115,52 +179,84 @@ const ROUTINE_DATA = {
         title: "Espalda / Pecho",
         exercises: [
             {
-                name: "Jalón al Pecho",
+                name: "Remo en T",
                 history: [
-                    "70x10(1) 70x10(1) 70x9(0)",
-                    "70x11(1) 70x10(1) 70x10(0)",
-                    "75x10(1) 70x11(1) 70x10(0)"
+                    "60x10(1) 60x10(1) 60x9(0)",
+                    "65x8(1) 65x8(1) 65x7(0)",
+                    "65x9(1) 65x8(1) 65x8(0)"
                 ],
-                notes: "Pensar en llevar los codos hacia las caderas. No tirarse hacia atrás en exceso.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Fondos en Paralelas",
+                name: "Jalón Dorsal Plano Frontal",
                 history: [
-                    "BWx12(1)   BWx12(1)   BWx10(0)",
-                    "BW+20x7(1) BW+20x6(1) BW+20x6(0)",
-                    "BW+20x8(1) BW+20x7(1) BWx12(0)"
+                    "50x12(1) 50x11(0)",
+                    "55x10(1) 55x9(0)",
+                    "55x11(1) 55x10(0)"
                 ],
-                notes: "Inclinarse ligeramente adelante. Rango de movimiento profundo con control del hombro.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Remo Unilateral c/ Mancuerna",
+                name: "Jalón Dorsal Plano Sagital",
                 history: [
-                    "38x10(1) 38x10(1) 38x9(0)",
-                    "40x9(1)  40x9(1)  40x8(0)",
-                    "40x10(1) 40x9(1)  38x10(0)"
+                    "45x12(1) 45x11(0)",
+                    "50x10(1) 50x9(0)",
+                    "50x10(1) 50x10(0)"
                 ],
-                notes: "Apoyo en banco. Llevar la mancuerna en diagonal hacia la cadera.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Cruces en Polea Alta",
+                name: "Press Horizontal en máquina",
                 history: [
-                    "12x15(1) 12x15(1) 12x14(0)",
-                    "15x14(1) 15x13(1) 15x12(0)",
-                    "15x15(1) 15x14(1) 12x15(0)"
+                    "90x10(1) 90x10(0)",
+                    "95x8(1) 95x8(0)",
+                    "95x9(1) 95x8(0)"
                 ],
-                notes: "Contracción máxima en el centro cruzando las manos ligeramente. Fase negativa controlada.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Press Inclinado",
+                history: [
+                    "70x10(1) 70x9(0)",
+                    "75x8(1) 75x8(0)",
+                    "75x9(1) 75x8(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Aperturas en polea sentado",
+                history: [
+                    "15x15(1) 15x14(0)",
+                    "17.5x12(1) 17.5x12(0)",
+                    "17.5x13(1) 17.5x12(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Laterales en polea (Hombro)",
+                history: [
+                    "10x15(1) 10x15(0)",
+                    "12.5x12(1) 12.5x12(0)",
+                    "12.5x13(1) 12.5x12(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Hombro Posterior",
+                history: [
+                    "10x15(0)",
+                    "12.5x12(0)",
+                    "12.5x13(0)"
+                ],
+                notes: "1 serie.",
+                weight: 0, reps: 0, rir: 0
             }
         ]
     },
@@ -168,52 +264,84 @@ const ROUTINE_DATA = {
         title: "Brazo / Pierna 2",
         exercises: [
             {
-                name: "Prensa de Piernas",
-                history: [
-                    "180x12(1) 180x12(1) 180x10(0)",
-                    "200x9(1)  200x9(1)  200x8(0)",
-                    "200x10(1) 200x9(1)  180x12(0)"
-                ],
-                notes: "Bajar controlado hasta donde la pelvis no se retrovierta (buttwink). Empuje sólido.",
-                weight: 0,
-                reps: 0,
-                rir: 0
-            },
-            {
-                name: "Curl Scott c/ Barra Z",
-                history: [
-                    "30x9(1)  30x9(1)  30x8(0)",
-                    "30x10(1) 30x10(1) 30x9(0)",
-                    "35x8(1)  30x10(1) 30x9(0)"
-                ],
-                notes: "Apoyo completo de axilas en el banco. No extender los codos hiperlaxamente abajo.",
-                weight: 0,
-                reps: 0,
-                rir: 0
-            },
-            {
                 name: "Press Francés",
                 history: [
-                    "25x12(1) 25x12(1) 25x10(0)",
-                    "30x9(1)  30x9(1)  30x8(0)",
-                    "30x10(1) 30x9(1)  25x12(0)"
+                    "30x12(1) 30x11(0)",
+                    "35x10(1) 35x9(0)",
+                    "35x11(1) 35x10(0)"
                 ],
-                notes: "Llevar la barra hacia la coronilla, no hacia la frente, para mantener tensión en tríceps.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
             },
             {
-                name: "Elevación de Talones de Pie",
+                name: "Extensión de tríceps en polea",
                 history: [
-                    "50x18(1) 50x18(1) 50x15(0)",
-                    "60x15(1) 60x15(1) 60x14(0)",
-                    "60x15(1) 60x15(1) 50x18(0)"
+                    "20x15(1) 20x14(1) 20x14(0)",
+                    "25x12(1) 25x12(1) 25x11(0)",
+                    "25x13(1) 25x12(1) 25x12(0)"
                 ],
-                notes: "Pausa de 2 segundos en el estiramiento máximo (abajo) y 1 segundo arriba.",
-                weight: 0,
-                reps: 0,
-                rir: 0
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Curl Banco Scott Unilateral",
+                history: [
+                    "15x12(1) 15x11(1) 15x10(0)",
+                    "17.5x10(1) 17.5x9(1) 17.5x9(0)",
+                    "17.5x11(1) 17.5x10(1) 17.5x9(0)"
+                ],
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Martillo en polea",
+                history: [
+                    "25x12(1) 25x11(0)",
+                    "30x10(1) 30x9(0)",
+                    "30x11(1) 30x10(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Elevaciones laterales",
+                history: [
+                    "12x15(1) 12x14(0)",
+                    "14x12(1) 14x12(0)",
+                    "14x13(1) 14x12(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Extensión de cuádriceps",
+                history: [
+                    "60x15(1) 60x14(1) 60x14(0)",
+                    "65x12(1) 65x12(1) 65x11(0)",
+                    "65x13(1) 65x12(1) 65x12(0)"
+                ],
+                notes: "3 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Sentadilla Péndulo",
+                history: [
+                    "100x12(1) 100x11(0)",
+                    "110x10(1) 110x9(0)",
+                    "110x11(1) 110x10(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
+            },
+            {
+                name: "Curl Femoral Sentado",
+                history: [
+                    "50x12(1) 50x11(0)",
+                    "55x10(1) 55x9(0)",
+                    "55x11(1) 55x10(0)"
+                ],
+                notes: "2 series.",
+                weight: 0, reps: 0, rir: 0
             }
         ]
     }
@@ -353,8 +481,10 @@ function openRoutineGeneral(routineKey) {
             </div>
             <div class="history-block">
                 ${ex.history.map(row => {
-                    const sets = row.trim().split(/\s+/).map(set => `<span class="history-set">${set}</span>`).join('');
-                    return `<div class="history-row">${sets}</div>`;
+                    const setsArr = row.trim().split(/\s+/);
+                    const setsCount = setsArr.length;
+                    const sets = setsArr.map(set => `<span class="history-set">${set}</span>`).join('');
+                    return `<div class="history-row" style="grid-template-columns: repeat(${setsCount}, 1fr);">${sets}</div>`;
                 }).join('')}
             </div>
         `;

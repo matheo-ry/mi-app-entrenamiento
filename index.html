@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WARZONE - Minimalist Strength Log</title>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Contenedor del Dispositivo Móvil -->
+    <div class="phone-shell">
+        
+        <!-- PANTALLA 1: HOME ("ENTRENO") -->
+        <section id="screen-entreno" class="screen active">
+            <header class="header">
+                <div>
+                    <h1>Entreno</h1>
+                    <div class="subtitle">Selecciona una rutina para hoy</div>
+                </div>
+                <button class="btn-icon" id="btn-theme-info">
+                    <i data-lucide="zap"></i>
+                </button>
+            </header>
+
+            <div class="routine-list">
+                <!-- Botón Rutina 1 -->
+                <button class="btn-routine" data-routine="pecho-espalda">
+                    <div class="routine-info">
+                        <span class="routine-title">Pecho / Espalda</span>
+                        <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 4 ejercicios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="chevron"></i>
+                    <!-- Detalle UI: Punto rojo brillante -->
+                    <div class="notification-dot"></div>
+                </button>
+
+                <!-- Botón Rutina 2 -->
+                <button class="btn-routine" data-routine="brazo-pierna-1">
+                    <div class="routine-info">
+                        <span class="routine-title">Brazo / Pierna 1</span>
+                        <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 4 ejercicios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="chevron"></i>
+                </button>
+
+                <!-- Botón Rutina 3 -->
+                <button class="btn-routine" data-routine="espalda-pecho">
+                    <div class="routine-info">
+                        <span class="routine-title">Espalda / Pecho</span>
+                        <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 4 ejercicios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="chevron"></i>
+                </button>
+
+                <!-- Botón Rutina 4 -->
+                <button class="btn-routine" data-routine="brazo-pierna-2">
+                    <div class="routine-info">
+                        <span class="routine-title">Brazo / Pierna 2</span>
+                        <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 4 ejercicios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="chevron"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: METRICAS -->
+        <section id="screen-metricas" class="screen">
+            <header class="header">
+                <div>
+                    <h1>Métricas</h1>
+                    <div class="subtitle">Tu progreso e historial</div>
+                </div>
+            </header>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span>Sesiones</span>
+                        <i data-lucide="calendar" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
+                    </div>
+                    <div class="metric-value">24</div>
+                    <div class="metric-change">Este mes</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span>Volumen</span>
+                        <i data-lucide="trending-up" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
+                    </div>
+                    <div class="metric-value">42.8t</div>
+                    <div class="metric-change">+12% vs prev.</div>
+                </div>
+
+                <div class="chart-placeholder">
+                    <div class="chart-header">
+                        <span class="chart-title">Consistencia Semanal</span>
+                        <i data-lucide="bar-chart-2" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
+                    </div>
+                    <div class="chart-bars">
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: 40px;"></div>
+                            <span class="chart-bar-label">Sem 1</span>
+                        </div>
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: 60px;"></div>
+                            <span class="chart-bar-label">Sem 2</span>
+                        </div>
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: 80px;"></div>
+                            <span class="chart-bar-label">Sem 3</span>
+                        </div>
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: 70px;"></div>
+                            <span class="chart-bar-label">Sem 4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA GENERAL (PANTALLA DESLIZANTE DE DETALLE DE RUTINA) -->
+        <section id="screen-general" class="screen" style="z-index: 150; background-color: var(--bg-pure);">
+            <div class="screen-general-header">
+                <button class="btn-icon" id="btn-back-to-home">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div class="routine-header-row">
+                    <div>
+                        <h1 id="routine-general-title">Pecho / Espalda</h1>
+                        <span class="subtitle">Lista de Ejercicios</span>
+                    </div>
+                    <!-- Botón Destacado: INICIAR ENTRENO -->
+                    <button class="btn-start-workout" id="btn-start-workout">
+                        <i data-lucide="play"></i>
+                        <span>Iniciar Entreno</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ScrollView de Tarjetas de Ejercicio -->
+            <div class="exercise-list" id="exercise-list-container">
+                <!-- Se poblará dinámicamente desde app.js para mantener consistencia -->
+            </div>
+        </section>
+
+        <!-- VISTA FOCO (PANTALLA COMPLETA - LA ZONA DE GUERRA) -->
+        <section id="screen-foco" class="screen">
+            <!-- Indicador superior de Gesto (Swipe) -->
+            <div class="swipe-indicator top"></div>
+
+            <div class="foco-header">
+                <button class="btn-icon" id="btn-back-to-general">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div class="foco-title-container">
+                    <div class="foco-exercise-name" id="foco-exercise-name">Press Horizontal</div>
+                    <div class="foco-subtitle" id="foco-exercise-index">Ejercicio 1 de 4</div>
+                </div>
+                <!-- Icono de Campana / Notas del día anterior -->
+                <button class="btn-icon" id="btn-toggle-notes" title="Notas del día anterior">
+                    <i data-lucide="bell"></i>
+                </button>
+            </div>
+
+            <!-- Panel de Notas Desplegable -->
+            <div class="notes-panel" id="notes-panel">
+                <div class="notes-header">
+                    <span>Notas de la sesión anterior</span>
+                    <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                </div>
+                <div class="notes-text" id="notes-text">
+                    Mantener el codo a 45 grados. RPE 9 en la última serie. Incrementar a 92.5kg si se consiguen todas las repeticiones.
+                </div>
+            </div>
+
+            <!-- Grid de Inputs Híbridos (Steppers) -->
+            <div class="data-inputs-container">
+                <!-- Stepper 1: PESO -->
+                <div class="stepper-row">
+                    <div class="stepper-info">
+                        <div class="stepper-label">Peso</div>
+                        <span class="stepper-unit">Kilogramos (kg)</span>
+                    </div>
+                    <div class="stepper-controls">
+                        <button class="btn-stepper" id="btn-weight-minus">-</button>
+                        <input type="number" class="stepper-input" id="input-weight" value="90" step="2.5">
+                        <button class="btn-stepper" id="btn-weight-plus">+</button>
+                    </div>
+                </div>
+
+                <!-- Stepper 2: REPES -->
+                <div class="stepper-row">
+                    <div class="stepper-info">
+                        <div class="stepper-label">Repeticiones</div>
+                        <span class="stepper-unit">Contador (repes)</span>
+                    </div>
+                    <div class="stepper-controls">
+                        <button class="btn-stepper" id="btn-reps-minus">-</button>
+                        <input type="number" class="stepper-input" id="input-reps" value="8" step="1">
+                        <button class="btn-stepper" id="btn-reps-plus">+</button>
+                    </div>
+                </div>
+
+                <!-- Stepper 3: RIR -->
+                <div class="stepper-row">
+                    <div class="stepper-info">
+                        <div class="stepper-label">RIR</div>
+                        <span class="stepper-unit">Reps en Reserva</span>
+                    </div>
+                    <div class="stepper-controls">
+                        <button class="btn-stepper" id="btn-rir-minus">-</button>
+                        <input type="number" class="stepper-input" id="input-rir" value="2" min="0" max="5" step="1">
+                        <button class="btn-stepper" id="btn-rir-plus">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulo de Cronómetro (Parte Inferior) -->
+            <div class="timer-container">
+                <div class="timer-row">
+                    <div class="timer-left">
+                        <span class="timer-label">Cronómetro</span>
+                        <div class="timer-display-wrapper">
+                            <span class="timer-display" id="timer-display">00:00</span>
+                        </div>
+                        <span class="timer-status" id="timer-status">Descanso listo</span>
+                    </div>
+                    
+                    <!-- Entrada manual, controles -->
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                        <input type="text" class="timer-manual-input" id="timer-manual" placeholder="01:30" title="Entrada manual (MM:SS)">
+                        <div class="timer-controls-group">
+                            <button class="btn-timer-ctrl" id="btn-timer-play" title="Iniciar/Pausar">
+                                <i data-lucide="play"></i>
+                            </button>
+                            <button class="btn-timer-ctrl" id="btn-timer-reset" title="Reiniciar">
+                                <i data-lucide="rotate-ccw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones rápidos predeterminados -->
+                <div class="timer-presets">
+                    <button class="btn-preset" data-seconds="60">1:00</button>
+                    <button class="btn-preset" data-seconds="90">1:30</button>
+                    <button class="btn-preset" data-seconds="120">2:00</button>
+                    <button class="btn-preset" data-seconds="180">3:00</button>
+                </div>
+            </div>
+
+            <!-- Indicador inferior de Gesto (Swipe) -->
+            <div class="swipe-indicator bottom"></div>
+        </section>
+
+        <!-- Barra de Navegación Inferior Minimalista -->
+        <nav class="bottom-nav" id="main-nav">
+            <button class="nav-item active" data-target="screen-entreno">
+                <i data-lucide="dumbbell"></i>
+                <span>Entreno</span>
+            </button>
+            <button class="nav-item" data-target="screen-metricas">
+                <i data-lucide="trending-up"></i>
+                <span>Métricas</span>
+            </button>
+        </nav>
+
+        <!-- Superposición de Ayuda de Gestos en Foco -->
+        <div class="gesture-help-overlay" id="gesture-help">
+            <div class="gesture-help-title">Controles Gestuales</div>
+            <div class="gesture-help-list">
+                <div class="gesture-help-item">
+                    <i data-lucide="chevron-down"></i>
+                    <span>Deslizar Abajo: Ejercicio Anterior</span>
+                </div>
+                <div class="gesture-help-item">
+                    <i data-lucide="chevron-up"></i>
+                    <span>Deslizar Arriba: Siguiente Ejercicio</span>
+                </div>
+                <div class="gesture-help-item">
+                    <i data-lucide="chevron-right"></i>
+                    <span>Deslizar a la Derecha: Volver</span>
+                </div>
+            </div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Toca en cualquier parte para cerrar</div>
+        </div>
+
+    </div>
+
+    <!-- Cargar Iconos de Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lógica de la Aplicación -->
+    <script src="app.js"></script>
+</body>
+</html>

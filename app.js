@@ -1,4 +1,1332 @@
+
+import React from 'react';
+import { WebView } from 'react-native-webview';
+import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+
+const htmlContent = `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WARZONE - Minimalist Strength Log</title>
+    <!-- Estilos personalizados -->
+    <style>/* ==========================================
+   GYM APP - ESTILOS VISUALES (v1-visual-base)
+   Tema: Dark Mode Elegante y Agresivo
+   Acentos: Morado Eléctrico
+   ========================================== */
+
+/* Fuentes e Inicialización */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Outfit:wght@300;400;600;700;900&display=swap');
+
+:root {
+    --bg-pure: #000000;
+    --bg-card: #101012;
+    --bg-card-hover: #16161a;
+    --bg-input: #1a1a1e;
+    --border-subtle: #242429;
+    
+    /* Acentos */
+    --accent-purple: #8A2BE2;
+    --accent-purple-glow: rgba(138, 43, 226, 0.45);
+    --accent-purple-dim: rgba(138, 43, 226, 0.15);
+    --accent-purple-bright: #a855f7;
+    
+    /* Estados */
+    --accent-red: #ff3344;
+    --accent-red-glow: rgba(255, 51, 68, 0.6);
+    --text-primary: #ffffff;
+    --text-secondary: #a3a3a3;
+    --text-muted: #666666;
+    
+    /* Dimensiones e Interacciones */
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Outfit', sans-serif;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+body {
+    background-color: #050508;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Contenedor del dispositivo móvil (Maqueta) */
+.phone-shell {
+    width: 100%;
+    max-width: 412px;
+    height: 100vh;
+    max-height: 892px; /* Altura estándar de iPhone 14 Pro / 15 Pro */
+    background-color: var(--bg-pure);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8),
+                0 0 40px 5px rgba(138, 43, 226, 0.15);
+    border: 1px solid #1a1a24;
+}
+
+/* En resoluciones de escritorio simular un smartphone real */
+@media (min-width: 768px) {
+    .phone-shell {
+        border-radius: 40px;
+        border: 8px solid #1c1c24;
+        height: 85vh;
+        max-height: 850px;
+    }
+    
+    /* Notch / Dynamic Island simulado en escritorio */
+    .phone-shell::before {
+        content: '';
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 110px;
+        height: 25px;
+        background-color: #000;
+        border-radius: 20px;
+        z-index: 1000;
+        pointer-events: none;
+    }
+}
+
+/* Área de Contenido Principal (Viewport) */
+.viewport {
+    flex: 1;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    padding: 24px 20px 90px 20px; /* Margen inferior para no tapar la navbar */
+    scrollbar-width: none; /* Firefox */
+}
+
+.viewport::-webkit-scrollbar {
+    display: none; /* Safari & Chrome */
+}
+
+/* Animaciones de cambio de pantalla */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 24px 20px 90px 20px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    display: none;
+    flex-direction: column;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.screen::-webkit-scrollbar {
+    display: none;
+}
+
+.screen.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 /* ==========================================
+   COMPONENTES COMUNES
+   ========================================== */
+
+/* Cabeceras de Pantalla */
+.header {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+}
+
+.header h1 {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header .subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+/* Botones y Enlaces */
+.btn-icon {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-icon:active {
+    transform: scale(0.92);
+    border-color: var(--accent-purple);
+    background: var(--accent-purple-dim);
+}
+
+.btn-icon i {
+    width: 20px;
+    height: 20px;
+}
+
+/* ==========================================
+   1. BOTTOM NAVIGATION BAR
+   ========================================== */
+.bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 76px;
+    background: rgba(10, 10, 12, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 100;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 70px;
+    height: 100%;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.nav-item i {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+    transition: var(--transition-smooth);
+}
+
+.nav-item span {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: var(--transition-smooth);
+}
+
+/* Estado activo de la navegación */
+.nav-item.active {
+    color: var(--accent-purple-bright);
+}
+
+.nav-item.active i {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 6px var(--accent-purple));
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    width: 16px;
+    height: 3px;
+    border-radius: 2px;
+    background-color: var(--accent-purple-bright);
+    box-shadow: 0 0 10px var(--accent-purple);
+    animation: barExpand 0.3s ease forwards;
+}
+
+@keyframes barExpand {
+    from { width: 0; }
+    to { width: 16px; }
+}
+
+/* ==========================================
+   2. VISTA HOME (ENTRENO)
+   ========================================== */
+.routine-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+/* Botones Grandes de Rutina */
+.btn-routine {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 24px 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de brillo de fondo al pasar el mouse/foco */
+.btn-routine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 100% 0%, var(--accent-purple-dim) 0%, transparent 70%);
+    opacity: 0;
+    transition: var(--transition-smooth);
+}
+
+.btn-routine:active {
+    transform: scale(0.96);
+    background-color: var(--bg-card-hover);
+    border-color: var(--accent-purple);
+}
+
+.btn-routine:active::before {
+    opacity: 1;
+}
+
+.routine-info {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+}
+
+.routine-title {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: -0.2px;
+}
+
+.routine-meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-routine i.chevron {
+    color: var(--text-muted);
+    width: 20px;
+    height: 20px;
+    transition: var(--transition-smooth);
+    z-index: 1;
+}
+
+.btn-routine:active i.chevron {
+    color: var(--accent-purple-bright);
+    transform: translateX(4px);
+}
+
+/* Indicador de Punto Rojo Brillante */
+.notification-dot {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-red);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-red), 0 0 4px var(--accent-red);
+    animation: pulseRed 2s infinite;
+}
+
+@keyframes pulseRed {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 51, 68, 0.7);
+    }
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 6px rgba(255, 51, 68, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 51, 68, 0);
+    }
+}
+
+/* ==========================================
+   3. VISTA GENERAL (MODO PANORÁMICO DE RUTINA)
+   ========================================== */
+.screen-general-header {
+    margin-bottom: 20px;
+}
+
+.routine-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+/* Botón Iniciar Entreno Elegante y Destacado */
+.btn-start-workout {
+    background: linear-gradient(135deg, var(--accent-purple) 0%, #6a1b9a 100%);
+    color: var(--text-primary);
+    border: none;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--accent-purple-glow);
+    transition: var(--transition-bounce);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-start-workout:active {
+    transform: scale(0.94);
+    box-shadow: 0 2px 8px var(--accent-purple-glow);
+    filter: brightness(1.2);
+}
+
+.btn-start-workout i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Lista de Tarjetas de Ejercicios */
+.exercise-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.card-exercise {
+    background-color: #161618;
+    border: 1px solid var(--border-subtle);
+    border-left: 4px solid #8A2BE2;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: var(--transition-bounce);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-exercise:active {
+    transform: scale(0.97);
+    border-color: var(--accent-purple);
+    background-color: var(--bg-card-hover);
+}
+
+.card-exercise::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background-color: var(--accent-purple);
+    opacity: 0;
+    transition: var(--transition-smooth);
+}
+
+.card-exercise:active::after {
+    opacity: 1;
+}
+
+.exercise-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #333333;
+}
+
+.exercise-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.card-exercise i.arrow-right-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    transition: var(--transition-smooth);
+}
+
+.card-exercise:active i.arrow-right-icon {
+    color: var(--accent-purple-bright);
+    transform: translateX(3px);
+}
+
+/* Bloque compacto del historial de las últimas 3 sesiones */
+.history-block {
+    background-color: #0C0C0C;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.history-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    font-family: monospace;
+    font-size: 11px;
+    color: #A0A0A0;
+    line-height: 1.3;
+}
+
+.history-set {
+    text-align: left;
+}
+
+/* ==========================================
+   4. VISTA FOCO (LA ZONA DE GUERRA)
+   ========================================== */
+.screen-foco {
+    padding-bottom: 20px;
+    background-color: #020203; /* Aislamiento visual más oscuro */
+    z-index: 200;
+}
+
+/* Animaciones de gestos (Swipe) para Vista Foco */
+.screen-foco.swipe-up-anim {
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.screen-foco.swipe-down-anim {
+    animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.screen-foco.swipe-right-anim {
+    animation: slideRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes slideRight {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
+
+.foco-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-top: 12px;
+}
+
+.foco-title-container {
+    flex: 1;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.foco-exercise-name {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.2px;
+    color: var(--text-primary);
+}
+
+.foco-subtitle {
+    font-size: 11px;
+    color: var(--accent-purple-bright);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* Panel de Notas del día anterior */
+.notes-panel {
+    background-color: var(--accent-purple-dim);
+    border: 1px solid var(--accent-purple);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 30px;
+    display: none; /* Se activa mediante JS */
+    animation: slideDownFade 0.3s ease forwards;
+}
+
+@keyframes slideDownFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-purple-bright);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.notes-text {
+    font-size: 13px;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+/* Grid de Inputs de Datos (Híbridos / Steppers) */
+.data-inputs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.stepper-row {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-smooth);
+}
+
+.stepper-row:focus-within {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.15);
+}
+
+.stepper-info {
+    flex: 1;
+}
+
+.stepper-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+}
+
+.stepper-unit {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.stepper-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-stepper {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+.btn-stepper:active {
+    background-color: var(--accent-purple);
+    border-color: var(--accent-purple-bright);
+    transform: scale(0.9);
+}
+
+.stepper-input {
+    width: 75px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 900;
+    text-align: center;
+    outline: none;
+}
+
+/* Eliminar flechas de número en navegadores */
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.stepper-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Sección Cronómetro en la Parte Inferior */
+.timer-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-top: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+
+.timer-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.timer-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.timer-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-purple-bright);
+}
+
+.timer-display-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.timer-display {
+    font-family: monospace;
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.timer-status {
+    font-size: 9px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+/* Entrada Manual de Cronómetro */
+.timer-manual-input {
+    width: 80px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    padding: 6px;
+    text-align: center;
+    font-family: monospace;
+    font-size: 14px;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.timer-manual-input:focus {
+    border-color: var(--accent-purple);
+}
+
+/* Controles Play/Pause/Reset */
+.timer-controls-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-timer-ctrl {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-timer-ctrl:active {
+    transform: scale(0.92);
+}
+
+.btn-timer-ctrl.active {
+    background-color: var(--accent-purple);
+    border-color: var(--accent-purple-bright);
+}
+
+.btn-timer-ctrl i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Fila de Botones Rápidos */
+.timer-presets {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.btn-preset {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    padding: 10px 0;
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-preset:active, .btn-preset.active {
+    background-color: var(--accent-purple-dim);
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(138, 43, 226, 0.15);
+}
+
+/* Indicador de Gestos Visual en la zona superior/inferior */
+.swipe-indicator {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background-color: var(--border-subtle);
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.swipe-indicator.top {
+    top: 8px;
+}
+
+.swipe-indicator.bottom {
+    bottom: 8px;
+}
+
+/* Indicación de navegación gestual para el usuario */
+.gesture-help-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 1px solid var(--accent-purple);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    text-align: center;
+    width: 80%;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.gesture-help-overlay.show {
+    opacity: 1;
+}
+
+.gesture-help-title {
+    font-weight: 700;
+    color: var(--accent-purple-bright);
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.gesture-help-list {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.gesture-help-item i {
+    color: var(--accent-purple-bright);
+    margin-right: 6px;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+}
+
+/* ==========================================
+   5. VISTA DE METRICAS (PAGINA SECUNDARIA COMPLEMENTARIA)
+   ========================================== */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.metric-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.metric-change {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-purple-bright);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.chart-placeholder {
+    grid-column: span 2;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chart-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.chart-bars {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 90px;
+    padding-top: 10px;
+}
+
+.chart-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    gap: 6px;
+}
+
+.chart-bar {
+    width: 20px;
+    background: linear-gradient(180deg, var(--accent-purple-bright) 0%, var(--accent-purple) 100%);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+    min-height: 5px;
+    transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chart-bar-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* Estado de Entrenamiento Activo (Dimmed) */
+.btn-start-workout.active-workout {
+    background: #1e1e24 !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-subtle) !important;
+    box-shadow: none !important;
+}
+</style>
+</head>
+<body>
+
+    <!-- Contenedor del Dispositivo Móvil -->
+    <div class="phone-shell">
+        
+        <!-- PANTALLA 1: HOME ("ENTRENO") -->
+        <section id="screen-entreno" class="screen active">
+            <header class="header">
+                <div>
+                    <h1>Entreno</h1>
+                    <div class="subtitle">Selecciona una rutina para hoy</div>
+                </div>
+                <button class="btn-icon" id="btn-theme-info">
+                    <i data-lucide="zap"></i>
+                </button>
+            </header>
+
+            <div class="routine-list">
+                <!-- Botón Rutina 1 -->
+                <button class="btn-routine" data-routine="pecho-espalda">
+                    <div class="routine-info">
+                        <span class="routine-title">Pecho / Espalda</span>
+                        <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 4 ejercicios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="chevron"></i>
+                    <!-- Detalle UI: Punto rojo brillante -->
+                    <div class="notification-dot"></div>
+                </button>
+
+                <!-- Botón Rutina 2 -->
+                <button class="btn-routine" data-routine="brazo-pierna-1">
+                    <div class="routine-info">
+                        <span class="routine-title">Brazo / Pierna 1</span>
+                        <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 4 ejercicios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="chevron"></i>
+                </button>
+
+                <!-- Botón Rutina 3 -->
+                <button class="btn-routine" data-routine="espalda-pecho">
+                    <div class="routine-info">
+                        <span class="routine-title">Espalda / Pecho</span>
+                        <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 4 ejercicios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="chevron"></i>
+                </button>
+
+                <!-- Botón Rutina 4 -->
+                <button class="btn-routine" data-routine="brazo-pierna-2">
+                    <div class="routine-info">
+                        <span class="routine-title">Brazo / Pierna 2</span>
+                        <span class="routine-meta"><i data-lucide="dumbbell" style="width: 12px; height: 12px;"></i> 4 ejercicios</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="chevron"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- PANTALLA 2: METRICAS -->
+        <section id="screen-metricas" class="screen">
+            <header class="header">
+                <div>
+                    <h1>Métricas</h1>
+                    <div class="subtitle">Tu progreso e historial</div>
+                </div>
+            </header>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span>Sesiones</span>
+                        <i data-lucide="calendar" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
+                    </div>
+                    <div class="metric-value">24</div>
+                    <div class="metric-change">Este mes</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span>Volumen</span>
+                        <i data-lucide="trending-up" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
+                    </div>
+                    <div class="metric-value">42.8t</div>
+                    <div class="metric-change">+12% vs prev.</div>
+                </div>
+
+                <div class="chart-placeholder">
+                    <div class="chart-header">
+                        <span class="chart-title">Consistencia Semanal</span>
+                        <i data-lucide="bar-chart-2" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
+                    </div>
+                    <div class="chart-bars">
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: 40px;"></div>
+                            <span class="chart-bar-label">Sem 1</span>
+                        </div>
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: 60px;"></div>
+                            <span class="chart-bar-label">Sem 2</span>
+                        </div>
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: 80px;"></div>
+                            <span class="chart-bar-label">Sem 3</span>
+                        </div>
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: 70px;"></div>
+                            <span class="chart-bar-label">Sem 4</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA GENERAL (PANTALLA DESLIZANTE DE DETALLE DE RUTINA) -->
+        <section id="screen-general" class="screen" style="z-index: 150; background-color: var(--bg-pure);">
+            <div class="screen-general-header">
+                <button class="btn-icon" id="btn-back-to-home">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div class="routine-header-row">
+                    <div>
+                        <h1 id="routine-general-title">Pecho / Espalda</h1>
+                        <span class="subtitle">Lista de Ejercicios</span>
+                    </div>
+                    <!-- Botón Destacado: INICIAR ENTRENO -->
+                    <button class="btn-start-workout" id="btn-start-workout">
+                        <i data-lucide="play"></i>
+                        <span>Iniciar Entreno</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ScrollView de Tarjetas de Ejercicio -->
+            <div class="exercise-list" id="exercise-list-container">
+                <!-- Se poblará dinámicamente desde app.js para mantener consistencia -->
+            </div>
+        </section>
+
+        <!-- VISTA FOCO (PANTALLA COMPLETA - LA ZONA DE GUERRA) -->
+        <section id="screen-foco" class="screen">
+            <!-- Indicador superior de Gesto (Swipe) -->
+            <div class="swipe-indicator top"></div>
+
+            <div class="foco-header">
+                <button class="btn-icon" id="btn-back-to-general">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div class="foco-title-container">
+                    <div class="foco-exercise-name" id="foco-exercise-name">Press Horizontal</div>
+                    <div class="foco-subtitle" id="foco-exercise-index">Ejercicio 1 de 4</div>
+                </div>
+                <!-- Icono de Campana / Notas del día anterior -->
+                <button class="btn-icon" id="btn-toggle-notes" title="Notas del día anterior">
+                    <i data-lucide="bell"></i>
+                </button>
+            </div>
+
+            <!-- Panel de Notas Desplegable -->
+            <div class="notes-panel" id="notes-panel">
+                <div class="notes-header">
+                    <span>Notas de la sesión anterior</span>
+                    <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                </div>
+                <div class="notes-text" id="notes-text">
+                    Mantener el codo a 45 grados. RPE 9 en la última serie. Incrementar a 92.5kg si se consiguen todas las repeticiones.
+                </div>
+            </div>
+
+            <!-- Grid de Inputs Híbridos (Steppers) -->
+            <div class="data-inputs-container">
+                <!-- Stepper 1: PESO -->
+                <div class="stepper-row">
+                    <div class="stepper-info">
+                        <div class="stepper-label">Peso</div>
+                        <span class="stepper-unit">Kilogramos (kg)</span>
+                    </div>
+                    <div class="stepper-controls">
+                        <button class="btn-stepper" id="btn-weight-minus">-</button>
+                        <input type="number" class="stepper-input" id="input-weight" value="0" step="2.5">
+                        <button class="btn-stepper" id="btn-weight-plus">+</button>
+                    </div>
+                </div>
+
+                <!-- Stepper 2: REPES -->
+                <div class="stepper-row">
+                    <div class="stepper-info">
+                        <div class="stepper-label">Repeticiones</div>
+                        <span class="stepper-unit">Contador (repes)</span>
+                    </div>
+                    <div class="stepper-controls">
+                        <button class="btn-stepper" id="btn-reps-minus">-</button>
+                        <input type="number" class="stepper-input" id="input-reps" value="0" step="1">
+                        <button class="btn-stepper" id="btn-reps-plus">+</button>
+                    </div>
+                </div>
+
+                <!-- Stepper 3: RIR -->
+                <div class="stepper-row">
+                    <div class="stepper-info">
+                        <div class="stepper-label">RIR</div>
+                        <span class="stepper-unit">Reps en Reserva</span>
+                    </div>
+                    <div class="stepper-controls">
+                        <button class="btn-stepper" id="btn-rir-minus">-</button>
+                        <input type="number" class="stepper-input" id="input-rir" value="0" min="0" max="5" step="1">
+                        <button class="btn-stepper" id="btn-rir-plus">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulo de Cronómetro (Parte Inferior) -->
+            <div class="timer-container">
+                <div class="timer-row">
+                    <div class="timer-left">
+                        <span class="timer-label">Cronómetro</span>
+                        <div class="timer-display-wrapper">
+                            <span class="timer-display" id="timer-display">00:00</span>
+                        </div>
+                        <span class="timer-status" id="timer-status">Descanso listo</span>
+                    </div>
+                    
+                    <!-- Entrada manual, controles -->
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+                        <input type="text" class="timer-manual-input" id="timer-manual" placeholder="01:30" title="Entrada manual (MM:SS)">
+                        <div class="timer-controls-group">
+                            <button class="btn-timer-ctrl" id="btn-timer-play" title="Iniciar/Pausar">
+                                <i data-lucide="play"></i>
+                            </button>
+                            <button class="btn-timer-ctrl" id="btn-timer-reset" title="Reiniciar">
+                                <i data-lucide="rotate-ccw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones rápidos predeterminados -->
+                <div class="timer-presets">
+                    <button class="btn-preset" data-seconds="60">1:00</button>
+                    <button class="btn-preset" data-seconds="90">1:30</button>
+                    <button class="btn-preset" data-seconds="180">3:00</button>
+                    <button class="btn-preset" data-seconds="210">3:30</button>
+                </div>
+            </div>
+
+            <!-- Indicador inferior de Gesto (Swipe) -->
+            <div class="swipe-indicator bottom"></div>
+        </section>
+
+        <!-- Barra de Navegación Inferior Minimalista -->
+        <nav class="bottom-nav" id="main-nav">
+            <button class="nav-item active" data-target="screen-entreno">
+                <i data-lucide="dumbbell"></i>
+                <span>Entreno</span>
+            </button>
+            <button class="nav-item" data-target="screen-metricas">
+                <i data-lucide="trending-up"></i>
+                <span>Métricas</span>
+            </button>
+        </nav>
+
+        <!-- Superposición de Ayuda de Gestos en Foco -->
+
+
+    </div>
+
+    <!-- Cargar Iconos de Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lógica de la Aplicación -->
+    <script>/* ==========================================
    GYM APP - LÓGICA DE APLICACIÓN (v1-visual-base)
    Navegación, Steppers, Cronómetro y Gestos
    ========================================== */
@@ -352,7 +1680,6 @@ const state = {
     currentTab: 'screen-entreno',
     currentRoutineKey: null,
     currentExerciseIndex: 0,
-    isFirstTimeFoco: true,
     isWorkoutActive: false
 };
 
@@ -382,7 +1709,6 @@ const dom = {
     btnToggleNotes: document.getElementById('btn-toggle-notes'),
     notesPanel: document.getElementById('notes-panel'),
     notesText: document.getElementById('notes-text'),
-    gestureHelp: document.getElementById('gesture-help'),
     
     // Steppers de Vista Foco
     inputs: {
@@ -474,20 +1800,20 @@ function openRoutineGeneral(routineKey) {
     routine.exercises.forEach((ex, index) => {
         const card = document.createElement('div');
         card.className = 'card-exercise';
-        card.innerHTML = `
+        card.innerHTML = \`
             <div class="exercise-title-row">
-                <span class="exercise-name">${ex.name}</span>
+                <span class="exercise-name">\${ex.name}</span>
                 <i data-lucide="chevron-right" class="arrow-right-icon"></i>
             </div>
             <div class="history-block">
-                ${ex.history.map(row => {
+                \${ex.history.map(row => {
                     const setsArr = row.trim().split(/\s+/);
                     const setsCount = setsArr.length;
-                    const sets = setsArr.map(set => `<span class="history-set">${set}</span>`).join('');
-                    return `<div class="history-row" style="grid-template-columns: repeat(${setsCount}, 1fr);">${sets}</div>`;
+                    const sets = setsArr.map(set => \`<span class="history-set">\${set}</span>\`).join('');
+                    return \`<div class="history-row" style="grid-template-columns: repeat(\${setsCount}, 1fr);">\${sets}</div>\`;
                 }).join('')}
             </div>
-        `;
+        \`;
         
         // Al tocar un ejercicio abrir Vista Foco
         card.addEventListener('click', () => {
@@ -529,7 +1855,7 @@ function openExerciseFoco(index) {
     
     // Cargar datos en pantalla
     dom.focoExerciseName.textContent = exercise.name;
-    dom.focoExerciseIndex.textContent = `Ejercicio ${index + 1} de ${routine.exercises.length}`;
+    dom.focoExerciseIndex.textContent = \`Ejercicio \${index + 1} de \${routine.exercises.length}\`;
     dom.notesText.textContent = exercise.notes;
     
     // Asignar inputs desde el modelo o mantener
@@ -546,13 +1872,6 @@ function openExerciseFoco(index) {
     
     // Mostrar pantalla foco
     dom.screens.foco.className = 'screen active screen-foco'; // Limpiar clases de animación previas
-    
-    // Mostrar la guía de gestos la primera vez que se abre la vista Foco
-    if (state.isFirstTimeFoco) {
-        setTimeout(() => {
-            dom.gestureHelp.classList.add('show');
-        }, 300);
-    }
     
     initIcons();
 }
@@ -589,7 +1908,7 @@ function navigateExercise(direction) {
     } else {
         // Alerta de feedback táctil suave si llega al final
         const borderGlow = direction > 0 ? 'top' : 'bottom';
-        const indicator = document.querySelector(`.swipe-indicator.${borderGlow}`);
+        const indicator = document.querySelector(\`.swipe-indicator.\${borderGlow}\`);
         if (indicator) {
             indicator.style.backgroundColor = 'var(--accent-purple-bright)';
             indicator.style.boxShadow = '0 0 10px var(--accent-purple-bright)';
@@ -674,7 +1993,7 @@ function updateStateData() {
 function formatTime(totalSeconds) {
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return \`\${mins.toString().padStart(2, '0')}:\${secs.toString().padStart(2, '0')}\`;
 }
 
 function updateTimerDisplay() {
@@ -913,11 +2232,7 @@ function bindEvents() {
         }
     });
     
-    // Cerrar superposición de ayuda gestos al tocarla
-    dom.gestureHelp.addEventListener('click', () => {
-        dom.gestureHelp.classList.remove('show');
-        state.isFirstTimeFoco = false;
-    });
+
 
     // Botón decorativo de tema
     document.getElementById('btn-theme-info').addEventListener('click', () => {
@@ -954,3 +2269,31 @@ function init() {
 
 // Arrancar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
+`;
+
+export default function App() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#000000" />
+      <WebView 
+        source={{ html: htmlContent }} 
+        style={{ flex: 1, backgroundColor: '#000000' }} 
+        originWhitelist={['*']}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        bounces={false}
+      />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { 
+    flex: 1, 
+    backgroundColor: '#000000',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
+  }
+});

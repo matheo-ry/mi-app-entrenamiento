@@ -1503,6 +1503,7 @@ const ROUTINE_DATA = {
                     "95x10(1) 95x9(1) 95x8(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1513,6 +1514,7 @@ const ROUTINE_DATA = {
                     "75x9(1) 75x8(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1523,6 +1525,7 @@ const ROUTINE_DATA = {
                     "17.5x13(1) 17.5x12(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1533,6 +1536,7 @@ const ROUTINE_DATA = {
                     "65x9(1) 65x8(1) 65x8(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1543,6 +1547,7 @@ const ROUTINE_DATA = {
                     "55x11(1) 55x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1553,6 +1558,7 @@ const ROUTINE_DATA = {
                     "50x10(1) 50x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1563,6 +1569,7 @@ const ROUTINE_DATA = {
                     "12.5x13(1) 12.5x12(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1573,6 +1580,7 @@ const ROUTINE_DATA = {
                     "12.5x13(0)"
                 ],
                 notes: "1 serie.",
+                totalSets: 1,
                 weight: 0, reps: 0, rir: 0
             }
         ]
@@ -1588,6 +1596,7 @@ const ROUTINE_DATA = {
                     "35x11(1) 35x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1598,6 +1607,7 @@ const ROUTINE_DATA = {
                     "25x13(1) 25x12(1) 25x12(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1608,6 +1618,7 @@ const ROUTINE_DATA = {
                     "17.5x11(1) 17.5x10(1) 17.5x9(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1618,6 +1629,7 @@ const ROUTINE_DATA = {
                     "30x11(1) 30x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1628,6 +1640,7 @@ const ROUTINE_DATA = {
                     "14x13(1) 14x12(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1638,6 +1651,7 @@ const ROUTINE_DATA = {
                     "65x13(1) 65x12(1) 65x12(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1648,6 +1662,7 @@ const ROUTINE_DATA = {
                     "110x11(1) 110x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1658,6 +1673,7 @@ const ROUTINE_DATA = {
                     "55x11(1) 55x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             }
         ]
@@ -1673,6 +1689,7 @@ const ROUTINE_DATA = {
                     "65x9(1) 65x8(1) 65x8(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1683,6 +1700,7 @@ const ROUTINE_DATA = {
                     "55x11(1) 55x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1693,6 +1711,7 @@ const ROUTINE_DATA = {
                     "50x10(1) 50x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1703,6 +1722,7 @@ const ROUTINE_DATA = {
                     "95x9(1) 95x8(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1713,6 +1733,7 @@ const ROUTINE_DATA = {
                     "75x9(1) 75x8(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1723,6 +1744,7 @@ const ROUTINE_DATA = {
                     "17.5x13(1) 17.5x12(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1733,6 +1755,7 @@ const ROUTINE_DATA = {
                     "12.5x13(1) 12.5x12(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1743,6 +1766,7 @@ const ROUTINE_DATA = {
                     "12.5x13(0)"
                 ],
                 notes: "1 serie.",
+                totalSets: 1,
                 weight: 0, reps: 0, rir: 0
             }
         ]
@@ -1758,6 +1782,7 @@ const ROUTINE_DATA = {
                     "35x11(1) 35x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1768,6 +1793,7 @@ const ROUTINE_DATA = {
                     "25x13(1) 25x12(1) 25x12(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1778,6 +1804,7 @@ const ROUTINE_DATA = {
                     "17.5x11(1) 17.5x10(1) 17.5x9(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1788,6 +1815,7 @@ const ROUTINE_DATA = {
                     "30x11(1) 30x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1798,6 +1826,7 @@ const ROUTINE_DATA = {
                     "14x13(1) 14x12(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1808,6 +1837,7 @@ const ROUTINE_DATA = {
                     "65x13(1) 65x12(1) 65x12(0)"
                 ],
                 notes: "3 series.",
+                totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1818,6 +1848,7 @@ const ROUTINE_DATA = {
                     "110x11(1) 110x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
@@ -1828,6 +1859,7 @@ const ROUTINE_DATA = {
                     "55x11(1) 55x10(0)"
                 ],
                 notes: "2 series.",
+                totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             }
         ]

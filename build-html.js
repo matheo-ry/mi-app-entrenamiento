@@ -40,5 +40,5 @@ const styles = StyleSheet.create({
 });
 `;
 
-fs.writeFileSync('App.js', appJs);
-console.log('App.js generated successfully.');
+fs.writeFileSync('ExpoApp.js', appJs);
+console.log('ExpoApp.js generated successfully.');

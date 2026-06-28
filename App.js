@@ -121,20 +121,14 @@ export default function App() {
 
   const [isReady, setIsReady] = useState(false);
 
-  // Developmental Reset & Load on Startup
+  // Load on Startup
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        const hasCleared = await AsyncStorage.getItem('DEV_CLEARED_ONCE');
-        if (!hasCleared) {
-          await AsyncStorage.clear();
-          await AsyncStorage.setItem('DEV_CLEARED_ONCE', 'true');
-          console.log("AsyncStorage purgado para desarrollo.");
-        }
         await loadDbSetups();
         await loadActiveSession();
       } catch (e) {
-        console.error("Fallo durante la inicialización de la app:", e);
+        console.error('Fallo durante la inicialización de la app:', e);
       } finally {
         setIsReady(true);
       }
@@ -533,7 +527,9 @@ export default function App() {
   // Technical setup modal toggle
   const openSetupModal = () => {
     const routine = ROUTINE_DATA[currentRoutineKey];
+    if (!routine) return; // guard against null routineKey
     const exercise = routine.exercises[currentExerciseIndex];
+    if (!exercise) return; // guard against out-of-bounds index
     const key = `${currentRoutineKey}-${currentExerciseIndex}`;
     const activeText = (focoData[key] && focoData[key].setupTechnical) || dbSetups[exercise.name] || '';
     setTempSetupText(activeText);
@@ -541,8 +537,6 @@ export default function App() {
   };
 
   const saveSetupModalText = () => {
-    const routine = ROUTINE_DATA[currentRoutineKey];
-    const exercise = routine.exercises[currentExerciseIndex];
     handleSetupOrNotesChange('setupTechnical', tempSetupText);
     setIsInfoModalVisible(false);
   };
@@ -695,7 +689,8 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#000000" />
+      {/* StatusBar: opaque black, content starts below it on Android */}
+      <StatusBar barStyle="light-content" backgroundColor="#000000" translucent={false} />
       
       {/* 1. SCREEN: HOME (ROUTINES LIST) */}
       {currentScreen === 'home' && (
@@ -738,14 +733,18 @@ export default function App() {
                   onPress={() => {
                     setCurrentRoutineKey(key);
                     // Fetch real history list for display
-                    AsyncStorage.getItem('DB_WORKOUTS_' + key).then(saved => {
-                      let array = [];
-                      if (saved) {
-                        array = JSON.parse(saved);
-                        if (!Array.isArray(array)) array = [];
-                      }
-                      setRoutineSessions(array);
-                    });
+                    AsyncStorage.getItem('DB_WORKOUTS_' + key)
+                      .then(saved => {
+                        let array = [];
+                        if (saved) {
+                          try {
+                            array = JSON.parse(saved);
+                            if (!Array.isArray(array)) array = [];
+                          } catch (_) { array = []; }
+                        }
+                        setRoutineSessions(array);
+                      })
+                      .catch(() => setRoutineSessions([]));
                     setCurrentScreen('workout-general');
                   }}
                 >
@@ -1278,7 +1277,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000000',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    // On Android, StatusBar height is already handled by StatusBar component
+    // Do NOT add paddingTop here or it doubles up the status bar spacing
   },
   screenWrapper: {
     flex: 1,

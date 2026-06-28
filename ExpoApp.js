@@ -1363,6 +1363,18 @@ body {
     pointer-events: none !important;
 }
 
+.btn-sync-icon.success {
+    color: #4ADE80 !important;
+    border-color: rgba(74, 222, 128, 0.4) !important;
+    background: rgba(74, 222, 128, 0.1) !important;
+}
+
+.btn-sync-icon.error {
+    color: #F87171 !important;
+    border-color: rgba(248, 113, 113, 0.4) !important;
+    background: rgba(248, 113, 113, 0.1) !important;
+}
+
 /* Spinner CSS */
 .spinner {
     width: 18px;
@@ -2963,8 +2975,7 @@ async function syncToGoogleSheets() {
     });
     
     if (dataToSync.length === 0) {
-        alert("Todo está al día.");
-        restoreSyncButton();
+        restoreSyncButton('success');
         return;
     }
     
@@ -2995,21 +3006,33 @@ async function syncToGoogleSheets() {
             }
         });
         
-        alert("Entrenamientos sincronizados correctamente.");
+        restoreSyncButton('success');
     } catch (e) {
         console.error("Sync fetch error:", e);
-        alert("Error al sincronizar con Google Sheets. Verifica tu conexión.");
-    } finally {
-        restoreSyncButton();
+        restoreSyncButton('error');
     }
 }
 
-function restoreSyncButton() {
+function restoreSyncButton(status) {
     const btnSync = document.getElementById('btn-sync-sheets-manual');
     if (btnSync) {
         btnSync.classList.remove('loading');
         btnSync.innerHTML = '<i data-lucide="refresh-cw"></i>';
         initIcons();
+        
+        if (status === 'success') {
+            btnSync.classList.add('success');
+            btnSync.classList.remove('error');
+            setTimeout(() => {
+                btnSync.classList.remove('success');
+            }, 2000);
+        } else if (status === 'error') {
+            btnSync.classList.add('error');
+            btnSync.classList.remove('success');
+            setTimeout(() => {
+                btnSync.classList.remove('error');
+            }, 2000);
+        }
     }
 }
 

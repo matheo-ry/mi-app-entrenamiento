@@ -1565,14 +1565,6 @@ body {
             </div>
         </section>
 
-        <!-- PANTALLA 2: METRICAS -->
-        <section id="screen-metricas" class="screen">
-            <header class="header">
-                <div>
-                    <h1>Métricas</h1>
-                    <div class="subtitle">Tu progreso e historial</div>
-                </div>
-            </header>
 
         <!-- PANTALLA 2: METRICAS -->
         <section id="screen-metricas" class="screen">
@@ -3427,7 +3419,7 @@ function openMetricDetails(routineKey) {
     routine.exercises.forEach((exercise, exerciseIdx) => {
         const exSection = document.createElement('div');
         exSection.className = 'metric-exercise-section';
-        exSection.style = "margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;";
+        exSection.style = "margin-bottom: 24px; border-bottom: 1px dashed var(--border-subtle); padding-bottom: 16px;";
         
         const header = document.createElement('h3');
         header.style = "font-family: var(--font-heading); font-size: 15px; font-weight: 800; text-transform: uppercase; color: var(--accent-purple-bright); margin-bottom: 10px;";

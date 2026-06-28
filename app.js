@@ -514,27 +514,34 @@ function openRoutineGeneral(routineKey) {
     const todayStr = new Date().toISOString().split('T')[0];
     const sessionID = "DIA_" + todayStr.replace(/-/g, '_') + "/" + routineKey.toUpperCase().replace(/-/g, '_');
     
-    // Al entrar en un Día, este estado es false por defecto
-    state.isWorkoutActive = false;
+    // Intentar restaurar la sesión activa guardada
+    const hasActiveSession = loadActiveSessionState();
     
-    const saved = localStorage.getItem(sessionID);
-    if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            if (parsed.completed) {
-                state.focoData = {};
-                console.log("Sesión de hoy ya completada. Iniciando limpio.");
-            } else {
-                state.focoData = parsed;
-                console.log("Cargada persistencia atómica para:", sessionID, state.focoData);
-            }
-        } catch (e) {
-            console.error("Error al cargar persistencia:", e);
-            state.focoData = {};
-        }
+    if (hasActiveSession && state.currentRoutineKey === routineKey) {
+        console.log("Se mantiene la sesión de entrenamiento activa:", state.focoData);
     } else {
-        state.focoData = {};
-        console.log("No hay sesión activa para hoy en DB_WORKOUTS. Inicializado limpio.");
+        // Al entrar en un Día sin sesión activa para esta rutina, este estado es false por defecto
+        state.isWorkoutActive = false;
+        
+        const saved = localStorage.getItem(sessionID);
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed && parsed.completed) {
+                    state.focoData = {};
+                    console.log("Sesión de hoy ya completada. Iniciando limpio.");
+                } else {
+                    state.focoData = parsed || {};
+                    console.log("Cargada persistencia atómica para:", sessionID, state.focoData);
+                }
+            } catch (e) {
+                console.error("Error al cargar persistencia:", e);
+                state.focoData = {};
+            }
+        } else {
+            state.focoData = {};
+            console.log("No hay sesión activa para hoy en DB_WORKOUTS. Inicializado limpio.");
+        }
     }
     
     // Poblar la lista de ejercicios dinámicamente
@@ -1239,6 +1246,7 @@ function bindEvents() {
             if (btnStart) btnStart.style.display = 'none';
             if (btnEnd) btnEnd.style.display = 'flex';
             alert("¡Entrenamiento iniciado! Toca cualquier ejercicio para ingresar a la Zona de Guerra.");
+            saveActiveSessionState();
             initIcons();
         });
     }
@@ -1248,7 +1256,18 @@ function bindEvents() {
             // Guardar con syncPending: true y completed: true
             state.focoData.syncPending = true;
             state.focoData.completed = true;
-            saveWorkout();
+            
+            // Guardado síncrono al terminar
+            flushSaveWorkout();
+            
+            // Eliminar de active session
+            localStorage.removeItem('CURRENT_ACTIVE_SESSION');
+            if (window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                    action: 'delete',
+                    key: 'CURRENT_ACTIVE_SESSION'
+                }));
+            }
             
             alert("Entreno finalizado y guardado");
             
@@ -1384,6 +1403,7 @@ function init() {
     setupGestures();
     setupKeyboardShortcuts();
     loadSetups();
+    loadActiveSessionState();
     initIcons();
     console.log("WARZONE STRENGTH LOG - Frontend cargado con éxito.");
 }
@@ -1434,6 +1454,10 @@ function flushSaveWorkout() {
             key: sessionID,
             value: dataStr
         }));
+    }
+    
+    if (state.isWorkoutActive) {
+        saveActiveSessionState();
     }
 }
 
@@ -1579,23 +1603,34 @@ function openMetricDetails(routineKey) {
     container.innerHTML = '';
     
     const sessions = getSessionsForRoutine(routineKey);
-    let completedCount = 0;
+    const completedSessions = sessions.filter(s => s.data.completed === true);
+    const activeSessions = sessions.filter(s => s.data.completed !== true);
     
-    const mappedSessions = sessions.map(session => {
-        const isActive = (session.data.completed !== true);
-        let label = "";
-        if (isActive) {
-            label = "Actual";
-        } else {
-            completedCount++;
-            label = `DIA${completedCount}`;
-        }
+    const N = completedSessions.length;
+    
+    const mappedSessions = completedSessions.map((session, index) => {
         return {
             ...session,
-            label,
-            isActive
+            label: `DIA${index + 1}`,
+            isActive: false
         };
     });
+    
+    if (state.isWorkoutActive && state.currentRoutineKey === routineKey) {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const activeSessionID = "DIA_" + todayStr.replace(/-/g, '_') + "/" + routineKey.toUpperCase().replace(/-/g, '_');
+        
+        const activeSess = activeSessions[0] || {
+            key: activeSessionID,
+            data: state.focoData
+        };
+        
+        mappedSessions.push({
+            ...activeSess,
+            label: `DIA${N + 1}`,
+            isActive: true
+        });
+    }
     
     routine.exercises.forEach((exercise, exerciseIdx) => {
         const exSection = document.createElement('div');
@@ -1618,10 +1653,12 @@ function openMetricDetails(routineKey) {
                 hasLogs = true;
                 const logLine = document.createElement('button');
                 logLine.className = 'metric-log-line-btn';
-                logLine.style = "background: none; border: none; padding: 4px 0; width: 100%; text-align: left; display: block; font-family: monospace; font-size: 13px; color: var(--text-primary); cursor: pointer;";
                 
-                const labelText = session.isActive ? `${session.label} (Actual)` : session.label;
-                logLine.innerHTML = `<span style="color: var(--text-secondary); margin-right: 8px;">${labelText}:</span> ${setsStr}`;
+                const color = session.isActive ? '#FF3333' : 'var(--text-primary)';
+                logLine.style = `background: none; border: none; padding: 4px 0; width: 100%; text-align: left; display: block; font-family: monospace; font-size: 13px; color: ${color}; cursor: pointer;`;
+                
+                const labelColor = session.isActive ? '#FF3333' : 'var(--text-secondary)';
+                logLine.innerHTML = `<span style="color: ${labelColor}; margin-right: 8px;">${session.label}:</span> ${setsStr}`;
                 
                 // Al tocar, abrir el modal de edición
                 logLine.addEventListener('click', () => {
@@ -1749,4 +1786,40 @@ function openEditLogModal(sessionKey, exerciseIdx, exerciseMeta) {
     }
     
     document.getElementById('edit-log-modal').classList.add('show');
+}
+
+function saveActiveSessionState() {
+    const sessionObj = {
+        isWorkoutActive: state.isWorkoutActive,
+        routineKey: state.currentRoutineKey,
+        focoData: state.focoData
+    };
+    const dataStr = JSON.stringify(sessionObj);
+    localStorage.setItem('CURRENT_ACTIVE_SESSION', dataStr);
+    
+    if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+            action: 'save',
+            key: 'CURRENT_ACTIVE_SESSION',
+            value: dataStr
+        }));
+    }
+}
+
+function loadActiveSessionState() {
+    const saved = localStorage.getItem('CURRENT_ACTIVE_SESSION');
+    if (saved) {
+        try {
+            const sessionObj = JSON.parse(saved);
+            if (sessionObj && sessionObj.isWorkoutActive) {
+                state.isWorkoutActive = sessionObj.isWorkoutActive;
+                state.currentRoutineKey = sessionObj.routineKey;
+                state.focoData = sessionObj.focoData;
+                return true;
+            }
+        } catch (e) {
+            console.error("Error al restaurar sesión activa:", e);
+        }
+    }
+    return false;
 }

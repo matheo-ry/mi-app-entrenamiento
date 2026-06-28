@@ -74,49 +74,56 @@
                 </div>
             </header>
 
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <span>Sesiones</span>
-                        <i data-lucide="calendar" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
-                    </div>
-                    <div class="metric-value">24</div>
-                    <div class="metric-change">Este mes</div>
+        <!-- PANTALLA 2: METRICAS -->
+        <section id="screen-metricas" class="screen">
+            <header class="header">
+                <div>
+                    <h1>Métricas</h1>
+                    <div class="subtitle">Historial de entrenamientos</div>
                 </div>
+            </header>
 
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <span>Volumen</span>
-                        <i data-lucide="trending-up" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
-                    </div>
-                    <div class="metric-value">42.8t</div>
-                    <div class="metric-change">+12% vs prev.</div>
-                </div>
+            <div class="metrics-routines-grid">
+                <button class="btn-metric-routine" data-routine="pecho-espalda">
+                    <span class="metric-routine-title">Pecho / Espalda</span>
+                    <i data-lucide="trending-up"></i>
+                </button>
+                <button class="btn-metric-routine" data-routine="brazo-pierna-1">
+                    <span class="metric-routine-title">Brazo / Pierna 1</span>
+                    <i data-lucide="trending-up"></i>
+                </button>
+                <button class="btn-metric-routine" data-routine="espalda-pecho">
+                    <span class="metric-routine-title">Espalda / Pecho</span>
+                    <i data-lucide="trending-up"></i>
+                </button>
+                <button class="btn-metric-routine" data-routine="brazo-pierna-2">
+                    <span class="metric-routine-title">Brazo / Pierna 2</span>
+                    <i data-lucide="trending-up"></i>
+                </button>
+            </div>
 
-                <div class="chart-placeholder">
-                    <div class="chart-header">
-                        <span class="chart-title">Consistencia Semanal</span>
-                        <i data-lucide="bar-chart-2" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
-                    </div>
-                    <div class="chart-bars">
-                        <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: 40px;"></div>
-                            <span class="chart-bar-label">Sem 1</span>
-                        </div>
-                        <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: 60px;"></div>
-                            <span class="chart-bar-label">Sem 2</span>
-                        </div>
-                        <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: 80px;"></div>
-                            <span class="chart-bar-label">Sem 3</span>
-                        </div>
-                        <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: 70px;"></div>
-                            <span class="chart-bar-label">Sem 4</span>
-                        </div>
-                    </div>
+            <div class="backup-container">
+                <button class="btn-backup" id="btn-import-backup">
+                    <i data-lucide="download"></i>
+                    <span>Importar Backup</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- PANTALLA NIVEL 2: LOG DE DATOS POR RUTINA (MÉTRICAS) -->
+        <section id="screen-metric-details" class="screen" style="z-index: 160; background-color: var(--bg-pure);">
+            <div class="screen-general-header" style="margin-bottom: 24px; display: flex; align-items: center; gap: 16px; padding-top: 12px;">
+                <button class="btn-icon" id="btn-back-to-metrics">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div style="display: flex; flex-direction: column;">
+                    <h1 id="metric-detail-title" style="font-family: var(--font-heading); font-size: 24px; font-weight: 900; text-transform: uppercase; color: var(--text-primary);">Pecho / Espalda</h1>
+                    <span class="subtitle" style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">Log Histórico de Entrenamientos</span>
                 </div>
+            </div>
+            
+            <div class="exercise-list" id="metric-log-container" style="margin-top: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; flex: 1;">
+                <!-- Se poblará dinámicamente -->
             </div>
         </section>
 
@@ -290,6 +297,28 @@
                 </button>
             </div>
             <textarea class="modal-textarea" id="info-modal-text" placeholder="Escribe aquí el setup técnico (posición, agarre, altura del asiento...)"></textarea>
+        </div>
+    </div>
+
+    <!-- Modal de Edición Histórica -->
+    <div class="modal-overlay" id="edit-log-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Editar Registro</span>
+                <button class="btn-close-modal" id="btn-close-edit-modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <div id="edit-log-fields-container" style="max-height: 350px; overflow-y: auto; padding-right: 4px;">
+                <!-- Se poblará con inputs para cada set dinámicamente -->
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end;">
+                <button class="btn-start-workout" id="btn-save-edit-log" style="background: var(--accent-purple-bright); box-shadow: none;">
+                    <span>Guardar</span>
+                </button>
+            </div>
         </div>
     </div>
 

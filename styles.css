@@ -1406,3 +1406,89 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Dashboard de Métricas */
+.metrics-routines-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.btn-metric-routine {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 120px;
+    cursor: pointer;
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-metric-routine:active {
+    transform: scale(0.96);
+    border-color: var(--accent-purple);
+    background-color: var(--bg-card-hover);
+}
+
+.metric-routine-title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.btn-metric-routine i {
+    color: var(--accent-purple-bright);
+    width: 20px;
+    height: 20px;
+    align-self: flex-end;
+}
+
+/* Backup Button */
+.backup-container {
+    margin-top: auto;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-backup {
+    background: transparent;
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-backup:active {
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+    background: var(--accent-purple-dim);
+}
+
+.btn-backup i {
+    width: 16px;
+    height: 16px;
+}
+
+.metric-log-line-btn:active {
+    opacity: 0.7;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}

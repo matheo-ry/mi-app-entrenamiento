@@ -1419,6 +1419,92 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Dashboard de Métricas */
+.metrics-routines-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.btn-metric-routine {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 120px;
+    cursor: pointer;
+    transition: var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-metric-routine:active {
+    transform: scale(0.96);
+    border-color: var(--accent-purple);
+    background-color: var(--bg-card-hover);
+}
+
+.metric-routine-title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.btn-metric-routine i {
+    color: var(--accent-purple-bright);
+    width: 20px;
+    height: 20px;
+    align-self: flex-end;
+}
+
+/* Backup Button */
+.backup-container {
+    margin-top: auto;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-backup {
+    background: transparent;
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-backup:active {
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+    background: var(--accent-purple-dim);
+}
+
+.btn-backup i {
+    width: 16px;
+    height: 16px;
+}
+
+.metric-log-line-btn:active {
+    opacity: 0.7;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
 </style>
 </head>
 <body>
@@ -1488,49 +1574,56 @@ body {
                 </div>
             </header>
 
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <span>Sesiones</span>
-                        <i data-lucide="calendar" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
-                    </div>
-                    <div class="metric-value">24</div>
-                    <div class="metric-change">Este mes</div>
+        <!-- PANTALLA 2: METRICAS -->
+        <section id="screen-metricas" class="screen">
+            <header class="header">
+                <div>
+                    <h1>Métricas</h1>
+                    <div class="subtitle">Historial de entrenamientos</div>
                 </div>
+            </header>
 
-                <div class="metric-card">
-                    <div class="metric-header">
-                        <span>Volumen</span>
-                        <i data-lucide="trending-up" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
-                    </div>
-                    <div class="metric-value">42.8t</div>
-                    <div class="metric-change">+12% vs prev.</div>
-                </div>
+            <div class="metrics-routines-grid">
+                <button class="btn-metric-routine" data-routine="pecho-espalda">
+                    <span class="metric-routine-title">Pecho / Espalda</span>
+                    <i data-lucide="trending-up"></i>
+                </button>
+                <button class="btn-metric-routine" data-routine="brazo-pierna-1">
+                    <span class="metric-routine-title">Brazo / Pierna 1</span>
+                    <i data-lucide="trending-up"></i>
+                </button>
+                <button class="btn-metric-routine" data-routine="espalda-pecho">
+                    <span class="metric-routine-title">Espalda / Pecho</span>
+                    <i data-lucide="trending-up"></i>
+                </button>
+                <button class="btn-metric-routine" data-routine="brazo-pierna-2">
+                    <span class="metric-routine-title">Brazo / Pierna 2</span>
+                    <i data-lucide="trending-up"></i>
+                </button>
+            </div>
 
-                <div class="chart-placeholder">
-                    <div class="chart-header">
-                        <span class="chart-title">Consistencia Semanal</span>
-                        <i data-lucide="bar-chart-2" style="width: 14px; height: 14px; color: var(--accent-purple-bright);"></i>
-                    </div>
-                    <div class="chart-bars">
-                        <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: 40px;"></div>
-                            <span class="chart-bar-label">Sem 1</span>
-                        </div>
-                        <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: 60px;"></div>
-                            <span class="chart-bar-label">Sem 2</span>
-                        </div>
-                        <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: 80px;"></div>
-                            <span class="chart-bar-label">Sem 3</span>
-                        </div>
-                        <div class="chart-bar-wrapper">
-                            <div class="chart-bar" style="height: 70px;"></div>
-                            <span class="chart-bar-label">Sem 4</span>
-                        </div>
-                    </div>
+            <div class="backup-container">
+                <button class="btn-backup" id="btn-import-backup">
+                    <i data-lucide="download"></i>
+                    <span>Importar Backup</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- PANTALLA NIVEL 2: LOG DE DATOS POR RUTINA (MÉTRICAS) -->
+        <section id="screen-metric-details" class="screen" style="z-index: 160; background-color: var(--bg-pure);">
+            <div class="screen-general-header" style="margin-bottom: 24px; display: flex; align-items: center; gap: 16px; padding-top: 12px;">
+                <button class="btn-icon" id="btn-back-to-metrics">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div style="display: flex; flex-direction: column;">
+                    <h1 id="metric-detail-title" style="font-family: var(--font-heading); font-size: 24px; font-weight: 900; text-transform: uppercase; color: var(--text-primary);">Pecho / Espalda</h1>
+                    <span class="subtitle" style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">Log Histórico de Entrenamientos</span>
                 </div>
+            </div>
+            
+            <div class="exercise-list" id="metric-log-container" style="margin-top: 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; flex: 1;">
+                <!-- Se poblará dinámicamente -->
             </div>
         </section>
 
@@ -1704,6 +1797,28 @@ body {
                 </button>
             </div>
             <textarea class="modal-textarea" id="info-modal-text" placeholder="Escribe aquí el setup técnico (posición, agarre, altura del asiento...)"></textarea>
+        </div>
+    </div>
+
+    <!-- Modal de Edición Histórica -->
+    <div class="modal-overlay" id="edit-log-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Editar Registro</span>
+                <button class="btn-close-modal" id="btn-close-edit-modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            
+            <div id="edit-log-fields-container" style="max-height: 350px; overflow-y: auto; padding-right: 4px;">
+                <!-- Se poblará con inputs para cada set dinámicamente -->
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end;">
+                <button class="btn-start-workout" id="btn-save-edit-log" style="background: var(--accent-purple-bright); box-shadow: none;">
+                    <span>Guardar</span>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -2177,10 +2292,14 @@ function switchTab(targetTabId) {
     
     // Apagar la activa
     document.querySelectorAll('.screen').forEach(screen => {
-        if (screen.id !== 'screen-general' && screen.id !== 'screen-foco') {
+        if (screen.id !== 'screen-general' && screen.id !== 'screen-foco' && screen.id !== 'screen-metric-details') {
             screen.classList.remove('active');
         }
     });
+    
+    // Cerrar métricas detalles si cambiamos de pestaña
+    const detailScreen = document.getElementById('screen-metric-details');
+    if (detailScreen) detailScreen.classList.remove('active');
     
     // Encender la seleccionada
     const targetScreen = document.getElementById(targetTabId);
@@ -2488,6 +2607,7 @@ function openExerciseFoco(index) {
 function closeExerciseFoco() {
     dom.screens.foco.classList.remove('active');
     resetTimer();
+    flushSaveWorkout();
 }
 
 // Cambiar de ejercicio (Navegación vertical dentro de Foco)
@@ -2585,6 +2705,20 @@ function setupSteppers() {
     
     // Escuchar cambios directos en los inputs
     Object.values(dom.inputs).forEach(input => {
+        input.addEventListener('input', () => {
+            if (input.id === 'input-rir') {
+                let val = input.value.trim().toUpperCase();
+                if (val !== 'F') {
+                    let num = parseInt(val) || 0;
+                    if (num < 0) input.value = 0;
+                }
+            } else {
+                let val = parseFloat(input.value) || 0;
+                if (val < 0) input.value = 0;
+            }
+            updateStateData();
+        });
+
         input.addEventListener('change', () => {
             if (input.id === 'input-rir') {
                 let val = input.value.trim().toUpperCase();
@@ -2614,6 +2748,7 @@ function setupSteppers() {
                 input.value = "0";
             }
             updateStateData();
+            flushSaveWorkout();
         });
     });
 }
@@ -2960,6 +3095,112 @@ function bindEvents() {
             initIcons();
         });
     }
+
+    // Rutinas en Métricas
+    document.querySelectorAll('.btn-metric-routine').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const routineKey = btn.dataset.routine;
+            openMetricDetails(routineKey);
+        });
+    });
+    
+    // Back from metrics details
+    const btnBackToMetrics = document.getElementById('btn-back-to-metrics');
+    if (btnBackToMetrics) {
+        btnBackToMetrics.addEventListener('click', () => {
+            document.getElementById('screen-metric-details').classList.remove('active');
+        });
+    }
+    
+    // Import Backup click
+    const btnImportBackup = document.getElementById('btn-import-backup');
+    if (btnImportBackup) {
+        btnImportBackup.addEventListener('click', () => {
+            alert("Función de Importación de Backup (UI preparada).");
+        });
+    }
+    
+    // Close edit log modal
+    const btnCloseEditModal = document.getElementById('btn-close-edit-modal');
+    if (btnCloseEditModal) {
+        btnCloseEditModal.addEventListener('click', () => {
+            document.getElementById('edit-log-modal').classList.remove('show');
+        });
+    }
+    
+    // Save edit log
+    const btnSaveEditLog = document.getElementById('btn-save-edit-log');
+    if (btnSaveEditLog) {
+        btnSaveEditLog.addEventListener('click', () => {
+            const sessionKey = state.activeEditSessionKey;
+            const focoKey = state.activeEditFocoKey;
+            const exerciseMeta = state.activeEditExerciseMeta;
+            
+            if (!sessionKey || !focoKey) return;
+            
+            const dataStr = localStorage.getItem(sessionKey);
+            if (!dataStr) return;
+            
+            const sessionData = JSON.parse(dataStr);
+            if (!sessionData[focoKey]) {
+                sessionData[focoKey] = { sets: {} };
+            }
+            
+            const exerciseData = sessionData[focoKey];
+            
+            // Leer valores de los inputs
+            const weightInputs = document.querySelectorAll('.edit-input-weight');
+            const repsInputs = document.querySelectorAll('.edit-input-reps');
+            const rirInputs = document.querySelectorAll('.edit-input-rir');
+            
+            weightInputs.forEach(input => {
+                const s = input.dataset.set;
+                const val = input.value.trim();
+                if (!exerciseData.sets[s]) exerciseData.sets[s] = {};
+                exerciseData.sets[s].weight = val === "" ? "" : (parseFloat(val) || 0);
+            });
+            
+            repsInputs.forEach(input => {
+                const s = input.dataset.set;
+                const val = input.value.trim();
+                if (!exerciseData.sets[s]) exerciseData.sets[s] = {};
+                exerciseData.sets[s].reps = val === "" ? "" : (parseInt(val) || 0);
+            });
+            
+            rirInputs.forEach(input => {
+                const s = input.dataset.set;
+                const val = input.value.trim().toUpperCase();
+                if (!exerciseData.sets[s]) exerciseData.sets[s] = {};
+                if (val === 'F') {
+                    exerciseData.sets[s].rir = 'F';
+                } else {
+                    exerciseData.sets[s].rir = val === "" ? "" : (parseInt(val) || 0);
+                }
+            });
+            
+            // Marcar para volver a sincronizar
+            sessionData.syncPending = true;
+            
+            const updatedStr = JSON.stringify(sessionData);
+            localStorage.setItem(sessionKey, updatedStr);
+            
+            // WebView Post
+            if (window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                    action: 'save',
+                    key: sessionKey,
+                    value: updatedStr
+                }));
+            }
+            
+            // Cerrar modal
+            document.getElementById('edit-log-modal').classList.remove('show');
+            
+            // Recargar Metrics Details
+            const routineKey = sessionKey.split('/')[1].toLowerCase().replace(/_/g, '-');
+            openMetricDetails(routineKey);
+        });
+    }
 }
 
 // 13. BOOTSTRAP DE LA APLICACIÓN
@@ -2990,19 +3231,30 @@ function loadSetups() {
     }
 }
 
+let saveTimeout = null;
 function saveWorkout() {
     if (!state.currentRoutineKey) return;
+    
+    // Marcar en memoria de inmediato
+    state.focoData.syncPending = true;
+    
+    // Debounce de guardado físico (500ms)
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+        flushSaveWorkout();
+    }, 500);
+}
+
+function flushSaveWorkout() {
+    if (!state.currentRoutineKey) return;
+    clearTimeout(saveTimeout);
     const todayStr = new Date().toISOString().split('T')[0];
     const sessionID = "DIA_" + todayStr.replace(/-/g, '_') + "/" + state.currentRoutineKey.toUpperCase().replace(/-/g, '_');
     
-    // Marcar que esta sesión tiene cambios pendientes de sincronizar
-    state.focoData.syncPending = true;
-    
     const dataStr = JSON.stringify(state.focoData);
     localStorage.setItem(sessionID, dataStr);
-    console.log("WARZONE: Guardada persistencia en DB_WORKOUTS con syncPending:true:", sessionID);
+    console.log("WARZONE: Guardada persistencia física (flushed/debounced):", sessionID);
     
-    // Si corre en React Native WebView, notificar al contenedor nativo para guardado atómico AsyncStorage
     if (window.ReactNativeWebView) {
         window.ReactNativeWebView.postMessage(JSON.stringify({
             action: 'save',
@@ -3142,6 +3394,189 @@ function restoreSyncButton(status) {
 
 // Arrancar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', init);
+
+// 15. MÉTRICAS LOGS Y HISTORIAL DETALLADO
+function openMetricDetails(routineKey) {
+    const routine = ROUTINE_DATA[routineKey];
+    if (!routine) return;
+    
+    document.getElementById('metric-detail-title').textContent = routine.title;
+    
+    const container = document.getElementById('metric-log-container');
+    container.innerHTML = '';
+    
+    const sessions = getSessionsForRoutine(routineKey);
+    let completedCount = 0;
+    
+    const mappedSessions = sessions.map(session => {
+        const isActive = (session.data.completed !== true);
+        let label = "";
+        if (isActive) {
+            label = "Actual";
+        } else {
+            completedCount++;
+            label = \`DIA\${completedCount}\`;
+        }
+        return {
+            ...session,
+            label,
+            isActive
+        };
+    });
+    
+    routine.exercises.forEach((exercise, exerciseIdx) => {
+        const exSection = document.createElement('div');
+        exSection.className = 'metric-exercise-section';
+        exSection.style = "margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;";
+        
+        const header = document.createElement('h3');
+        header.style = "font-family: var(--font-heading); font-size: 15px; font-weight: 800; text-transform: uppercase; color: var(--accent-purple-bright); margin-bottom: 10px;";
+        header.textContent = exercise.name.toUpperCase();
+        exSection.appendChild(header);
+        
+        let hasLogs = false;
+        
+        mappedSessions.forEach(session => {
+            const focoKey = \`\${routineKey}-\${exerciseIdx}\`;
+            const exerciseData = session.data[focoKey];
+            const setsStr = formatSetsString(exerciseData, exercise);
+            
+            if (setsStr) {
+                hasLogs = true;
+                const logLine = document.createElement('button');
+                logLine.className = 'metric-log-line-btn';
+                logLine.style = "background: none; border: none; padding: 4px 0; width: 100%; text-align: left; display: block; font-family: monospace; font-size: 13px; color: var(--text-primary); cursor: pointer;";
+                
+                const labelText = session.isActive ? \`\${session.label} (Actual)\` : session.label;
+                logLine.innerHTML = \`<span style="color: var(--text-secondary); margin-right: 8px;">\${labelText}:</span> \${setsStr}\`;
+                
+                // Al tocar, abrir el modal de edición
+                logLine.addEventListener('click', () => {
+                    openEditLogModal(session.key, exerciseIdx, exercise);
+                });
+                
+                exSection.appendChild(logLine);
+            }
+        });
+        
+        if (!hasLogs) {
+            const noLogs = document.createElement('div');
+            noLogs.style = "font-size: 12px; color: var(--text-muted); font-style: italic;";
+            noLogs.textContent = "Sin registros.";
+            exSection.appendChild(noLogs);
+        }
+        
+        container.appendChild(exSection);
+    });
+    
+    document.getElementById('screen-metric-details').classList.add('active');
+}
+
+function getSessionsForRoutine(routineKey) {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("DIA_") && key.endsWith("/" + routineKey.toUpperCase().replace(/-/g, '_'))) {
+            keys.push(key);
+        }
+    }
+    
+    // Sort keys chronologically by date: DIA_YYYY_MM_DD/ROUTINE -> YYYY_MM_DD
+    keys.sort((a, b) => {
+        const dateA = a.split('/')[0].replace("DIA_", "").replace(/_/g, "-");
+        const dateB = b.split('/')[0].replace("DIA_", "").replace(/_/g, "-");
+        return dateA.localeCompare(dateB);
+    });
+    
+    const sessions = [];
+    keys.forEach(key => {
+        const dataStr = localStorage.getItem(key);
+        if (dataStr) {
+            try {
+                const data = JSON.parse(dataStr);
+                sessions.push({ key, data });
+            } catch (e) {
+                console.error("Error parsing session data for key", key, e);
+            }
+        }
+    });
+    
+    return sessions;
+}
+
+function formatSetsString(exerciseData, exerciseMeta) {
+    if (!exerciseData || !exerciseData.sets) return "";
+    
+    const setsParts = [];
+    for (let s = 1; s <= exerciseMeta.totalSets; s++) {
+        const set = exerciseData.sets[s];
+        if (set && (set.weight !== "" || set.reps !== "" || set.rir !== "")) {
+            const weight = set.weight !== "" ? set.weight : "0";
+            const reps = set.reps !== "" ? set.reps : "0";
+            let rir = set.rir !== undefined ? set.rir : "0";
+            if (rir === 'F') {
+                rir = 'F';
+            }
+            setsParts.push(\`\${weight}X\${reps}(\${rir})\`);
+        }
+    }
+    return setsParts.join(" / ");
+}
+
+function openEditLogModal(sessionKey, exerciseIdx, exerciseMeta) {
+    const dataStr = localStorage.getItem(sessionKey);
+    if (!dataStr) return;
+    
+    const sessionData = JSON.parse(dataStr);
+    const focoKey = \`\${sessionKey.split('/')[1].toLowerCase().replace(/_/g, '-')}-\${exerciseIdx}\`;
+    
+    if (!sessionData[focoKey]) {
+        sessionData[focoKey] = {
+            sets: {}
+        };
+    }
+    
+    const exerciseData = sessionData[focoKey];
+    const container = document.getElementById('edit-log-fields-container');
+    container.innerHTML = '';
+    
+    // Guardar referencias temporales
+    state.activeEditSessionKey = sessionKey;
+    state.activeEditFocoKey = focoKey;
+    state.activeEditExerciseMeta = exerciseMeta;
+    
+    const title = document.querySelector('#edit-log-modal .modal-title');
+    if (title) title.textContent = \`Editar: \${exerciseMeta.name}\`;
+    
+    for (let s = 1; s <= exerciseMeta.totalSets; s++) {
+        if (!exerciseData.sets[s]) {
+            exerciseData.sets[s] = { weight: "", reps: "", rir: "" };
+        }
+        const setData = exerciseData.sets[s];
+        
+        const setRow = document.createElement('div');
+        setRow.className = 'edit-set-row';
+        setRow.style = "display: flex; gap: 10px; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;";
+        setRow.innerHTML = \`
+            <span style="font-weight: bold; width: 50px; font-size: 13px;">Set \${s}</span>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 11px; color: var(--text-secondary);">Peso (kg)</span>
+                <input type="number" class="edit-input-weight" data-set="\${s}" value="\${setData.weight !== undefined ? setData.weight : ""}" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 11px; color: var(--text-secondary);">Repes</span>
+                <input type="number" class="edit-input-reps" data-set="\${s}" value="\${setData.reps !== undefined ? setData.reps : ""}" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 11px; color: var(--text-secondary);">RIR</span>
+                <input type="text" class="edit-input-rir" data-set="\${s}" value="\${setData.rir !== undefined ? setData.rir : ""}" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
+            </div>
+        \`;
+        container.appendChild(setRow);
+    }
+    
+    document.getElementById('edit-log-modal').classList.add('show');
+}
 </script>
 </body>
 </html>

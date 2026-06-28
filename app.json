@@ -1,26 +1,26 @@
 {
   "expo": {
-    "name": "GymApp",
+    "name": "WARZONE - Gym Log",
     "slug": "gym-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.matheo234.gymapp"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "android": {
+      "package": "com.matheo234.gymapp",
+      "adaptiveIcon": {
+        "backgroundColor": "#000000"
+      },
+      "softwareKeyboardLayoutMode": "pan"
     },
     "extra": {
       "eas": {
         "projectId": "b7caae34-c072-4ea0-b853-149f59adcba2"
       }
-    },
-    "android": {
-      "package": "com.matheo234.gymapp"
     }
   }
 }

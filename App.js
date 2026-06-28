@@ -185,15 +185,25 @@ export default function App() {
       const saved = await AsyncStorage.getItem('CURRENT_ACTIVE_SESSION');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed && parsed.isWorkoutActive) {
-          setIsWorkoutActive(parsed.isWorkoutActive);
+        // Validate the stored session has all required fields
+        if (
+          parsed &&
+          parsed.isWorkoutActive === true &&
+          parsed.routineKey &&
+          ROUTINE_DATA[parsed.routineKey] // ensure routine still exists
+        ) {
+          setIsWorkoutActive(true);
           setCurrentRoutineKey(parsed.routineKey);
           setFocoData(parsed.focoData || {});
-          console.log("Restaurada sesión activa desde almacenamiento.");
+          console.log('Sesión activa restaurada:', parsed.routineKey);
+        } else {
+          // Stale or corrupt session — clean it up
+          await AsyncStorage.removeItem('CURRENT_ACTIVE_SESSION');
         }
       }
     } catch (e) {
-      console.error("Error loading active session:", e);
+      console.error('Error loading active session:', e);
+      await AsyncStorage.removeItem('CURRENT_ACTIVE_SESSION');
     }
   };
 
@@ -209,10 +219,13 @@ export default function App() {
 
   // Immediate save of CURRENT_ACTIVE_SESSION
   const flushSaveActiveSession = async (updatedFoco) => {
+    // Guard: never persist if workout ended
+    if (!isWorkoutActive && !updatedFoco) return;
     if (saveTimeoutRef.current) {
       clearTimeout(saveTimeoutRef.current);
     }
     const currentFoco = updatedFoco || focoData;
+    if (!currentRoutineKey) return; // guard: no key = nothing to persist
     const sessionObj = {
       isWorkoutActive: true,
       routineKey: currentRoutineKey,
@@ -220,9 +233,8 @@ export default function App() {
     };
     try {
       await AsyncStorage.setItem('CURRENT_ACTIVE_SESSION', JSON.stringify(sessionObj));
-      console.log("Guardada sesión activa CURRENT_ACTIVE_SESSION.");
     } catch (e) {
-      console.error(e);
+      console.error('flushSaveActiveSession error:', e);
     }
   };
 
@@ -647,10 +659,7 @@ export default function App() {
     return rows;
   };
 
-  // Technical setup notes list
-  const getTechnicalSetupText = (exerciseName) => {
-    return dbSetups[exerciseName] || "Pulsa el icono de información en el entrenamiento para editar el setup técnico.";
-  };
+  // (getTechnicalSetupText removed - unused function)
 
   // Helper to retrieve historical rows of completed days for home overview
   const getRealHistoryRowsForHome = (exerciseIdx, totalSets) => {
@@ -877,7 +886,7 @@ export default function App() {
                   <TextInput 
                     style={styles.stepperInput}
                     keyboardType="decimal-pad"
-                    value={focoData[`${currentRoutineKey}-${currentExerciseIndex}`]?.sets[currentSet]?.weight || ''}
+                    value={focoData[`${currentRoutineKey}-${currentExerciseIndex}`]?.sets?.[currentSet]?.weight || ''}
                     onChangeText={(text) => handleInputChange('weight', text)}
                     placeholder="0"
                     placeholderTextColor="#555"
@@ -908,7 +917,7 @@ export default function App() {
                   <TextInput 
                     style={styles.stepperInput}
                     keyboardType="number-pad"
-                    value={focoData[`${currentRoutineKey}-${currentExerciseIndex}`]?.sets[currentSet]?.reps || ''}
+                    value={focoData[`${currentRoutineKey}-${currentExerciseIndex}`]?.sets?.[currentSet]?.reps || ''}
                     onChangeText={(text) => handleInputChange('reps', text)}
                     placeholder="0"
                     placeholderTextColor="#555"
@@ -938,7 +947,7 @@ export default function App() {
                   </TouchableOpacity>
                   <TextInput 
                     style={styles.stepperInput}
-                    value={focoData[`${currentRoutineKey}-${currentExerciseIndex}`]?.sets[currentSet]?.rir || ''}
+                    value={focoData[`${currentRoutineKey}-${currentExerciseIndex}`]?.sets?.[currentSet]?.rir || ''}
                     onChangeText={(text) => handleInputChange('rir', text)}
                     placeholder="0"
                     placeholderTextColor="#555"
@@ -1046,7 +1055,7 @@ export default function App() {
                 multiline={true}
                 placeholder="Ej: Subir peso la próxima vez, molestias en hombro..."
                 placeholderTextColor="#555"
-                value={focoData[`${currentRoutineKey}-${currentExerciseIndex}`]?.notes || ''}
+                value={focoData[`${currentRoutineKey}-${currentExerciseIndex}`]?.notes ?? ''}
                 onChangeText={(text) => handleSetupOrNotesChange('notes', text)}
               />
             </View>
@@ -1448,7 +1457,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     fontSize: 11,
     color: '#A0A0A5',
-    fontFamily: 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
   },
   focoHeader: {
     flexDirection: 'row',
@@ -1553,7 +1562,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: '800',
-    fontFamily: 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
     padding: 0,
   },
   timerCard: {
@@ -1576,7 +1585,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '900',
     color: '#FFF',
-    fontFamily: 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
   },
   timerDisplayStatus: {
     fontSize: 11,
@@ -1718,7 +1727,7 @@ const styles = StyleSheet.create({
   btnBackup: {
     borderWidth: 1,
     borderColor: '#242429',
-    borderStyle: 'dashed',
+    // borderStyle dashed + borderRadius crashes Android — using solid border
     borderRadius: 10,
     paddingVertical: 14,
     flexDirection: 'row',
@@ -1734,8 +1743,8 @@ const styles = StyleSheet.create({
   metricExerciseSection: {
     marginBottom: 24,
     borderBottomWidth: 1,
-    borderBottomColor: '#242429',
-    borderStyle: 'dashed',
+    borderBottomColor: '#333337',
+    // borderStyle dashed crashes Android with borderRadius — using solid
     paddingBottom: 16,
   },
   metricExerciseTitle: {
@@ -1756,13 +1765,13 @@ const styles = StyleSheet.create({
     color: '#A0A0A5',
     fontSize: 13,
     fontWeight: '600',
-    fontFamily: 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
   },
   metricLogValue: {
     color: '#FFF',
     fontSize: 13,
     fontWeight: '600',
-    fontFamily: 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
   },
   noHistoryText: {
     fontSize: 12,

@@ -451,6 +451,36 @@ body {
     height: 14px;
 }
 
+/* Botón Terminar Entreno */
+.btn-end-workout {
+    background: linear-gradient(135deg, var(--accent-red) 0%, #b71c1c 100%);
+    color: var(--text-primary);
+    border: none;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    transition: var(--transition-bounce);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-end-workout:active {
+    transform: scale(0.94);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    filter: brightness(1.2);
+}
+
+.btn-end-workout i {
+    width: 14px;
+    height: 14px;
+}
+
 /* Lista de Tarjetas de Ejercicios */
 .exercise-list {
     display: flex;
@@ -1520,6 +1550,10 @@ body {
                         <i data-lucide="play"></i>
                         <span>Iniciar Entreno</span>
                     </button>
+                    <button class="btn-end-workout" id="btn-end-workout" style="display: none;">
+                        <i data-lucide="square"></i>
+                        <span>Terminar Entreno</span>
+                    </button>
                 </div>
             </div>
 
@@ -2188,11 +2222,20 @@ function openRoutineGeneral(routineKey) {
     const todayStr = new Date().toISOString().split('T')[0];
     const sessionID = "DIA_" + todayStr.replace(/-/g, '_') + "/" + routineKey.toUpperCase().replace(/-/g, '_');
     
+    // Al entrar en un Día, este estado es false por defecto
+    state.isWorkoutActive = false;
+    
     const saved = localStorage.getItem(sessionID);
     if (saved) {
         try {
-            state.focoData = JSON.parse(saved);
-            console.log("Cargada persistencia atómica para:", sessionID, state.focoData);
+            const parsed = JSON.parse(saved);
+            if (parsed.completed) {
+                state.focoData = {};
+                console.log("Sesión de hoy ya completada. Iniciando limpio.");
+            } else {
+                state.focoData = parsed;
+                console.log("Cargada persistencia atómica para:", sessionID, state.focoData);
+            }
         } catch (e) {
             console.error("Error al cargar persistencia:", e);
             state.focoData = {};
@@ -2232,13 +2275,15 @@ function openRoutineGeneral(routineKey) {
         dom.exerciseListContainer.appendChild(card);
     });
     
-    // Sincronizar estado visual del botón Iniciar/Terminar Entreno
+    // Sincronizar estado visual de los botones Iniciar/Terminar Entreno
+    const btnStart = document.getElementById('btn-start-workout');
+    const btnEnd = document.getElementById('btn-end-workout');
     if (state.isWorkoutActive) {
-        dom.btnStartWorkout.classList.add('active-workout');
-        dom.btnStartWorkout.innerHTML = '<i data-lucide="square"></i><span>Terminar Entreno</span>';
+        if (btnStart) btnStart.style.display = 'none';
+        if (btnEnd) btnEnd.style.display = 'flex';
     } else {
-        dom.btnStartWorkout.classList.remove('active-workout');
-        dom.btnStartWorkout.innerHTML = '<i data-lucide="play"></i><span>Iniciar Entreno</span>';
+        if (btnStart) btnStart.style.display = 'flex';
+        if (btnEnd) btnEnd.style.display = 'none';
     }
 
     // Mostrar pantalla general
@@ -2252,6 +2297,37 @@ function openRoutineGeneral(routineKey) {
 function closeRoutineGeneral() {
     dom.screens.general.classList.remove('active');
     dom.navBar.style.display = 'flex';
+}
+
+function updateFocoUIInteractiveState() {
+    const isWorkoutActive = state.isWorkoutActive;
+    
+    // Deshabilitar inputs
+    if (dom.inputs && dom.inputs.weight) dom.inputs.weight.disabled = !isWorkoutActive;
+    if (dom.inputs && dom.inputs.reps) dom.inputs.reps.disabled = !isWorkoutActive;
+    if (dom.inputs && dom.inputs.rir) dom.inputs.rir.disabled = !isWorkoutActive;
+    
+    // Deshabilitar botones de steppers
+    if (dom.buttons) {
+        if (dom.buttons.weightMinus) dom.buttons.weightMinus.disabled = !isWorkoutActive;
+        if (dom.buttons.weightPlus) dom.buttons.weightPlus.disabled = !isWorkoutActive;
+        if (dom.buttons.repsMinus) dom.buttons.repsMinus.disabled = !isWorkoutActive;
+        if (dom.buttons.repsPlus) dom.buttons.repsPlus.disabled = !isWorkoutActive;
+        if (dom.buttons.rirMinus) dom.buttons.rirMinus.disabled = !isWorkoutActive;
+        if (dom.buttons.rirPlus) dom.buttons.rirPlus.disabled = !isWorkoutActive;
+    }
+    
+    // Si no está activo, bloquear contenedor
+    const container = document.querySelector('.data-inputs-container');
+    if (container) {
+        if (!isWorkoutActive) {
+            container.style.opacity = '0.5';
+            container.style.pointerEvents = 'none';
+        } else {
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'auto';
+        }
+    }
 }
 
 // 8. FUNCIONES DE VISTA FOCO (ZONA DE GUERRA)
@@ -2286,6 +2362,9 @@ function openExerciseFoco(index) {
     // Cargar Notas Generales y Setup Técnico (Editable Textarea)
     dom.infoModalText.value = state.focoData[focoKey].setupTechnical;
     dom.inputDailyNotes.value = state.focoData[focoKey].notes;
+    
+    // Deshabilitar/Habilitar inputs según el estado del entrenamiento
+    updateFocoUIInteractiveState();
     
     // Cargar Historial Reciente (los últimos 3 entrenamientos)
     const historyList = document.getElementById('foco-history-list');
@@ -2541,6 +2620,7 @@ function setupSteppers() {
 
 // Sincronizar inputs manuales con el estado mock y persistir localmente
 function updateStateData() {
+    if (!state.isWorkoutActive) return; // Evitar cambios si no está activo
     const focoKey = \`\${state.currentRoutineKey}-\${state.currentExerciseIndex}\`;
     const exerciseData = state.focoData[focoKey];
     if (!exerciseData) return;
@@ -2841,21 +2921,45 @@ function bindEvents() {
         });
     }
     
-    // Botón Iniciar/Terminar Entreno en Vista General
-    dom.btnStartWorkout.addEventListener('click', () => {
-        if (!state.isWorkoutActive) {
+    // Botón Iniciar Entreno en Vista General
+    const btnStart = document.getElementById('btn-start-workout');
+    const btnEnd = document.getElementById('btn-end-workout');
+    
+    if (btnStart) {
+        btnStart.addEventListener('click', () => {
             state.isWorkoutActive = true;
-            dom.btnStartWorkout.classList.add('active-workout');
-            dom.btnStartWorkout.innerHTML = '<i data-lucide="square"></i><span>Terminar Entreno</span>';
+            if (btnStart) btnStart.style.display = 'none';
+            if (btnEnd) btnEnd.style.display = 'flex';
             alert("¡Entrenamiento iniciado! Toca cualquier ejercicio para ingresar a la Zona de Guerra.");
-        } else {
+            initIcons();
+        });
+    }
+    
+    if (btnEnd) {
+        btnEnd.addEventListener('click', () => {
+            // Guardar con syncPending: true y completed: true
+            state.focoData.syncPending = true;
+            state.focoData.completed = true;
+            saveWorkout();
+            
+            alert("Entreno finalizado y guardado");
+            
+            // Limpiar estado
+            state.focoData = {};
             state.isWorkoutActive = false;
-            dom.btnStartWorkout.classList.remove('active-workout');
-            dom.btnStartWorkout.innerHTML = '<i data-lucide="play"></i><span>Iniciar Entreno</span>';
-            alert("¡Entrenamiento terminado y guardado en la memoria!");
-        }
-        initIcons();
-    });
+            
+            // Resetear botones en la UI
+            if (btnStart) btnStart.style.display = 'flex';
+            if (btnEnd) btnEnd.style.display = 'none';
+            
+            // Resetear inputs en la UI
+            dom.inputs.weight.value = "";
+            dom.inputs.reps.value = "";
+            dom.inputs.rir.value = "";
+            
+            initIcons();
+        });
+    }
 }
 
 // 13. BOOTSTRAP DE LA APLICACIÓN

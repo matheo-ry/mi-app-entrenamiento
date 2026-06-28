@@ -438,6 +438,36 @@ body {
     height: 14px;
 }
 
+/* Botón Terminar Entreno */
+.btn-end-workout {
+    background: linear-gradient(135deg, var(--accent-red) 0%, #b71c1c 100%);
+    color: var(--text-primary);
+    border: none;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    transition: var(--transition-bounce);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-end-workout:active {
+    transform: scale(0.94);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    filter: brightness(1.2);
+}
+
+.btn-end-workout i {
+    width: 14px;
+    height: 14px;
+}
+
 /* Lista de Tarjetas de Ejercicios */
 .exercise-list {
     display: flex;

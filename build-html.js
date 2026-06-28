@@ -9,7 +9,7 @@ const bundledHtml = html
   .replace('<script src="app.js"></script>', `<script>${js}</script>`);
 
 const appJs = `
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { WebView } from 'react-native-webview';
 import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,6 +18,18 @@ const htmlContent = \`${bundledHtml.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\
 
 export default function App() {
   const webViewRef = useRef(null);
+
+  useEffect(() => {
+    const clearStorage = async () => {
+      try {
+        await AsyncStorage.clear();
+        console.log("AsyncStorage purgado para desarrollo.");
+      } catch (e) {
+        console.error("Error al purgar AsyncStorage:", e);
+      }
+    };
+    clearStorage();
+  }, []);
 
   const onMessage = async (event) => {
     try {

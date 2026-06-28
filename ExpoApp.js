@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { WebView } from 'react-native-webview';
 import { StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -1829,88 +1829,56 @@ const ROUTINE_DATA = {
         exercises: [
             {
                 name: "Press Horizontal en máquina",
-                history: [
-                    "90x10(1) 90x10(1) 90x9(0)",
-                    "95x9(1) 95x8(1) 95x8(0) | Muy cansado de hombro posterior",
-                    "95x10(1) 95x9(1) 95x8(0) | Asiento en altura 4, empuje explosivo y retracción escapular"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Press Inclinado",
-                history: [
-                    "70x10(1) 70x9(0)",
-                    "75x8(1) 75x8(0)",
-                    "75x9(1) 75x8(0) | Buen ángulo de banco, sin dolor"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Aperturas en polea sentado",
-                history: [
-                    "15x15(1) 15x14(0)",
-                    "17.5x12(1) 17.5x12(0)",
-                    "17.5x13(1) 17.5x12(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Remo en T",
-                history: [
-                    "60x10(1) 60x10(1) 60x9(0)",
-                    "65x8(1) 65x8(1) 65x7(0)",
-                    "65x9(1) 65x8(1) 65x8(0)"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Jalón Dorsal Plano Frontal",
-                history: [
-                    "50x12(1) 50x11(0)",
-                    "55x10(1) 55x9(0)",
-                    "55x11(1) 55x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Jalón Dorsal Plano Sagital",
-                history: [
-                    "45x12(1) 45x11(0)",
-                    "50x10(1) 50x9(0)",
-                    "50x10(1) 50x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Laterales en polea (Hombro)",
-                history: [
-                    "10x15(1) 10x15(0)",
-                    "12.5x12(1) 12.5x12(0)",
-                    "12.5x13(1) 12.5x12(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Hombro Posterior",
-                history: [
-                    "10x15(0)",
-                    "12.5x12(0)",
-                    "12.5x13(0)"
-                ],
+                history: [],
                 notes: "1 serie.",
                 totalSets: 1,
                 weight: 0, reps: 0, rir: 0
@@ -1922,88 +1890,56 @@ const ROUTINE_DATA = {
         exercises: [
             {
                 name: "Press Francés",
-                history: [
-                    "30x12(1) 30x11(0)",
-                    "35x10(1) 35x9(0)",
-                    "35x11(1) 35x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Extensión de tríceps en polea",
-                history: [
-                    "20x15(1) 20x14(1) 20x14(0)",
-                    "25x12(1) 25x12(1) 25x11(0)",
-                    "25x13(1) 25x12(1) 25x12(0)"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Curl Banco Scott Unilateral",
-                history: [
-                    "15x12(1) 15x11(1) 15x10(0)",
-                    "17.5x10(1) 17.5x9(1) 17.5x9(0)",
-                    "17.5x11(1) 17.5x10(1) 17.5x9(0) | Foco en estiramiento total"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Martillo en polea",
-                history: [
-                    "25x12(1) 25x11(0)",
-                    "30x10(1) 30x9(0)",
-                    "30x11(1) 30x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Elevaciones laterales",
-                history: [
-                    "12x15(1) 12x14(0)",
-                    "14x12(1) 14x12(0)",
-                    "14x13(1) 14x12(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Extensión de cuádriceps",
-                history: [
-                    "60x15(1) 60x14(1) 60x14(0)",
-                    "65x12(1) 65x12(1) 65x11(0)",
-                    "65x13(1) 65x12(1) 65x12(0)"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Sentadilla Péndulo",
-                history: [
-                    "100x12(1) 100x11(0)",
-                    "110x10(1) 110x9(0)",
-                    "110x11(1) 110x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Curl Femoral Sentado",
-                history: [
-                    "50x12(1) 50x11(0)",
-                    "55x10(1) 55x9(0)",
-                    "55x11(1) 55x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
@@ -2015,88 +1951,56 @@ const ROUTINE_DATA = {
         exercises: [
             {
                 name: "Remo en T",
-                history: [
-                    "60x10(1) 60x10(1) 60x9(0)",
-                    "65x8(1) 65x8(1) 65x7(0)",
-                    "65x9(1) 65x8(1) 65x8(0)"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Jalón Dorsal Plano Frontal",
-                history: [
-                    "50x12(1) 50x11(0)",
-                    "55x10(1) 55x9(0)",
-                    "55x11(1) 55x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Jalón Dorsal Plano Sagital",
-                history: [
-                    "45x12(1) 45x11(0)",
-                    "50x10(1) 50x9(0)",
-                    "50x10(1) 50x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Press Horizontal en máquina",
-                history: [
-                    "90x10(1) 90x10(0)",
-                    "95x8(1) 95x8(0)",
-                    "95x9(1) 95x8(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Press Inclinado",
-                history: [
-                    "70x10(1) 70x9(0)",
-                    "75x8(1) 75x8(0)",
-                    "75x9(1) 75x8(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Aperturas en polea sentado",
-                history: [
-                    "15x15(1) 15x14(0)",
-                    "17.5x12(1) 17.5x12(0)",
-                    "17.5x13(1) 17.5x12(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Laterales en polea (Hombro)",
-                history: [
-                    "10x15(1) 10x15(0)",
-                    "12.5x12(1) 12.5x12(0)",
-                    "12.5x13(1) 12.5x12(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Hombro Posterior",
-                history: [
-                    "10x15(0)",
-                    "12.5x12(0)",
-                    "12.5x13(0)"
-                ],
+                history: [],
                 notes: "1 serie.",
                 totalSets: 1,
                 weight: 0, reps: 0, rir: 0
@@ -2108,88 +2012,56 @@ const ROUTINE_DATA = {
         exercises: [
             {
                 name: "Press Francés",
-                history: [
-                    "30x12(1) 30x11(0)",
-                    "35x10(1) 35x9(0)",
-                    "35x11(1) 35x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Extensión de tríceps en polea",
-                history: [
-                    "20x15(1) 20x14(1) 20x14(0)",
-                    "25x12(1) 25x12(1) 25x11(0)",
-                    "25x13(1) 25x12(1) 25x12(0)"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Curl Banco Scott Unilateral",
-                history: [
-                    "15x12(1) 15x11(1) 15x10(0)",
-                    "17.5x10(1) 17.5x9(1) 17.5x9(0)",
-                    "17.5x11(1) 17.5x10(1) 17.5x9(0)"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Martillo en polea",
-                history: [
-                    "25x12(1) 25x11(0)",
-                    "30x10(1) 30x9(0)",
-                    "30x11(1) 30x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Elevaciones laterales",
-                history: [
-                    "12x15(1) 12x14(0)",
-                    "14x12(1) 14x12(0)",
-                    "14x13(1) 14x12(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Extensión de cuádriceps",
-                history: [
-                    "60x15(1) 60x14(1) 60x14(0)",
-                    "65x12(1) 65x12(1) 65x11(0)",
-                    "65x13(1) 65x12(1) 65x12(0)"
-                ],
+                history: [],
                 notes: "3 series.",
                 totalSets: 3,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Sentadilla Péndulo",
-                history: [
-                    "100x12(1) 100x11(0)",
-                    "110x10(1) 110x9(0)",
-                    "110x11(1) 110x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
             },
             {
                 name: "Curl Femoral Sentado",
-                history: [
-                    "50x12(1) 50x11(0)",
-                    "55x10(1) 55x9(0)",
-                    "55x11(1) 55x10(0)"
-                ],
+                history: [],
                 notes: "2 series.",
                 totalSets: 2,
                 weight: 0, reps: 0, rir: 0
@@ -2369,13 +2241,14 @@ function openRoutineGeneral(routineKey) {
     routine.exercises.forEach((ex, index) => {
         const card = document.createElement('div');
         card.className = 'card-exercise';
+        const realHistory = getHistoryForExercise(routineKey, index, ex);
         card.innerHTML = \`
             <div class="exercise-title-row">
                 <span class="exercise-name">\${ex.name}</span>
                 <i data-lucide="chevron-right" class="arrow-right-icon"></i>
             </div>
-            <div class="history-block">
-                \${ex.history.map(row => {
+            <div class="history-block" style="\${realHistory.length === 0 ? 'display:none;' : ''}">
+                \${realHistory.map(row => {
                     const setsStr = row.split('|')[0].trim();
                     const setsArr = setsStr.split(/\s+/);
                     const setsCount = setsArr.length;
@@ -2488,7 +2361,7 @@ function openExerciseFoco(index) {
     const historyList = document.getElementById('foco-history-list');
     if (historyList) {
         historyList.innerHTML = '';
-        const rawHistory = exercise.history || [];
+        const rawHistory = getHistoryForExercise(state.currentRoutineKey, index, exercise);
         const last3 = rawHistory.slice(-3).reverse();
         
         // Generar etiquetas de fecha de forma representativa (Hoy/Previo, Hace 7 días, Hace 14 días...)
@@ -3072,12 +2945,38 @@ function bindEvents() {
     
     if (btnEnd) {
         btnEnd.addEventListener('click', () => {
-            // Guardar con syncPending: true y completed: true
-            state.focoData.syncPending = true;
-            state.focoData.completed = true;
+            const routineKey = state.currentRoutineKey;
             
-            // Guardado síncrono al terminar
-            flushSaveWorkout();
+            // Guardar en el array de la base de datos local (APPEND)
+            const savedDb = localStorage.getItem('DB_WORKOUTS_' + routineKey);
+            let historyArray = [];
+            if (savedDb) {
+                try {
+                    historyArray = JSON.parse(savedDb);
+                    if (!Array.isArray(historyArray)) historyArray = [];
+                } catch (e) {
+                    historyArray = [];
+                }
+            }
+            
+            const newSession = {
+                date: new Date().toISOString().split('T')[0],
+                completed: true,
+                focoData: state.focoData,
+                syncPending: true
+            };
+            
+            historyArray.push(newSession);
+            const updatedDbStr = JSON.stringify(historyArray);
+            localStorage.setItem('DB_WORKOUTS_' + routineKey, updatedDbStr);
+            
+            if (window.ReactNativeWebView) {
+                window.ReactNativeWebView.postMessage(JSON.stringify({
+                    action: 'save',
+                    key: 'DB_WORKOUTS_' + routineKey,
+                    value: updatedDbStr
+                }));
+            }
             
             // Eliminar de active session
             localStorage.removeItem('CURRENT_ACTIVE_SESSION');
@@ -3143,21 +3042,26 @@ function bindEvents() {
     const btnSaveEditLog = document.getElementById('btn-save-edit-log');
     if (btnSaveEditLog) {
         btnSaveEditLog.addEventListener('click', () => {
-            const sessionKey = state.activeEditSessionKey;
+            const routineKey = state.activeEditRoutineKey;
+            const sessionIndex = state.activeEditSessionIndex;
             const focoKey = state.activeEditFocoKey;
             const exerciseMeta = state.activeEditExerciseMeta;
             
-            if (!sessionKey || !focoKey) return;
+            if (!routineKey || sessionIndex === undefined || !focoKey) return;
             
-            const dataStr = localStorage.getItem(sessionKey);
-            if (!dataStr) return;
+            const saved = localStorage.getItem('DB_WORKOUTS_' + routineKey);
+            if (!saved) return;
             
-            const sessionData = JSON.parse(dataStr);
-            if (!sessionData[focoKey]) {
-                sessionData[focoKey] = { sets: {} };
+            const array = JSON.parse(saved);
+            const sessionData = array[sessionIndex];
+            if (!sessionData) return;
+            
+            if (!sessionData.focoData) sessionData.focoData = {};
+            if (!sessionData.focoData[focoKey]) {
+                sessionData.focoData[focoKey] = { sets: {} };
             }
             
-            const exerciseData = sessionData[focoKey];
+            const exerciseData = sessionData.focoData[focoKey];
             
             // Leer valores de los inputs
             const weightInputs = document.querySelectorAll('.edit-input-weight');
@@ -3192,14 +3096,14 @@ function bindEvents() {
             // Marcar para volver a sincronizar
             sessionData.syncPending = true;
             
-            const updatedStr = JSON.stringify(sessionData);
-            localStorage.setItem(sessionKey, updatedStr);
+            const updatedStr = JSON.stringify(array);
+            localStorage.setItem('DB_WORKOUTS_' + routineKey, updatedStr);
             
             // WebView Post
             if (window.ReactNativeWebView) {
                 window.ReactNativeWebView.postMessage(JSON.stringify({
                     action: 'save',
-                    key: sessionKey,
+                    key: 'DB_WORKOUTS_' + routineKey,
                     value: updatedStr
                 }));
             }
@@ -3208,7 +3112,6 @@ function bindEvents() {
             document.getElementById('edit-log-modal').classList.remove('show');
             
             // Recargar Metrics Details
-            const routineKey = sessionKey.split('/')[1].toLowerCase().replace(/_/g, '-');
             openMetricDetails(routineKey);
         });
     }
@@ -3216,6 +3119,14 @@ function bindEvents() {
 
 // 13. BOOTSTRAP DE LA APLICACIÓN
 function init() {
+    // Purga de desarrollo una sola vez para base de datos limpia
+    const hasCleared = localStorage.getItem('DEV_CLEARED_ONCE');
+    if (!hasCleared) {
+        localStorage.clear();
+        localStorage.setItem('DEV_CLEARED_ONCE', 'true');
+        console.log("LocalStorage purgado para desarrollo.");
+    }
+
     bindEvents();
     setupSteppers();
     setupTimer();
@@ -3421,33 +3332,23 @@ function openMetricDetails(routineKey) {
     const container = document.getElementById('metric-log-container');
     container.innerHTML = '';
     
-    const sessions = getSessionsForRoutine(routineKey);
-    const completedSessions = sessions.filter(s => s.data.completed === true);
-    const activeSessions = sessions.filter(s => s.data.completed !== true);
-    
+    const completedSessions = getSessionsForRoutine(routineKey);
     const N = completedSessions.length;
     
     const mappedSessions = completedSessions.map((session, index) => {
         return {
             ...session,
             label: \`DIA\${index + 1}\`,
-            isActive: false
+            isActive: false,
+            sessionIndex: index
         };
     });
     
     if (state.isWorkoutActive && state.currentRoutineKey === routineKey) {
-        const todayStr = new Date().toISOString().split('T')[0];
-        const activeSessionID = "DIA_" + todayStr.replace(/-/g, '_') + "/" + routineKey.toUpperCase().replace(/-/g, '_');
-        
-        const activeSess = activeSessions[0] || {
-            key: activeSessionID,
-            data: state.focoData
-        };
-        
         mappedSessions.push({
-            ...activeSess,
             label: \`DIA\${N + 1}\`,
-            isActive: true
+            isActive: true,
+            focoData: state.focoData
         });
     }
     
@@ -3464,8 +3365,9 @@ function openMetricDetails(routineKey) {
         let hasLogs = false;
         
         mappedSessions.forEach(session => {
-            const focoKey = \`\${routineKey}-\${exerciseIdx}\`;
-            const exerciseData = session.data[focoKey];
+            const focoKey = \`dots;\${routineKey}-dots;\${exerciseIdx}\`.replace(/\dots;/g, '');
+            const workoutData = session.isActive ? state.focoData : session.focoData;
+            const exerciseData = workoutData ? workoutData[focoKey] : null;
             const setsStr = formatSetsString(exerciseData, exercise);
             
             if (setsStr) {
@@ -3474,15 +3376,23 @@ function openMetricDetails(routineKey) {
                 logLine.className = 'metric-log-line-btn';
                 
                 const color = session.isActive ? '#FF3333' : 'var(--text-primary)';
-                logLine.style = \`background: none; border: none; padding: 4px 0; width: 100%; text-align: left; display: block; font-family: monospace; font-size: 13px; color: \${color}; cursor: pointer;\`;
+                logLine.style = \`background: none; border: none; padding: 4px 0; width: 100%; text-align: left; display: block; font-family: monospace; font-size: 13px; color: dots;\${color}dots;; cursor: pointer;\`.replace(/\dots;/g, '');
                 
                 const labelColor = session.isActive ? '#FF3333' : 'var(--text-secondary)';
-                logLine.innerHTML = \`<span style="color: \${labelColor}; margin-right: 8px;">\${session.label}:</span> \${setsStr}\`;
+                logLine.innerHTML = \`<span style="color: dots;\${labelColor}dots;; margin-right: 8px;">dots;\${session.label}dots;:</span> dots;dots;\${setsStr}dots;dots;\`.replace(/\dots;/g, '');
                 
                 // Al tocar, abrir el modal de edición
-                logLine.addEventListener('click', () => {
-                    openEditLogModal(session.key, exerciseIdx, exercise);
-                });
+                if (!session.isActive) {
+                    logLine.addEventListener('click', () => {
+                        openEditLogModal(routineKey, session.sessionIndex, exerciseIdx, exercise);
+                    });
+                } else {
+                    logLine.addEventListener('click', () => {
+                        switchTab('screen-entreno');
+                        openRoutineGeneral(routineKey);
+                        openExerciseFoco(exerciseIdx);
+                    });
+                }
                 
                 exSection.appendChild(logLine);
             }
@@ -3502,35 +3412,18 @@ function openMetricDetails(routineKey) {
 }
 
 function getSessionsForRoutine(routineKey) {
-    const keys = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith("DIA_") && key.endsWith("/" + routineKey.toUpperCase().replace(/-/g, '_'))) {
-            keys.push(key);
+    const saved = localStorage.getItem('DB_WORKOUTS_' + routineKey);
+    if (saved) {
+        try {
+            const array = JSON.parse(saved);
+            if (Array.isArray(array)) {
+                return array;
+            }
+        } catch (e) {
+            console.error("Error parsing DB_WORKOUTS for routine", routineKey, e);
         }
     }
-    
-    // Sort keys chronologically by date: DIA_YYYY_MM_DD/ROUTINE -> YYYY_MM_DD
-    keys.sort((a, b) => {
-        const dateA = a.split('/')[0].replace("DIA_", "").replace(/_/g, "-");
-        const dateB = b.split('/')[0].replace("DIA_", "").replace(/_/g, "-");
-        return dateA.localeCompare(dateB);
-    });
-    
-    const sessions = [];
-    keys.forEach(key => {
-        const dataStr = localStorage.getItem(key);
-        if (dataStr) {
-            try {
-                const data = JSON.parse(dataStr);
-                sessions.push({ key, data });
-            } catch (e) {
-                console.error("Error parsing session data for key", key, e);
-            }
-        }
-    });
-    
-    return sessions;
+    return [];
 }
 
 function formatSetsString(exerciseData, exerciseMeta) {
@@ -3552,25 +3445,27 @@ function formatSetsString(exerciseData, exerciseMeta) {
     return setsParts.join(" / ");
 }
 
-function openEditLogModal(sessionKey, exerciseIdx, exerciseMeta) {
-    const dataStr = localStorage.getItem(sessionKey);
-    if (!dataStr) return;
+function openEditLogModal(routineKey, sessionIndex, exerciseIdx, exerciseMeta) {
+    const saved = localStorage.getItem('DB_WORKOUTS_' + routineKey);
+    if (!saved) return;
     
-    const sessionData = JSON.parse(dataStr);
-    const focoKey = \`\${sessionKey.split('/')[1].toLowerCase().replace(/_/g, '-')}-\${exerciseIdx}\`;
+    const array = JSON.parse(saved);
+    const sessionData = array[sessionIndex];
+    if (!sessionData) return;
     
-    if (!sessionData[focoKey]) {
-        sessionData[focoKey] = {
-            sets: {}
-        };
+    const focoKey = \`\${routineKey}-\${exerciseIdx}\`;
+    if (!sessionData.focoData) sessionData.focoData = {};
+    if (!sessionData.focoData[focoKey]) {
+        sessionData.focoData[focoKey] = { sets: {} };
     }
     
-    const exerciseData = sessionData[focoKey];
+    const exerciseData = sessionData.focoData[focoKey];
     const container = document.getElementById('edit-log-fields-container');
     container.innerHTML = '';
     
     // Guardar referencias temporales
-    state.activeEditSessionKey = sessionKey;
+    state.activeEditRoutineKey = routineKey;
+    state.activeEditSessionIndex = sessionIndex;
     state.activeEditFocoKey = focoKey;
     state.activeEditExerciseMeta = exerciseMeta;
     
@@ -3587,20 +3482,20 @@ function openEditLogModal(sessionKey, exerciseIdx, exerciseMeta) {
         setRow.className = 'edit-set-row';
         setRow.style = "display: flex; gap: 10px; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;";
         setRow.innerHTML = \`
-            <span style="font-weight: bold; width: 50px; font-size: 13px;">Set \${s}</span>
+            <span style="font-weight: bold; width: 50px; font-size: 13px;">Set dots;\${s}dots;</span>
             <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
                 <span style="font-size: 11px; color: var(--text-secondary);">Peso (kg)</span>
-                <input type="number" class="edit-input-weight" data-set="\${s}" value="\${setData.weight !== undefined ? setData.weight : ""}" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
+                <input type="number" class="edit-input-weight" data-set="dots;\${s}dots;" value="dots;\${setData.weight !== undefined ? setData.weight : ""}dots;" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
             </div>
             <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
                 <span style="font-size: 11px; color: var(--text-secondary);">Repes</span>
-                <input type="number" class="edit-input-reps" data-set="\${s}" value="\${setData.reps !== undefined ? setData.reps : ""}" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
+                <input type="number" class="edit-input-reps" data-set="dots;\${s}dots;" value="dots;\${setData.reps !== undefined ? setData.reps : ""}dots;" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
             </div>
             <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
                 <span style="font-size: 11px; color: var(--text-secondary);">RIR</span>
-                <input type="text" class="edit-input-rir" data-set="\${s}" value="\${setData.rir !== undefined ? setData.rir : ""}" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
+                <input type="text" class="edit-input-rir" data-set="dots;\${s}dots;" value="dots;\${setData.rir !== undefined ? setData.rir : ""}dots;" style="background: #161618; border: 1px solid var(--border-subtle); padding: 8px; border-radius: 6px; color: #fff; width: 100%;">
             </div>
-        \`;
+        \`.replace(/\dots;/g, '');
         container.appendChild(setRow);
     }
     
@@ -3642,6 +3537,35 @@ function loadActiveSessionState() {
     }
     return false;
 }
+
+function getHistoryForExercise(routineKey, exerciseIdx, exerciseMeta) {
+    const completedSessions = getSessionsForRoutine(routineKey);
+    const historyStrings = [];
+    completedSessions.forEach(session => {
+        const focoKey = \`\${routineKey}-dots;\${exerciseIdx}\`.replace(/\dots;/g, '');
+        const exerciseData = session.focoData ? session.focoData[focoKey] : null;
+        if (exerciseData && exerciseData.sets) {
+            const setsParts = [];
+            for (let s = 1; s <= exerciseMeta.totalSets; s++) {
+                const set = exerciseData.sets[s];
+                if (set && (set.weight !== "" || set.reps !== "" || set.rir !== "")) {
+                    const weight = set.weight !== "" ? set.weight : "0";
+                    const reps = set.reps !== "" ? set.reps : "0";
+                    let rir = set.rir !== undefined ? set.rir : "0";
+                    setsParts.push(\`\${weight}x\${reps}(\${rir})\`);
+                }
+            }
+            if (setsParts.length > 0) {
+                let sessionStr = setsParts.join(" ");
+                if (exerciseData.notes) {
+                    sessionStr += \` | \${exerciseData.notes}\`;
+                }
+                historyStrings.push(sessionStr);
+            }
+        }
+    });
+    return historyStrings;
+}
 </script>
 </body>
 </html>
@@ -3649,6 +3573,18 @@ function loadActiveSessionState() {
 
 export default function App() {
   const webViewRef = useRef(null);
+
+  useEffect(() => {
+    const clearStorage = async () => {
+      try {
+        await AsyncStorage.clear();
+        console.log("AsyncStorage purgado para desarrollo.");
+      } catch (e) {
+        console.error("Error al purgar AsyncStorage:", e);
+      }
+    };
+    clearStorage();
+  }, []);
 
   const onMessage = async (event) => {
     try {

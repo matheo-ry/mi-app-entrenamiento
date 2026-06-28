@@ -119,9 +119,11 @@ export default function App() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-  // Developmental Reset on Load
+  const [isReady, setIsReady] = useState(false);
+
+  // Developmental Reset & Load on Startup
   useEffect(() => {
-    const clearStorageForDev = async () => {
+    const initializeApp = async () => {
       try {
         const hasCleared = await AsyncStorage.getItem('DEV_CLEARED_ONCE');
         if (!hasCleared) {
@@ -129,13 +131,15 @@ export default function App() {
           await AsyncStorage.setItem('DEV_CLEARED_ONCE', 'true');
           console.log("AsyncStorage purgado para desarrollo.");
         }
+        await loadDbSetups();
+        await loadActiveSession();
       } catch (e) {
-        console.error(e);
+        console.error("Fallo durante la inicialización de la app:", e);
+      } finally {
+        setIsReady(true);
       }
     };
-    clearStorageForDev();
-    loadDbSetups();
-    loadActiveSession();
+    initializeApp();
   }, []);
 
   // Timer logic
@@ -671,6 +675,14 @@ export default function App() {
       );
     });
   };
+
+  if (!isReady) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#000000', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#8A2BE2" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>

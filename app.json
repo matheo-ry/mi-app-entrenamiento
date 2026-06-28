@@ -13,6 +13,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b7caae34-c072-4ea0-b853-149f59adcba2"
+      }
+    },
+    "android": {
+      "package": "com.matheo234.gymapp"
     }
   }
 }

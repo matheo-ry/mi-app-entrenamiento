@@ -620,7 +620,7 @@ export default function App() {
     });
 
     // Active session live entry (Red visual accent)
-    if (isWorkoutActive && state.currentRoutineKey === currentRoutineKey) {
+    if (isWorkoutActive && currentRoutineKey != null) {
       const liveExData = focoData[key];
       const liveSetsStr = formatSetsString(liveExData, totalSets);
       if (liveSetsStr) {
@@ -667,7 +667,7 @@ export default function App() {
       
       const setsArr = setsStr.split(' / ');
       return (
-        <View key={idx} style={[styles.homeHistoryRow, { gridTemplateColumns: `repeat(${setsArr.length}, 1fr)` }]}>
+        <View key={idx} style={styles.homeHistoryRow}>
           {setsArr.map((setVal, setIdx) => (
             <Text key={setIdx} style={styles.homeHistorySetPill}>{setVal}</Text>
           ))}
@@ -742,9 +742,10 @@ export default function App() {
                 >
                   <View style={styles.routineCardInfo}>
                     <Text style={styles.routineCardTitle}>{item.title}</Text>
-                    <Text style={styles.routineCardMeta}>
-                      <Ionicons name="barbell-outline" size={12} color="#A0A0A5" /> {item.exercises.length} ejercicios
-                    </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 6, gap: 4 }}>
+                      <Ionicons name="barbell-outline" size={12} color="#A0A0A5" />
+                      <Text style={styles.routineCardMeta}>{item.exercises.length} ejercicios</Text>
+                    </View>
                   </View>
                   <View style={styles.routineCardRight}>
                     {isActiveHere && <View style={styles.activeDot} />}
@@ -772,7 +773,7 @@ export default function App() {
           </View>
 
           <View style={styles.actionButtonsContainer}>
-            {(!isWorkoutActive || currentRoutineKey !== state.currentRoutineKey) ? (
+            {!isWorkoutActive ? (
               <TouchableOpacity style={styles.btnStart} onPress={startWorkout}>
                 <Text style={styles.btnStartText}>Iniciar Entreno</Text>
               </TouchableOpacity>
